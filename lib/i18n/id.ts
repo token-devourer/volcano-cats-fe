@@ -133,14 +133,14 @@ const UI: StringTable = {
   // Lobby / room
   "lobby.title": "Lobby",
   "lobby.roomCode": "Kode Room",
-  "lobby.shareHint": "Bagikan kode ini ke temanmu biar bisa gabung.",
+  "lobby.shareHint": "Bagikan 5 huruf kode ini ke temanmu biar bisa gabung.",
   "lobby.players": "Pemain",
   "lobby.waiting": "Menunggu pemain lain...",
   "lobby.start": "Mulai Game",
   "lobby.needMorePlayers": "Butuh minimal 2 pemain untuk mulai.",
   "lobby.hostOnly": "Hanya host yang bisa memulai game.",
   "lobby.enterName": "Masukkan namamu",
-  "lobby.enterCode": "Masukkan kode room",
+  "lobby.enterCode": "Masukkan 5 huruf kode room",
   "lobby.create": "Buat Room",
   "lobby.join": "Gabung Room",
 

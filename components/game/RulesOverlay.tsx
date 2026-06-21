@@ -52,7 +52,7 @@ export default function RulesOverlay() {
       {/* Scroll region — capped height so the dialog never exceeds the
           viewport; the sheet/modal chrome stays fixed while this scrolls. */}
       <div className="max-h-[70vh] space-y-6 overflow-y-auto pr-1">
-        <p className="text-cream leading-relaxed" style={PRETTY}>
+        <p className="text-ink leading-relaxed" style={PRETTY}>
           {t("rules.intro")}
         </p>
 
@@ -125,7 +125,7 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
 /** A paragraph of running prose — AA-legible, pretty-wrapped, ≤ ~70ch. */
 function Prose({ children }: { children: ReactNode }) {
   return (
-    <p className="max-w-[70ch] text-sm leading-relaxed text-ash-light" style={PRETTY}>
+    <p className="max-w-[70ch] text-sm leading-relaxed text-ink-soft" style={PRETTY}>
       {children}
     </p>
   );
@@ -136,7 +136,7 @@ function CardGroup({ label, types }: { label: string; types: CardType[] }) {
   if (types.length === 0) return null;
   return (
     <div className="space-y-2">
-      <h4 className="text-xs font-semibold uppercase tracking-wide text-cream">{label}</h4>
+      <h4 className="text-xs font-semibold uppercase tracking-wide text-ink">{label}</h4>
       <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
         {types.map((type) => (
           <CardRef key={type} type={type} />
@@ -155,7 +155,7 @@ function CardGroup({ label, types }: { label: string; types: CardType[] }) {
 function CardRef({ type }: { type: CardType }) {
   const theme = getCardTheme(type);
   return (
-    <li className="flex items-start gap-3 rounded-xl border border-card-border bg-obsidian-2 p-3">
+    <li className="flex items-start gap-3 rounded-xl border border-panel-line bg-panel-2 p-3">
       <span
         className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg p-1.5"
         style={{ background: `${theme.color}1A`, boxShadow: `inset 0 0 0 1px ${theme.color}40`, color: theme.color }}
@@ -164,10 +164,10 @@ function CardRef({ type }: { type: CardType }) {
         <CardArt type={type} className="h-full w-full" />
       </span>
       <div className="min-w-0">
-        <p className="font-display text-sm leading-tight" style={{ color: theme.color }}>
+        <p className="font-display text-sm leading-tight text-ink">
           {cardName(type)}
         </p>
-        <p className="mt-0.5 text-xs leading-relaxed text-ash-light" style={PRETTY}>
+        <p className="mt-0.5 text-xs leading-relaxed text-ink-soft" style={PRETTY}>
           {cardDesc(type)}
         </p>
       </div>
@@ -178,9 +178,9 @@ function CardRef({ type }: { type: CardType }) {
 /** A single Gang combo row: combo name + what it does. */
 function Combo({ title, body }: { title: string; body: string }) {
   return (
-    <li className="rounded-xl border border-card-border bg-obsidian-2 p-3">
-      <p className="font-display text-sm leading-tight text-gold">{title}</p>
-      <p className="mt-0.5 text-xs leading-relaxed text-ash-light" style={PRETTY}>
+    <li className="rounded-xl border border-panel-line bg-panel-2 p-3">
+      <p className="font-display text-sm leading-tight text-gold-dim">{title}</p>
+      <p className="mt-0.5 text-xs leading-relaxed text-ink-soft" style={PRETTY}>
         {body}
       </p>
     </li>

@@ -37,13 +37,13 @@ export function GameTable() {
         <p
           className={clsx(
             "font-display text-lg",
-            isMyTurn ? "text-lava drop-shadow-[0_0_14px_rgba(255,92,26,0.4)]" : "text-cream",
+            isMyTurn ? "text-cream drop-shadow-[0_0_14px_rgba(214,58,11,0.55)]" : "text-cream/85",
           )}
         >
           {isMyTurn ? t("game.yourTurn") : `${t("status.turn")} ${currentName}`}
         </p>
         {state.turnsRemaining > 1 && (
-          <p className="mt-1 inline-flex items-center gap-1.5 rounded-full bg-gold/10 px-2.5 py-0.5 text-sm font-semibold text-gold ring-1 ring-gold/30">
+          <p className="mt-1 inline-flex items-center gap-1.5 rounded-full bg-gold px-2.5 py-0.5 text-sm font-semibold text-ink ring-1 ring-gold/60">
             {currentName} · {state.turnsRemaining}× giliran
           </p>
         )}
@@ -52,18 +52,18 @@ export function GameTable() {
       {/* Deck + discard */}
       <div className="flex items-end justify-center gap-6 sm:gap-10">
         <div className="flex flex-col items-center gap-2">
-          <span className="text-xs uppercase tracking-widest text-ash-light">{t("game.discard")}</span>
+          <span className="text-xs uppercase tracking-widest text-cream/80">{t("game.discard")}</span>
           {topDiscard ? (
             <Card card={topDiscard} name={cardName(topDiscard.type)} size="md" />
           ) : (
-            <div className="grid h-[clamp(7rem,22vw,9rem)] w-[clamp(5rem,16vw,6.5rem)] place-items-center rounded-2xl border border-dashed border-card-border text-ash-light/50">
+            <div className="grid h-[clamp(7rem,22vw,9rem)] w-[clamp(5rem,16vw,6.5rem)] place-items-center rounded-2xl border border-dashed border-panel-line text-cream/40">
               —
             </div>
           )}
         </div>
 
         <div className="flex flex-col items-center gap-2">
-          <span className="text-xs uppercase tracking-widest text-ash-light">
+          <span className="text-xs uppercase tracking-widest text-cream/80">
             {t("game.deck")} · {state.deckCount}
           </span>
           <Card
@@ -73,7 +73,7 @@ export function GameTable() {
             size="md"
             disabled={!canDraw}
             onActivate={canDraw ? () => send({ t: "DRAW" }) : undefined}
-            className={clsx(canDraw && "ring-2 ring-lava ring-offset-2 ring-offset-obsidian shadow-lava-glow")}
+            className={clsx(canDraw && "ring-2 ring-lava ring-offset-2 ring-offset-wood shadow-lava-glow")}
           />
         </div>
       </div>

@@ -27,13 +27,13 @@ interface StatusStyle {
 }
 
 const STYLES: Record<StatusVariant, StatusStyle> = {
-  host:    { icon: "👑", key: "status.host",    tint: "bg-gold/15 text-gold border-gold/40" },
-  you:     { icon: "🫵", key: "status.you",     tint: "bg-lava/15 text-lava border-lava/40" },
-  away:    { icon: "💤", key: "status.away",    tint: "bg-obsidian-2 text-ash-light border-card-border" },
-  locked:  { icon: "🔒", key: "status.locked",  tint: "bg-gang-storm/15 text-gang-storm border-gang-storm/40" },
-  bunker:  { icon: "🛡️", key: "status.bunker",  tint: "bg-gang-earth/15 text-gang-earth border-gang-earth/40" },
-  dead:    { icon: "💀", key: "status.dead",    tint: "bg-ember/20 text-cream border-ember/60" },
-  offline: { icon: "📵", key: "status.offline", tint: "bg-obsidian-2 text-ash-light border-card-border" },
+  host:    { icon: "👑", key: "status.host",    tint: "bg-gold text-ink border-gold/60" },
+  you:     { icon: "🫵", key: "status.you",     tint: "bg-lava text-cream border-lava/60" },
+  away:    { icon: "💤", key: "status.away",    tint: "bg-wood-deep text-cream/85 border-wood-deep" },
+  locked:  { icon: "🔒", key: "status.locked",  tint: "bg-gang-storm text-cream border-gang-storm/60" },
+  bunker:  { icon: "🛡️", key: "status.bunker",  tint: "bg-gang-earth text-cream border-gang-earth/60" },
+  dead:    { icon: "💀", key: "status.dead",    tint: "bg-ember text-cream border-ember/60" },
+  offline: { icon: "📵", key: "status.offline", tint: "bg-wood-deep text-cream/85 border-wood-deep" },
 };
 
 /**

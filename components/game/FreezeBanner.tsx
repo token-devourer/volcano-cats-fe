@@ -38,17 +38,17 @@ export function FreezeBanner() {
 
   return (
     <div className="fixed left-1/2 top-[max(0.75rem,env(safe-area-inset-top))] z-banner w-[min(92vw,28rem)] -translate-x-1/2 animate-slide-up">
-      <div className="overflow-hidden rounded-2xl border border-gang-ice/60 bg-obsidian-3/95 shadow-xl backdrop-blur">
+      <div className="overflow-hidden rounded-2xl border border-gang-ice/60 bg-panel/95 shadow-panel backdrop-blur">
         <div className="h-1.5 bg-gang-ice/20">
           <div className="h-full bg-gang-ice transition-[width] duration-100 ease-linear" style={{ width: `${pct}%` }} />
         </div>
         <div className="flex items-center gap-3 p-3">
           <span className="text-2xl" aria-hidden="true">❄️</span>
           <div className="min-w-0 flex-1">
-            <p className="truncate text-sm text-cream">
+            <p className="truncate text-sm text-ink">
               {actorName} · {cardName(pending.cardType)}
             </p>
-            <p className="text-xs text-ash-light">
+            <p className="text-xs text-ink-soft">
               {negated ? "Akan dibatalkan!" : t("game.freezeWindow")}
             </p>
           </div>

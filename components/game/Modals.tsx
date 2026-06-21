@@ -18,7 +18,7 @@ function CardPicker({
   emptyText?: string;
 }) {
   if (cards.length === 0) {
-    return <p className="py-4 text-center text-sm text-ash-light">{emptyText ?? t("game.emptyHand")}</p>;
+    return <p className="py-4 text-center text-sm text-ink-soft">{emptyText ?? t("game.emptyHand")}</p>;
   }
   return (
     <div className="flex max-h-[46vh] flex-wrap justify-center gap-2 overflow-y-auto py-1">
@@ -42,7 +42,7 @@ export function BucketModal() {
   const [pos, setPos] = useState(0);
   return (
     <ResponsiveDialog open title={t("game.placeBucket")} icon="💧" accent="lava" dismissable={false} onClose={() => {}}>
-      <p className="mb-4 text-sm text-ash-light">
+      <p className="mb-4 text-sm text-ink-soft">
         0 = paling atas (langsung ketemu lagi 😈), {deckCount} = paling bawah (aman 😌).
       </p>
       <input
@@ -67,8 +67,8 @@ export function FavorModal({ initiatorName }: { initiatorName: string }) {
   const hand = useGame((s) => s.hand);
   return (
     <ResponsiveDialog open title={t("card.bribe.name")} icon="🎁" accent="gold" dismissable={false} onClose={() => {}}>
-      <p className="mb-3 text-sm text-ash-light">
-        <span className="font-semibold text-gold">{initiatorName}</span> minta 1 kartu. Pilih yang mau kamu kasih.
+      <p className="mb-3 text-sm text-ink-soft">
+        <span className="font-semibold text-ink">{initiatorName}</span> minta 1 kartu. Pilih yang mau kamu kasih.
       </p>
       <CardPicker cards={hand} onPick={(c) => send({ t: "GIVE_CARD", cardId: c.id })} />
     </ResponsiveDialog>
@@ -87,11 +87,11 @@ export function PeekSwapModal() {
   };
   return (
     <ResponsiveDialog open title={t("card.peekAndSwap.name")} icon="👁️" accent="gang-storm" dismissable={false} onClose={() => {}}>
-      <p className="mb-2 text-sm text-ash-light">Kartu teratas deck:</p>
+      <p className="mb-2 text-sm text-ink-soft">Kartu teratas deck:</p>
       <div className="mb-4 flex justify-center">
         {top && <CardView card={top} name={cardName(top.type)} description={cardDesc(top.type)} size="md" />}
       </div>
-      <p className="mb-2 text-sm text-ash-light">Tukar dengan kartu dari tanganmu, atau lewati:</p>
+      <p className="mb-2 text-sm text-ink-soft">Tukar dengan kartu dari tanganmu, atau lewati:</p>
       <CardPicker cards={hand} onPick={(c) => decide(true, c.id)} />
       <Button variant="outline" size="md" fullWidth className="mt-4" onClick={() => decide(false)}>
         {t("action.skip")}
@@ -111,11 +111,11 @@ export function FloodModal() {
     <ResponsiveDialog open title={t("card.flood.name")} icon="🌊" accent="gang-ice" dismissable={false} onClose={() => {}}>
       {mustDiscard ? (
         <>
-          <p className="mb-3 text-sm text-ash-light">Semua kena Flood — buang 1 kartu pilihanmu.</p>
+          <p className="mb-3 text-sm text-ink-soft">Semua kena Flood — buang 1 kartu pilihanmu.</p>
           <CardPicker cards={hand} onPick={(c) => send({ t: "FLOOD_DISCARD", cardId: c.id })} />
         </>
       ) : (
-        <p className="py-6 text-center text-sm text-ash-light">{t("lobby.waiting")}</p>
+        <p className="py-6 text-center text-sm text-ink-soft">{t("lobby.waiting")}</p>
       )}
     </ResponsiveDialog>
   );
@@ -126,7 +126,7 @@ export function TimeWarpModal() {
   const discard = useGame((s) => s.state?.discardTop ?? []);
   return (
     <ResponsiveDialog open title={t("card.timeWarp.name")} icon="🪄" accent="gang-storm" dismissable={false} onClose={() => {}}>
-      <p className="mb-3 text-sm text-ash-light">Ambil 1 kartu dari buangan:</p>
+      <p className="mb-3 text-sm text-ink-soft">Ambil 1 kartu dari buangan:</p>
       <CardPicker cards={[...discard].reverse()} onPick={(c) => send({ t: "TIMEWARP_PICK", cardId: c.id })} emptyText={t("game.discard")} />
     </ResponsiveDialog>
   );
@@ -138,7 +138,7 @@ export function PickpocketModal() {
   const closePeek = useUI((s) => s.closePeek);
   return (
     <ResponsiveDialog open title={t("card.pickpocket.name")} icon="💸" accent="lava" dismissable={false} onClose={() => {}}>
-      <p className="mb-3 text-sm text-ash-light">Tangan target — ambil 1 kartu:</p>
+      <p className="mb-3 text-sm text-ink-soft">Tangan target — ambil 1 kartu:</p>
       <CardPicker
         cards={peek.cards}
         onPick={(c) => {
@@ -157,11 +157,11 @@ export function SpyModal() {
   if (!peek.open || peek.mode !== "spy") return null;
   return (
     <ResponsiveDialog open title={t("card.spyCat.name")} icon="🔭" accent="gang-storm" onClose={closePeek}>
-      <p className="mb-3 text-sm text-ash-light">3 kartu teratas (dari atas ke bawah):</p>
+      <p className="mb-3 text-sm text-ink-soft">3 kartu teratas (dari atas ke bawah):</p>
       <div className="flex justify-center gap-2">
         {peek.cards.map((c, i) => (
           <div key={c.id} className="flex flex-col items-center gap-1">
-            <span className="text-xs text-ash-light">{i + 1}</span>
+            <span className="text-xs text-ink-soft">{i + 1}</span>
             <CardView card={c} name={cardName(c.type)} description={cardDesc(c.type)} size="sm" />
           </div>
         ))}
@@ -201,15 +201,15 @@ export function TargetPicker() {
           <button
             key={p.id}
             onClick={() => pick(p.id)}
-            className="flex items-center gap-3 rounded-xl border border-card-border bg-obsidian-2 px-3 py-2.5 text-left transition-colors hover:border-gold hover:bg-gold/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+            className="flex items-center gap-3 rounded-xl border border-panel-line bg-panel-2 px-3 py-2.5 text-left transition-colors hover:border-lava hover:bg-lava/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lava"
           >
             <Avatar name={p.name} size="sm" />
-            <span className="flex-1 truncate text-cream">{p.name}</span>
-            <span className="text-xs text-ash-light">🂠 {p.handCount}</span>
+            <span className="flex-1 truncate text-ink">{p.name}</span>
+            <span className="text-xs text-ink-soft">🂠 {p.handCount}</span>
           </button>
         ))}
       </div>
-      <Button variant="ghost" size="md" fullWidth className="mt-4" onClick={cancel}>
+      <Button variant="outline" size="md" fullWidth className="mt-4" onClick={cancel}>
         {t("action.cancel")}
       </Button>
     </ResponsiveDialog>
@@ -230,13 +230,13 @@ export function DeclareTypeModal() {
 
   return (
     <ResponsiveDialog open title="Sebut Kartunya" icon="🎯" accent="gold" onClose={close}>
-      <p className="mb-3 text-sm text-ash-light">Sebut 1 jenis kartu — kalau target punya, kamu ambil.</p>
+      <p className="mb-3 text-sm text-ink-soft">Sebut 1 jenis kartu — kalau target punya, kamu ambil.</p>
       <div className="grid max-h-[46vh] grid-cols-2 gap-2 overflow-y-auto sm:grid-cols-3">
         {ALL_CARD_TYPES.map((type) => (
           <button
             key={type}
             onClick={() => choose(type)}
-            className="rounded-lg border border-card-border bg-obsidian-2 px-2 py-2 text-sm text-cream transition-colors hover:border-gold hover:bg-gold/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+            className="rounded-lg border border-panel-line bg-panel-2 px-2 py-2 text-sm text-ink transition-colors hover:border-lava hover:bg-lava/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lava"
           >
             {cardName(type)}
           </button>

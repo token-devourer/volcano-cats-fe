@@ -27,7 +27,7 @@ export function Sheet({
       {open && (
         <div className="fixed inset-0 z-modal-backdrop flex items-end justify-center">
           <motion.div
-            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+            className="absolute inset-0 bg-wood-deep/80 backdrop-blur-sm"
             initial={reduce ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -43,9 +43,9 @@ export function Sheet({
             aria-labelledby={titleId}
             tabIndex={-1}
             className={clsx(
-              "relative z-modal w-full max-w-lg rounded-t-2xl border-t border-x bg-obsidian-3",
+              "relative z-modal w-full max-w-lg rounded-t-2xl border-t border-x bg-panel",
               "flex flex-col gap-4 p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))]",
-              "shadow-2xl outline-none",
+              "shadow-panel outline-none",
               className,
             )}
             style={{ borderColor: `${accentHex}66` }}
@@ -56,7 +56,7 @@ export function Sheet({
           >
             {/* Drag-handle affordance (visual only) */}
             <div
-              className="mx-auto h-1.5 w-10 rounded-full bg-card-border"
+              className="mx-auto h-1.5 w-10 rounded-full bg-panel-line"
               aria-hidden="true"
             />
 
@@ -71,7 +71,7 @@ export function Sheet({
               </h2>
             </header>
 
-            {children && <div className="text-cream text-sm leading-relaxed">{children}</div>}
+            {children && <div className="text-ink text-sm leading-relaxed">{children}</div>}
 
             {footer && <footer className="flex items-center justify-end gap-2">{footer}</footer>}
           </motion.div>

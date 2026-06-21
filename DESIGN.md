@@ -1,67 +1,75 @@
 # Design
 
-Visual system for **Volcano Cats**. Dark, molten, high-contrast game UI. This is the refined
-identity for the rewrite — it **preserves** the existing obsidian/lava/gold brand and elevates
-craft (contrast, hierarchy, tokens, motion discipline, responsiveness, accessibility). See
-`PRODUCT.md` for strategy.
+Visual system for **Volcano Cats**. A warm, cheerful "wooden table" game UI — bright cream
+cards on a wood-plank table, vivid saturated accents, friendly and fun. This is the **ceria**
+(warm/cheerful) identity, deliberately reversing the earlier cold obsidian direction on the
+owner's instruction: the volcano/lava/cats identity is kept (lava red stays), only the cold
+funereal surfaces change to warm wood + cream. See `PRODUCT.md` for strategy.
 
 ## Theme
 
-Dark-mode only. The player is in a dim, glowing volcanic "room": a near-black obsidian field with a
-warm radial glow at the table center, molten orange as the energy color, gold as reward/secondary,
-ember red as danger/death. Surfaces are deep blue-tinted charcoals (not pure gray) so the warm
-accents read as heat against cool stone. The look is a lit table in a dark room — focus pooled at
-the center, decoration receding into the dark.
+Light-mode table. The player is at a sunlit wooden table with a warm pool of light at the
+center: a wood-plank surface (mid-brown `wood` deepening to `wood-deep` at the edges), cream
+printed cards and panels on top, molten orange as the energy color, gold as reward/secondary
+(on dark plaques), ember red as danger/death. The look is a bright party game on a table —
+cream cards pop against warm wood, cats are vivid and saturated. Light INK text reads on cream;
+CREAM text reads on wood and inside solid dark accents (lava/ember/gang).
 
 ## Colors
 
-Hex is canonical (committed brand). Roles, not raw values, drive usage.
+Hex is canonical. Roles, not raw values, drive usage. Accent values are AA-tuned so dark INK
+reads on cream AND light CREAM reads on the accent.
 
-### Core surfaces (cool blue-charcoal stone)
-- `obsidian`   `#0D0D0F` — app background / base
-- `obsidian-2` `#141418` — raised surface (top bar, inactive panels)
-- `obsidian-3` `#1C1C24` — cards, modals, inputs
-- `card-bg`    `#1E1E2E` — playing-card face base
-- `card-border``#2E2E44` — hairline borders on surfaces (1px only — never as a thick side-stripe)
+### Warm wood surfaces (the table)
+- `wood`        `#8A5A2E` — table base plank
+- `wood-deep`   `#5E3A1C` — vignette / grain shadow / dark plaque (room-code sign)
+- `wood-glow`   `#A9712F` — warm light pool at table center
 
-### Heat accents
-- `lava`       `#FF5C1A` — primary action, "draw", danger highlight, focus ring
-- `lava-dim`   `#CC3D00` — pressed/secondary lava
-- `gold`       `#FFB547` — secondary action, win, room code, reward
-- `gold-dim`   `#CC8A1A`
-- `ember`      `#C0392B` — error, elimination, destructive
+### Cream panels / cards
+- `panel`       `#FFF6E9` — cream panel/surface (cards, modals, inputs container)
+- `panel-2`     `#FBEAD2` — raised/inset cream (input fills, hovers, sub-panels)
+- `panel-line`  `#E3C7A0` — soft brown hairline border (1px only)
 
-### Text / ink ramp
-- `cream`      `#F0EAD6` — primary text (≥ 12:1 on obsidian)
-- `ash-light`  `#BDBDCC` — **muted text / secondary copy** (use this, ~7:1 on obsidian-3 — AA pass)
-- `ash`        `#8A8A99` — **decorative/disabled only.** Do NOT use for body or placeholder text on
-  dark surfaces (≈4.2:1, borderline). Placeholders use `ash-light` at reduced opacity.
+### Ink (dark text on cream)
+- `ink`         `#2A1A10` — primary text on cream (~15:1 AA)
+- `ink-soft`    `#7A5A40` — muted/secondary on cream (~6:1 AA)
+- `cream`       `#FFF7EC` — light text ON wood / dark accents only (NOT on cream panels)
+
+### Heat accents (AA-tuned: cream-on-accent ≥ 4.5:1)
+- `lava`       `#D63A0B` — primary action, "draw", danger highlight, focus ring
+- `lava-dim`   `#B02E08` — pressed/gradient end
+- `gold`       `#E6A317` — reward / win / room-code plaque (use on dark surfaces; for gold
+  text on cream use `gold-dim`)
+- `gold-dim`   `#B07A0E` — gold text on cream (~4.7:1 AA)
+- `ember`      `#D0332A` — error, elimination, destructive
 
 ### Gang (elemental) colors — also the only sanctioned "extra" hues
-- `gang-fire`   `#FF5C1A` (= lava)   🔥
-- `gang-ice`    `#5CE0FF`            🧊  — also the **Freeze / cold-effect** accent (replaces the
-  off-system blue currently in FreezeButton/FloodModal)
-- `gang-storm`  `#B05CFF`            ⚡  — also the **Time Warp** accent (replaces off-system purple)
-- `gang-earth`  `#5CFF8A`            🌿  — also `success`
-- `gang-shadow` `#8A5CFF`            🌑
+- `gang-fire`   `#D63A0B` (= lava)   🔥
+- `gang-ice`    `#2BB7C4`            🧊  — also the **Freeze / cold-effect** accent (decorative:
+  bars/borders; not body text on cream)
+- `gang-storm`  `#7A3FC4`            ⚡  — also the **Time Warp** accent (cream-on-it AA as solid bg)
+- `gang-earth`  `#2E8B3A`            🌿  — also `success` (cream-on-it AA as solid bg)
+- `gang-shadow` `#7A5BE0`            🌑  — decorative card art
 
 **Rule:** the palette above is the whole palette. No ad-hoc Tailwind `blue-400` / `purple-400`.
-Cold effects use `gang-ice`; warp uses `gang-storm`; success uses `gang-earth`.
+Cold effects use `gang-ice`; warp uses `gang-storm`; success uses `gang-earth`. Legacy aliases
+(`obsidian*`, `ash-light`, `card-border`) are re-pointed to the warm tokens so any unmigrated
+usage still renders warm — but prefer the canonical names above.
 
 ### Gradients & glows (used sparingly, for heat only)
-- `lava-gradient` `linear-gradient(135deg,#FF5C1A,#C0392B)` — primary buttons, lava moments
-- `gold-gradient` `linear-gradient(135deg,#FFB547,#FF8C00)` — win / join
-- `card-gradient` `linear-gradient(145deg,#1E1E2E,#14141C)` — card faces
-- `table-felt`    `radial-gradient(ellipse at center,#1A1A2E,#0D0D0F 70%)` — the table backdrop
+- `lava-gradient` `linear-gradient(135deg,#E8470A,#B02E08)` — primary buttons, lava moments
+- `gold-gradient` `linear-gradient(135deg,#F4BE2E,#D4900E)` — win / join (text = `ink`, not cream)
+- `card-gradient` `linear-gradient(145deg,#FFFDF7,#FFF1DC,#FBE8CF)` — cream card faces
+- `table-wood`    `radial-gradient(ellipse at 50% 38%,#A9712F,#8A5A2E 42%,#5E3A1C 100%)` — the table
 - Glows: `lava-glow`, `gold-glow` — reserved for the active turn, the deck on your turn, and
-  win/danger moments. Not on idle elements.
+  win/danger moments. Not on idle elements. Shadows are warm brown-tinted (`rgba(60,30,10,…)`).
 
 ## Typography
 
 Two families on a contrast axis (display vs. body) — never two similar sans.
 - **Display:** `Righteous` (single weight) — logo, headings, card names, room code, turn banner.
   Used at large sizes only; letter-spacing ≥ -0.02em; `text-wrap: balance` on headings.
-- **Body / UI:** `Inter` (400/500/600/700) — all running text, labels, buttons, log, tooltips.
+- **Body / UI:** `Hanken Grotesk` (400/500/600/700/800) — all running text, labels, buttons, log, tooltips.
 - Scale (clamp, mobile→desktop): display hero ≤ `clamp(2.5rem,8vw,4.5rem)` (never above ~6rem);
   h2 `clamp(1.5rem,4vw,2rem)`; body `0.95–1rem`; small/meta `0.8rem` (never below 12px for
   meaningful text). Body line-length ≤ 70ch. `text-wrap: pretty` on prose (rules overlay).

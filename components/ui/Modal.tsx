@@ -43,7 +43,7 @@ export function Modal({
         <div className="fixed inset-0 z-modal-backdrop flex items-center justify-center p-4">
           {/* Backdrop */}
           <motion.div
-            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+            className="absolute inset-0 bg-wood-deep/80 backdrop-blur-sm"
             initial={reduce ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={reduce ? { opacity: 0 } : { opacity: 0 }}
@@ -60,8 +60,8 @@ export function Modal({
             aria-labelledby={titleId}
             tabIndex={-1}
             className={clsx(
-              "relative z-modal w-full max-w-md rounded-2xl border bg-obsidian-3 p-6",
-              "flex flex-col gap-4 shadow-2xl outline-none",
+              "relative z-modal w-full max-w-md rounded-2xl border bg-panel p-6",
+              "flex flex-col gap-4 shadow-panel outline-none",
               className,
             )}
             style={{ borderColor: `${accentHex}66` }}
@@ -81,7 +81,7 @@ export function Modal({
               </h2>
             </header>
 
-            {children && <div className="text-cream text-sm leading-relaxed">{children}</div>}
+            {children && <div className="text-ink text-sm leading-relaxed">{children}</div>}
 
             {footer && <footer className="flex items-center justify-end gap-2">{footer}</footer>}
           </motion.div>

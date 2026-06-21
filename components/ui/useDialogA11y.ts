@@ -80,11 +80,11 @@ export type AccentToken =
   | "gang-shadow";
 
 export const ACCENT_HEX: Record<AccentToken, string> = {
-  lava: "#FF5C1A",
-  gold: "#FFB547",
-  ember: "#C0392B",
-  "gang-ice": "#5CE0FF",
-  "gang-storm": "#B05CFF",
-  "gang-earth": "#5CFF8A",
-  "gang-shadow": "#8A5CFF",
+  lava: "#D63A0B",
+  gold: "#B07A0E",
+  ember: "#D0332A",
+  "gang-ice": "#1E8C97",
+  "gang-storm": "#7A3FC4",
+  "gang-earth": "#2E8B3A",
+  "gang-shadow": "#6A45D0",
 };

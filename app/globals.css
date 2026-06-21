@@ -7,45 +7,60 @@
 
 /* ============================================================
    PALETTE — CSS custom properties mirror of the Tailwind tokens.
-   Single sanctioned palette (see DESIGN.md). Use these (or the
-   Tailwind classes) — never raw blue/purple. Cold = gang-ice,
-   warp = gang-storm, success = gang-earth.
+   Warm wooden-table system (ceria direction): cream cards on a
+   wood surface, bright heat accents. See DESIGN.md.
    ============================================================ */
 :root {
-  /* Core surfaces (cool blue-charcoal stone) */
-  --obsidian:     #0D0D0F;
-  --obsidian-2:   #141418;
-  --obsidian-3:   #1C1C24;
-  --card-bg:      #1E1E2E;
-  --card-border:  #2E2E44;
+  /* Warm wood surfaces (the table) */
+  --wood:        #8A5A2E;
+  --wood-deep:   #5E3A1C;
+  --wood-glow:   #A9712F;
 
-  /* Heat accents */
-  --lava:      #FF5C1A;
-  --lava-dim:  #CC3D00;
-  --gold:      #FFB547;
-  --gold-dim:  #CC8A1A;
-  --ember:     #C0392B;
+  /* Cream panels / cards */
+  --panel:       #FFF6E9;
+  --panel-2:     #FBEAD2;
+  --panel-line:  #E3C7A0;
 
-  /* Ink ramp */
-  --cream:      #F0EAD6;
-  --ash-light:  #BDBDCC; /* muted/secondary text on dark surfaces (AA) */
-  --ash:        #8A8A99; /* decorative / disabled only — NOT body text */
+  /* Ink (dark text on cream) */
+  --ink:         #2A1A10;
+  --ink-soft:    #7A5A40;
 
-  /* Gang / elemental (the only sanctioned extra hues) */
-  --gang-fire:   #FF5C1A;
-  --gang-ice:    #5CE0FF;
-  --gang-storm:  #B05CFF;
-  --gang-earth:  #5CFF8A;
-  --gang-shadow: #8A5CFF;
+  /* Light text (on wood / dark accents) */
+  --cream:       #FFF7EC;
+
+  /* Heat accents (AA-tuned) */
+  --lava:        #D63A0B;
+  --lava-dim:    #B02E08;
+  --gold:        #E6A317;
+  --gold-dim:    #B07A0E;
+  --ember:       #D0332A;
+
+  /* Gang / elemental */
+  --gang-fire:   #D63A0B;
+  --gang-ice:    #2BB7C4;
+  --gang-storm:  #7A3FC4;
+  --gang-earth:  #2E8B3A;
+  --gang-shadow: #7A5BE0;
+
+  /* Legacy aliases (warm) */
+  --obsidian:    #8A5A2E;
+  --obsidian-2:  #FBEAD2;
+  --obsidian-3:  #FFF6E9;
+  --ash-light:   #7A5A40;
+  --ash:         #7A5A40;
+  --card-bg:     #FBEAD2;
+  --card-border: #E3C7A0;
 }
 
 html, body {
-  background-color: var(--obsidian);
+  /* Warm wood table: a pool of light on a plank surface. */
+  background-color: var(--wood-deep);
+  background-image: radial-gradient(ellipse at 50% 30%, var(--wood-glow), var(--wood) 45%, var(--wood-deep) 100%);
+  background-attachment: fixed;
   color: var(--cream);
   font-family: 'Hanken Grotesk', sans-serif;
   min-height: 100vh;
   overflow-x: hidden;
-  /* Smoother text rendering on the dark field */
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -56,13 +71,13 @@ html, body {
 /* Headings wrap nicely; prose stays readable */
 h1, h2, h3 { text-wrap: balance; }
 
-/* Custom scrollbar */
+/* Custom scrollbar — warm brown */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: var(--obsidian-3); }
-::-webkit-scrollbar-thumb { background: #3A3A55; border-radius: 3px; }
+::-webkit-scrollbar-track { background: var(--panel-2); }
+::-webkit-scrollbar-thumb { background: #C9A06A; border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--lava); }
 /* Firefox */
-* { scrollbar-width: thin; scrollbar-color: #3A3A55 var(--obsidian-3); }
+* { scrollbar-width: thin; scrollbar-color: #C9A06A var(--panel-2); }
 
 /* Card 3D perspective (used by the playing-card primitive) */
 .card-3d-container { perspective: 1000px; }
@@ -75,30 +90,31 @@ h1, h2, h3 { text-wrap: balance; }
 
 /* Lava border animation (ambient — paused under reduced motion) */
 @keyframes lavaBorder {
-  0%, 100% { border-color: rgba(255,92,26,0.4); }
-  50%       { border-color: rgba(255,92,26,1); }
+  0%, 100% { border-color: rgba(214,58,11,0.4); }
+  50%       { border-color: rgba(214,58,11,1); }
 }
 .lava-border { animation: lavaBorder 1.5s ease-in-out infinite; }
 
-/* Ember particles — sit behind content on the table layer */
+/* Warm floating motes — sit behind content on the table layer */
 .ember {
   position: fixed;
   width: 3px;
   height: 3px;
-  background: var(--lava);
+  background: var(--gold);
   border-radius: 50%;
   pointer-events: none;
   z-index: 0;
 }
 
 /* ============================================================
-   PLAYING-CARD SYSTEM — the premium card face.
-   A single obsidian face whose identity comes from `--card-accent`
-   (set per card). Accent drives a top spotlight, the framed inner
-   ring, the SVG art tint, the corner pips and the name plate, so
-   every card reads as the same physical object in 21 different hues.
-   Heavy lifting lives here (pseudo-elements, states, keyframes) so
-   the React primitive stays declarative.
+   PLAYING-CARD SYSTEM — the premium CREAM card face.
+   A single cream printed face whose identity comes from
+   `--card-accent` (set per card). Accent drives a top wash, the
+   framed inner ring, the SVG art tint, the corner pips and the
+   name plate, so every card reads as the same physical object in
+   21 different hues — now bright on cream, like the original
+   party game. Heavy lifting lives here (pseudo-elements, states,
+   keyframes) so the React primitive stays declarative.
    ============================================================ */
 .vc-card {
   --card-width: 6rem;
@@ -107,15 +123,15 @@ h1, h2, h3 { text-wrap: balance; }
   width: var(--card-width);
   aspect-ratio: 5 / 7;
   border-radius: clamp(8px, calc(var(--card-width) * 0.12), 18px);
-  border: 1px solid color-mix(in oklab, var(--card-accent) 34%, #0D0D0F);
+  border: 1px solid color-mix(in oklab, var(--card-accent) 45%, var(--panel-line));
   background:
-    radial-gradient(120% 78% at 50% -10%, color-mix(in oklab, var(--card-accent) 40%, transparent), transparent 60%),
-    radial-gradient(96% 72% at 82% 118%, color-mix(in oklab, var(--card-accent) 20%, transparent), transparent 64%),
-    linear-gradient(162deg, #20202c 0%, #15151d 58%, #0e0e14 100%);
+    radial-gradient(120% 78% at 50% -10%, color-mix(in oklab, var(--card-accent) 22%, transparent), transparent 60%),
+    radial-gradient(96% 72% at 82% 118%, color-mix(in oklab, var(--card-accent) 12%, transparent), transparent 64%),
+    linear-gradient(162deg, #FFFDF7 0%, #FFF1DC 58%, #FBE8CF 100%);
   box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.06) inset,
-    0 -10px 22px rgba(0, 0, 0, 0.34) inset,
-    0 12px 26px rgba(0, 0, 0, 0.5);
+    0 1px 0 rgba(255, 255, 255, 0.7) inset,
+    0 -8px 18px rgba(120, 70, 30, 0.10) inset,
+    0 10px 24px rgba(60, 30, 10, 0.28);
   overflow: hidden;
   isolation: isolate;
   transform-style: preserve-3d;
@@ -135,8 +151,8 @@ h1, h2, h3 { text-wrap: balance; }
   z-index: 1;
   pointer-events: none;
   background:
-    linear-gradient(150deg, rgba(255, 255, 255, 0.1), transparent 34%),
-    radial-gradient(120% 70% at 50% 114%, rgba(0, 0, 0, 0.3), transparent 64%);
+    linear-gradient(150deg, rgba(255, 255, 255, 0.55), transparent 34%),
+    radial-gradient(120% 70% at 50% 114%, rgba(120, 70, 30, 0.16), transparent 64%);
 }
 
 /* Inset accent frame — the hairline that makes it feel printed, not flat. */
@@ -148,8 +164,8 @@ h1, h2, h3 { text-wrap: balance; }
   pointer-events: none;
   border-radius: clamp(5px, calc(var(--card-width) * 0.09), 13px);
   box-shadow:
-    inset 0 0 0 1px color-mix(in oklab, var(--card-accent) 40%, transparent),
-    inset 0 0 18px color-mix(in oklab, var(--card-accent) 12%, transparent);
+    inset 0 0 0 1px color-mix(in oklab, var(--card-accent) 45%, transparent),
+    inset 0 0 18px color-mix(in oklab, var(--card-accent) 14%, transparent);
 }
 
 .vc-card__art {
@@ -161,8 +177,8 @@ h1, h2, h3 { text-wrap: balance; }
   padding-bottom: 18%;
   color: var(--card-accent);
   filter:
-    drop-shadow(0 2px 5px rgba(0, 0, 0, 0.55))
-    drop-shadow(0 0 9px color-mix(in oklab, var(--card-accent) 42%, transparent));
+    drop-shadow(0 2px 3px rgba(60, 30, 10, 0.35))
+    drop-shadow(0 0 9px color-mix(in oklab, var(--card-accent) 38%, transparent));
 }
 .vc-card__art > svg {
   width: 52%;
@@ -181,9 +197,10 @@ h1, h2, h3 { text-wrap: balance; }
   letter-spacing: 0.03em;
   line-height: 1.02;
   font-size: calc(var(--card-width) * 0.118);
-  color: color-mix(in oklab, var(--card-accent) 58%, #F7F2E6);
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
-  background: linear-gradient(to top, rgba(8, 8, 12, 0.94), rgba(8, 8, 12, 0.5) 62%, transparent);
+  /* Accent pulled toward ink so the name stays AA-dark on cream. */
+  color: color-mix(in oklab, var(--card-accent) 55%, var(--ink));
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  background: linear-gradient(to top, color-mix(in oklab, var(--card-accent) 14%, var(--panel)) 4%, color-mix(in oklab, var(--card-accent) 6%, transparent) 60%, transparent);
 }
 
 /* Corner pips — a small echo of the art, top-left & bottom-right (rotated),
@@ -193,8 +210,8 @@ h1, h2, h3 { text-wrap: balance; }
   z-index: 4;
   width: calc(var(--card-width) * 0.2);
   height: calc(var(--card-width) * 0.2);
-  color: color-mix(in oklab, var(--card-accent) 72%, #F7F2E6);
-  opacity: 0.9;
+  color: color-mix(in oklab, var(--card-accent) 68%, var(--ink));
+  opacity: 0.92;
   pointer-events: none;
 }
 .vc-card__corner--tl { top: calc(var(--card-width) * 0.055); left: calc(var(--card-width) * 0.055); }
@@ -207,7 +224,7 @@ h1, h2, h3 { text-wrap: balance; }
   inset: 0;
   z-index: 3;
   pointer-events: none;
-  background: linear-gradient(115deg, transparent 40%, rgba(255, 255, 255, 0.26) 50%, transparent 60%);
+  background: linear-gradient(115deg, transparent 40%, rgba(255, 255, 255, 0.45) 50%, transparent 60%);
   background-size: 240% 100%;
   background-repeat: no-repeat;
   background-position: -140% 0;
@@ -219,20 +236,20 @@ button.vc-card { cursor: pointer; appearance: none; padding: 0; text-align: inhe
 button.vc-card:focus-visible {
   outline: none;
   box-shadow:
-    0 0 0 2px var(--obsidian),
+    0 0 0 2px var(--panel),
     0 0 0 4px var(--lava),
-    0 12px 26px rgba(0, 0, 0, 0.5);
+    0 12px 26px rgba(60, 30, 10, 0.3);
 }
 
 .vc-card--playable { transform: translateY(-4px); }
 
 button.vc-card:not(:disabled):hover {
   transform: translateY(-14px) scale(1.05) rotateX(7deg);
-  border-color: color-mix(in oklab, var(--card-accent) 70%, #0D0D0F);
+  border-color: color-mix(in oklab, var(--card-accent) 70%, var(--panel-line));
   box-shadow:
     0 0 0 1px color-mix(in oklab, var(--card-accent) 60%, transparent),
     0 0 26px color-mix(in oklab, var(--card-accent) 45%, transparent),
-    0 26px 40px rgba(0, 0, 0, 0.55);
+    0 26px 40px rgba(60, 30, 10, 0.34);
 }
 button.vc-card:not(:disabled):active {
   transform: translateY(-6px) scale(0.97);
@@ -245,25 +262,30 @@ button.vc-card:not(:disabled):active {
   border-color: var(--lava);
   box-shadow:
     0 0 0 2px var(--lava),
-    0 0 28px rgba(255, 92, 26, 0.6),
-    0 22px 40px rgba(0, 0, 0, 0.6);
+    0 0 28px rgba(214, 58, 11, 0.6),
+    0 22px 40px rgba(60, 30, 10, 0.36);
 }
 
 .vc-card--disabled,
 button.vc-card:disabled {
   cursor: default;
-  filter: grayscale(0.5) brightness(0.62);
+  filter: grayscale(0.45) brightness(0.85);
 }
 
-/* The face-down back: obsidian with a lava-hatch and the volcano sigil. */
+/* The face-down back: a friendly red hatch on kraft, with the volcano sigil —
+   echoing the original party game's red card back. */
 .vc-card--back {
-  --card-accent: var(--lava);
+  --card-accent: var(--ember);
   background:
-    radial-gradient(circle at 50% 40%, rgba(255, 92, 26, 0.4), transparent 56%),
-    repeating-linear-gradient(45deg, rgba(255, 92, 26, 0.07) 0 2px, transparent 2px 11px),
-    linear-gradient(165deg, #1c1c28, #0d0d12);
+    radial-gradient(circle at 50% 40%, rgba(208, 51, 42, 0.28), transparent 56%),
+    repeating-linear-gradient(45deg, rgba(208, 51, 42, 0.10) 0 2px, transparent 2px 11px),
+    linear-gradient(165deg, #FBE8CF, #EFD3A6);
 }
-.vc-card--back .vc-card__art { padding-bottom: 0; }
+.vc-card--back .vc-card__art {
+  padding-bottom: 0;
+  color: var(--ember);
+  filter: drop-shadow(0 1px 2px rgba(120, 30, 20, 0.3));
+}
 
 @keyframes vcCardShine {
   0% { background-position: -140% 0; }

@@ -33,7 +33,6 @@ export function PlayerSeat({ player, isCurrent, isMe, compact }: PlayerSeatProps
       <div className="flex max-w-[88px] items-center gap-1">
         <span className="truncate text-xs font-semibold text-cream">{player.name}</span>
       </div>
-
       <div className="flex flex-wrap items-center justify-center gap-1">
         {!player.alive ? (
           <StatusBadge variant="dead" label={t("status.dead")} />
@@ -50,7 +49,7 @@ export function PlayerSeat({ player, isCurrent, isMe, compact }: PlayerSeatProps
       </div>
 
       {player.alive && (
-        <span className="text-[11px] text-ash-light" aria-label={t("game.deckCount", { count: player.handCount })}>
+        <span className="text-[11px] text-cream/80" aria-label={t("game.deckCount", { count: player.handCount })}>
           🂠 {player.handCount}
         </span>
       )}
