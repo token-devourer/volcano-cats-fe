@@ -30,7 +30,7 @@ module.exports = {
       },
       fontFamily: {
         display: ["Righteous", "sans-serif"],
-        body:    ["Inter", "sans-serif"],
+        body:    ["Hanken Grotesk", "sans-serif"],
       },
       // Semantic z-index scale — replaces ad-hoc 30/40/50/60 across the app.
       // table (ambient/ember layer) sits behind everything; tooltip wins.

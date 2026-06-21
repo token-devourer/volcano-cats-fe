@@ -43,7 +43,9 @@ export function GameTable() {
           {isMyTurn ? t("game.yourTurn") : `${t("status.turn")} ${currentName}`}
         </p>
         {state.turnsRemaining > 1 && (
-          <p className="mt-0.5 text-sm text-gold">🌀 {currentName} · {state.turnsRemaining}×</p>
+          <p className="mt-1 inline-flex items-center gap-1.5 rounded-full bg-gold/10 px-2.5 py-0.5 text-sm font-semibold text-gold ring-1 ring-gold/30">
+            {currentName} · {state.turnsRemaining}× giliran
+          </p>
         )}
       </div>
 
@@ -80,7 +82,12 @@ export function GameTable() {
       <div className="h-12">
         {canDraw && (
           <Button variant="primary" size="lg" onClick={() => send({ t: "DRAW" })} className="animate-slide-up">
-            🎴 {t("action.draw")}
+            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <rect x="4" y="3" width="11" height="15" rx="2" />
+              <path d="M20 8v11a2 2 0 0 1-2 2H9" opacity={0.6} />
+              <path d="M9.5 11.5 9.5 7M7.5 9 9.5 11.5 11.5 9" />
+            </svg>
+            {t("action.draw")}
           </Button>
         )}
       </div>

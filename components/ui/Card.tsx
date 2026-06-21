@@ -1,9 +1,11 @@
 "use client";
-import { useState, type CSSProperties, type KeyboardEvent } from "react";
-import Image from "next/image";
+import { useEffect, useRef, useState, type CSSProperties, type KeyboardEvent } from "react";
+import { createPortal } from "react-dom";
+import { AnimatePresence, motion } from "framer-motion";
 import clsx from "clsx";
 import type { CardType } from "@/lib/shared";
 import { getCardTheme } from "@/lib/cardTheme";
+import { CardArt, CardBackArt } from "./CardArt";
 
 export type CardSize = "sm" | "md" | "lg" | "responsive";
 
@@ -24,238 +26,174 @@ export interface CardProps {
   className?: string;
 }
 
-/**
- * Fixed widths use a 2:3 aspect ratio. The `responsive` size scales with the
- * viewport via clamp() and never overflows a 320px phone (min 56px).
- */
-const SIZE_STYLE: Record<CardSize, CSSProperties> = {
-  sm: { width: "4rem" }, // 64px
-  md: { width: "6rem" }, // 96px
-  lg: { width: "8rem" }, // 128px
-  responsive: { width: "clamp(3.5rem, 18vw, 7rem)" },
+/** Each size is just a `--card-width`; every interior measure derives from it. */
+const CARD_WIDTH: Record<CardSize, string> = {
+  sm: "4rem", // 64px
+  md: "6rem", // 96px
+  lg: "8rem", // 128px
+  responsive: "clamp(3.75rem, 17vw, 7rem)",
 };
 
-/** Emoji scales with the card; clamp keeps it sane on the responsive size. */
-const EMOJI_STYLE: Record<CardSize, string> = {
-  sm: "text-2xl",
-  md: "text-4xl",
-  lg: "text-5xl",
-  responsive: "text-[clamp(1.5rem,7vw,2.75rem)]",
+/** Corner pips only earn their keep above the tiny hand size. */
+const SHOW_CORNERS: Record<CardSize, boolean> = {
+  sm: false, md: true, lg: true, responsive: true,
 };
 
-const NAME_STYLE: Record<CardSize, string> = {
-  sm: "text-[8px]",
-  md: "text-[10px]",
-  lg: "text-xs",
-  responsive: "text-[clamp(7px,2.6vw,11px)]",
-};
+/** Stable 0–3s shine offset from the card id, so the hand glints out of phase. */
+function shineDelay(id: string): number {
+  let h = 0;
+  for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0;
+  return (h % 30) / 10;
+}
+
+interface TipPos { x: number; y: number; place: "top" | "bottom" }
 
 /**
- * The playing-card primitive. Renders a custom image (with a legible gradient
- * name overlay) when `lib/cardTheme` provides one, otherwise an emoji on the
- * card's gradient. Always falls back to emoji if an image fails to load.
- *
- * Interactive cards are real <button>s (keyboard-activatable, focus ring,
- * aria-label = name + description). Tooltip shows on hover AND focus.
- * No coupling to any store.
+ * The playing-card primitive. A single obsidian face tinted by the card's
+ * accent (`lib/cardTheme`), carrying bespoke SVG art (`CardArt`) — never
+ * emoji. Interactive cards are real buttons (keyboard + focus ring); the
+ * description tooltip renders in a fixed-position portal so it escapes the
+ * hand's horizontal scroll container instead of being clipped by it.
  */
 export function Card({
   card, name, description, selected = false, disabled = false,
   faceDown = false, size = "md", onClick, onActivate, className,
 }: CardProps) {
   const theme = getCardTheme(card.type);
-  const [imgFailed, setImgFailed] = useState(false);
-  const [active, setActive] = useState(false); // hovered OR focused → tooltip + accent
+  const interactive = !!(onClick || onActivate);
+  const playable = interactive && !disabled;
 
-  const interactive = !disabled && (!!onClick || !!onActivate);
-  const showImage = !faceDown && !!theme.image && !imgFailed;
+  const ref = useRef<HTMLElement | null>(null);
+  const [mounted, setMounted] = useState(false);
+  const [tip, setTip] = useState<TipPos | null>(null);
+  useEffect(() => setMounted(true), []);
+
+  const activate = () => { if (playable) (onActivate ?? onClick)?.(); };
+  const onKeyDown = (e: KeyboardEvent) => {
+    if (!playable) return;
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); activate(); }
+  };
+
+  const showTip = () => {
+    const el = ref.current;
+    if (!el || faceDown || !description) return;
+    const r = el.getBoundingClientRect();
+    const place: "top" | "bottom" = r.top < 140 ? "bottom" : "top";
+    setTip({
+      x: Math.min(Math.max(r.left + r.width / 2, 96), window.innerWidth - 96),
+      y: place === "top" ? r.top - 10 : r.bottom + 10,
+      place,
+    });
+  };
+  const hideTip = () => setTip(null);
+
+  const showCorners = SHOW_CORNERS[size] && !faceDown;
   const ariaLabel = description ? `${name}, ${description}` : name;
 
-  const activate = () => {
-    (onActivate ?? onClick)?.();
-  };
-  const onKeyDown = (e: KeyboardEvent) => {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      activate();
-    }
+  const style: CSSProperties = {
+    // Custom props the CSS reads. (Type cast keeps TS happy about `--vars`.)
+    ["--card-width" as string]: CARD_WIDTH[size],
+    ["--card-accent" as string]: theme.color,
   };
 
-  // Border + shadow per state. Disabled desaturates the border (not opacity
-  // alone); selected gets a lava lift + glow; default uses the card accent.
-  const borderColor = disabled
-    ? "#2E2E44"
-    : selected
-      ? "#FF5C1A"
-      : active
-        ? theme.color
-        : "#2E2E44";
-  const boxShadow = selected
-    ? `0 -6px 24px ${theme.glow}, 0 0 28px rgba(255,92,26,0.55)`
-    : active && !disabled
-      ? `0 8px 24px rgba(0,0,0,0.6), 0 0 12px ${theme.glow}`
-      : "0 4px 12px rgba(0,0,0,0.5)";
+  const content = (
+    <>
+      {faceDown ? (
+        <div className="vc-card__art"><CardBackArt /></div>
+      ) : (
+        <>
+          <div className="vc-card__art"><CardArt type={card.type} /></div>
+          {showCorners && (
+            <>
+              <span className="vc-card__corner vc-card__corner--tl"><CardArt type={card.type} /></span>
+              <span className="vc-card__corner vc-card__corner--br"><CardArt type={card.type} /></span>
+            </>
+          )}
+          <span className="vc-card__name">{name}</span>
+        </>
+      )}
+      {playable && !selected && (
+        <span className="vc-card__shine" style={{ animationDelay: `${shineDelay(card.id)}s` }} aria-hidden="true" />
+      )}
+    </>
+  );
+
+  const classes = clsx(
+    "vc-card",
+    faceDown && "vc-card--back",
+    selected && "vc-card--selected",
+    playable && !selected && "vc-card--playable",
+    interactive && disabled && "vc-card--disabled",
+    className,
+  );
+
+  const handlers = {
+    onMouseEnter: showTip,
+    onMouseLeave: hideTip,
+    onFocus: showTip,
+    onBlur: hideTip,
+    title: !faceDown && description ? `${name} — ${description}` : undefined,
+  };
 
   return (
-    <div
-      className={clsx("relative select-none", interactive && "group", className)}
-      style={SIZE_STYLE[size]}
-    >
-      <button
-        type="button"
-        disabled={!interactive}
-        aria-label={ariaLabel}
-        aria-pressed={onClick || onActivate ? selected : undefined}
-        onClick={interactive ? activate : undefined}
-        onKeyDown={interactive ? onKeyDown : undefined}
-        onMouseEnter={() => setActive(true)}
-        onMouseLeave={() => setActive(false)}
-        onFocus={() => setActive(true)}
-        onBlur={() => setActive(false)}
-        className={clsx(
-          "relative block w-full overflow-hidden rounded-2xl border text-left",
-          "transition-[transform,box-shadow,border-color,filter] duration-200",
-          "focus:outline-none focus-visible:ring-2 focus-visible:ring-lava focus-visible:ring-offset-2 focus-visible:ring-offset-obsidian",
-          interactive && "cursor-pointer",
-          // Lift on hover/focus and when selected (no-ops under reduced motion via global CSS)
-          interactive && !selected && "hover:-translate-y-2 focus-visible:-translate-y-2",
-          selected && "-translate-y-4",
-          // Disabled: dim + desaturate (state, not just opacity)
-          disabled && "cursor-not-allowed opacity-60 saturate-50",
-        )}
-        style={{
-          aspectRatio: "2 / 3",
-          borderColor,
-          boxShadow,
-        }}
-      >
-        {faceDown ? (
-          <CardBack emojiClass={EMOJI_STYLE[size]} />
-        ) : showImage ? (
-          <ImageFace
-            src={theme.image!}
-            name={name}
-            accent={theme.color}
-            nameClass={NAME_STYLE[size]}
-            sizeKey={size}
-            onError={() => setImgFailed(true)}
-          />
-        ) : (
-          <EmojiFace
-            emoji={theme.emoji}
-            name={name}
-            gradient={theme.gradient}
-            accent={theme.color}
-            emojiClass={EMOJI_STYLE[size]}
-            nameClass={NAME_STYLE[size]}
-          />
-        )}
-      </button>
-
-      {/* Tooltip — on hover AND focus (not hover-only). Centered above the
-          card; uses tooltip z-index. `title` attr is the always-available
-          fallback for assistive tech / clipped viewports. */}
-      {!faceDown && description && active && (
-        <div
-          role="tooltip"
-          className="pointer-events-none absolute bottom-[calc(100%+8px)] left-1/2 z-tooltip w-44 max-w-[60vw]
-                     -translate-x-1/2 rounded-lg border bg-obsidian-3 px-3 py-2 text-center shadow-xl"
-          style={{ borderColor: `${theme.color}66` }}
+    <>
+      {interactive ? (
+        <button
+          ref={ref as React.RefObject<HTMLButtonElement>}
+          type="button"
+          aria-label={ariaLabel}
+          aria-disabled={!playable || undefined}
+          aria-pressed={selected || undefined}
+          onClick={playable ? activate : undefined}
+          onKeyDown={onKeyDown}
+          className={classes}
+          style={style}
+          {...handlers}
         >
-          <p className="font-display text-sm" style={{ color: theme.color }}>{name}</p>
-          <p className="mt-0.5 text-xs leading-relaxed text-ash-light">{description}</p>
+          {content}
+        </button>
+      ) : (
+        <div
+          ref={ref as React.RefObject<HTMLDivElement>}
+          aria-label={description ? ariaLabel : undefined}
+          className={classes}
+          style={style}
+          {...handlers}
+        >
+          {content}
         </div>
       )}
-    </div>
-  );
-}
 
-function ImageFace({
-  src, name, accent, nameClass, sizeKey, onError,
-}: {
-  src: string;
-  name: string;
-  accent: string;
-  nameClass: string;
-  sizeKey: CardSize;
-  onError: () => void;
-}) {
-  // Hint the browser at the rendered width per size (responsive uses the max).
-  const sizes =
-    sizeKey === "sm" ? "64px"
-    : sizeKey === "lg" ? "128px"
-    : sizeKey === "responsive" ? "(max-width: 640px) 18vw, 112px"
-    : "96px";
-
-  return (
-    <div className="relative h-full w-full">
-      <Image
-        src={src}
-        alt=""
-        fill
-        sizes={sizes}
-        className="object-cover"
-        // Custom uploaded art may have odd dimensions — don't fail the build.
-        unoptimized
-        onError={onError}
-      />
-      {/* Bottom gradient so the name stays legible over any art. */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/85 to-transparent" />
-      <div className="absolute inset-x-1.5 bottom-1.5 text-center">
-        <p className={clsx("font-display uppercase leading-tight tracking-wide drop-shadow-md", nameClass)}
-           style={{ color: "#F0EAD6" }}>
-          {name}
-        </p>
-      </div>
-      <span className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset"
-            style={{ boxShadow: `inset 0 0 0 1px ${accent}33` }} aria-hidden="true" />
-    </div>
-  );
-}
-
-function EmojiFace({
-  emoji, name, gradient, accent, emojiClass, nameClass,
-}: {
-  emoji: string;
-  name: string;
-  gradient: string;
-  accent: string;
-  emojiClass: string;
-  nameClass: string;
-}) {
-  return (
-    <div
-      className="relative flex h-full w-full flex-col items-center justify-between p-2"
-      style={{ background: gradient }}
-    >
-      {/* Subtle top sheen */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/10 to-transparent" />
-      <div className={clsx("my-auto text-center drop-shadow", emojiClass)} aria-hidden="true">
-        {emoji}
-      </div>
-      <p className={clsx("relative text-center font-display uppercase leading-tight tracking-wide", nameClass)}
-         style={{ color: "#F0EAD6" }}>
-        {name}
-      </p>
-      {/* Accent hairline at the bottom (full-width, not a side-stripe). */}
-      <span className="pointer-events-none absolute inset-x-0 bottom-0 h-0.5" style={{ background: accent }} aria-hidden="true" />
-    </div>
-  );
-}
-
-/** The lava-stripe card back. */
-function CardBack({ emojiClass }: { emojiClass: string }) {
-  return (
-    <div className="relative flex h-full w-full items-center justify-center bg-card-gradient">
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            "repeating-linear-gradient(45deg, rgba(255,92,26,0.06) 0px, rgba(255,92,26,0.06) 2px, transparent 2px, transparent 10px)",
-        }}
-        aria-hidden="true"
-      />
-      <span className={clsx("relative", emojiClass)} aria-hidden="true">🌋</span>
-    </div>
+      {/* Description tooltip — portalled to <body> and fixed-positioned so the
+          hand's overflow-x scroll container can never clip it. */}
+      {mounted && createPortal(
+        <AnimatePresence>
+          {tip && description && (
+            <motion.div
+              role="tooltip"
+              initial={{ opacity: 0, scale: 0.94 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.96 }}
+              transition={{ duration: 0.16, ease: [0.22, 1, 0.36, 1] }}
+              // Keep the centering translate while framer-motion drives scale.
+              transformTemplate={(_, generated) =>
+                `translate(-50%, ${tip.place === "top" ? "-100%" : "0"}) ${generated}`}
+              style={{
+                left: tip.x,
+                top: tip.y,
+                zIndex: 60,
+                transformOrigin: tip.place === "top" ? "bottom center" : "top center",
+                borderColor: `${theme.color}66`,
+              }}
+              className="pointer-events-none fixed w-44 max-w-[60vw] rounded-xl border bg-obsidian-3/95 px-3 py-2 text-center shadow-xl backdrop-blur-sm"
+            >
+              <p className="font-display text-sm leading-tight" style={{ color: theme.color }}>{name}</p>
+              <p className="mt-0.5 text-xs leading-snug text-ash-light">{description}</p>
+            </motion.div>
+          )}
+        </AnimatePresence>,
+        document.body,
+      )}
+    </>
   );
 }

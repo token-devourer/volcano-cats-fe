@@ -1,4 +1,5 @@
 "use client";
+import { motion, useReducedMotion } from "framer-motion";
 import { Card, Button } from "@/components/ui";
 import { useGame } from "@/store/game";
 import { useUI } from "@/store/ui";
@@ -28,6 +29,7 @@ export function PlayerHand() {
   const clearSelect = useUI((s) => s.clearSelect);
   const startTargeting = useUI((s) => s.startTargeting);
   const openDeclare = useUI((s) => s.openDeclare);
+  const reduce = useReducedMotion();
 
   if (!state) return null;
   const me = state.players.find((p) => p.id === myId);
@@ -72,7 +74,7 @@ export function PlayerHand() {
 
   return (
     <div
-      className="fixed inset-x-0 bottom-0 z-hand bg-gradient-to-t from-obsidian via-obsidian/95 to-transparent pt-8"
+      className="fixed inset-x-0 bottom-0 z-hand bg-gradient-to-t from-obsidian via-obsidian/95 to-transparent pt-12"
       style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))" }}
     >
       {/* Combo / status bar */}
@@ -101,31 +103,53 @@ export function PlayerHand() {
         ) : null}
       </div>
 
-      {/* Hand */}
-      <div className="flex justify-start gap-2 overflow-x-auto px-4 pb-1 sm:justify-center [scrollbar-width:thin]">
-        {hand.length === 0 ? (
-          <p className="py-6 text-sm text-ash-light">{t("game.emptyHand")}</p>
-        ) : (
-          hand.map((card) => {
+      {/* Hand — an overlapping fan that deals in, then lifts each card on hover.
+          Cards overlap so a big hand still reads as one cohesive spread; the
+          row scrolls horizontally only when even the overlap can't fit. */}
+      {hand.length === 0 ? (
+        <p className="py-6 text-center text-sm text-ash-light">{t("game.emptyHand")}</p>
+      ) : (
+        <motion.div
+          className="flex justify-start overflow-x-auto overflow-y-hidden px-5 pb-1 pt-1 [perspective:900px] sm:justify-center"
+          initial="hidden"
+          animate="show"
+          variants={{ show: { transition: { staggerChildren: reduce ? 0 : 0.045 } } }}
+        >
+          {hand.map((card, i) => {
             const gang = isGangType(card.type);
             const playableNow =
               canPlay && (gang || (card.type !== "FREEZE" && CARD_SPECS[card.type].role !== "danger"));
             return (
-              <Card
+              <motion.div
                 key={card.id}
-                card={card}
-                name={cardName(card.type)}
-                description={cardDesc(card.type)}
-                size="sm"
-                selected={selected.includes(card.id)}
-                disabled={!playableNow}
-                onActivate={() => onCardClick(card.id, card.type)}
-                className="shrink-0"
-              />
+                className="relative shrink-0 transition-[z-index] hover:z-20 focus-within:z-20"
+                style={{ marginLeft: i === 0 ? 0 : "-0.6rem", zIndex: 1 }}
+                variants={
+                  reduce
+                    ? { hidden: { opacity: 0 }, show: { opacity: 1 } }
+                    : {
+                        hidden: { opacity: 0, y: 26, rotateZ: -5 },
+                        show: {
+                          opacity: 1, y: 0, rotateZ: 0,
+                          transition: { duration: 0.36, ease: [0.22, 1, 0.36, 1] },
+                        },
+                      }
+                }
+              >
+                <Card
+                  card={card}
+                  name={cardName(card.type)}
+                  description={cardDesc(card.type)}
+                  size="sm"
+                  selected={selected.includes(card.id)}
+                  disabled={!playableNow}
+                  onActivate={() => onCardClick(card.id, card.type)}
+                />
+              </motion.div>
             );
-          })
-        )}
-      </div>
+          })}
+        </motion.div>
+      )}
     </div>
   );
 }
