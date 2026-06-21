@@ -7,10 +7,10 @@ import { EVENT_TONE, type EventTone } from "@/lib/shared";
 import clsx from "clsx";
 
 const TONE_COLOR: Record<EventTone, string> = {
-  info: "text-ash-light",
-  action: "text-cream",
+  info: "text-ink-soft",
+  action: "text-ink",
   danger: "text-ember",
-  win: "text-gold",
+  win: "text-gold-dim",
 };
 
 /** Slide-in activity log, rendered from the structured event stream. */
@@ -40,13 +40,13 @@ export function GameLog() {
         role="log"
         aria-live="polite"
         className={clsx(
-          "fixed right-0 top-0 z-modal flex h-[100dvh] w-80 max-w-[85vw] flex-col border-l border-card-border bg-obsidian-2 shadow-2xl transition-transform duration-300 ease-out",
+          "fixed right-0 top-0 z-modal flex h-[100dvh] w-80 max-w-[85vw] flex-col border-l border-panel-line bg-panel shadow-panel transition-transform duration-300 ease-out",
           open ? "translate-x-0" : "translate-x-full",
         )}
       >
-        <header className="flex items-center justify-between border-b border-card-border px-4 py-3">
+        <header className="flex items-center justify-between border-b border-panel-line px-4 py-3">
           <h2 className="font-display text-lava">📜 Log</h2>
-          <button onClick={toggle} className="text-ash-light hover:text-cream" aria-label="Tutup">✕</button>
+          <button onClick={toggle} className="text-ink-soft hover:text-ink" aria-label="Tutup">✕</button>
         </header>
         <div className="flex-1 space-y-1.5 overflow-y-auto px-4 py-3 text-sm [scrollbar-width:thin]">
           {state.log.map((e, i) => (

@@ -117,7 +117,7 @@ export default function RoomPage() {
     return (
       <Centered>
         <Spinner size="lg" label={t("conn.connecting")} />
-        <p className="mt-4 text-ash-light">{t("conn.connecting")}</p>
+        <p className="mt-4 text-cream/80">{t("conn.connecting")}</p>
         {globals}
       </Centered>
     );
@@ -125,12 +125,14 @@ export default function RoomPage() {
   if (status === "error" || (status === "disconnected" && !state)) {
     return (
       <Centered>
-        <div className="text-6xl" aria-hidden="true">📡</div>
-        <h2 className="mt-3 font-display text-2xl text-ember">{t("conn.disconnected")}</h2>
-        <p className="mt-2 max-w-xs text-sm text-ash-light">{t("conn.lost")}</p>
-        <Button variant="primary" size="lg" className="mt-6" onClick={leaveToMenu}>
-          {t("action.back")}
-        </Button>
+        <div className="rounded-2xl border border-ember/40 bg-panel p-6 shadow-panel">
+          <div className="text-6xl" aria-hidden="true">📡</div>
+          <h2 className="mt-3 font-display text-2xl text-ember">{t("conn.disconnected")}</h2>
+          <p className="mt-2 max-w-xs text-sm text-ink-soft">{t("conn.lost")}</p>
+          <Button variant="primary" size="lg" className="mt-6" onClick={leaveToMenu}>
+            {t("action.back")}
+          </Button>
+        </div>
         {globals}
       </Centered>
     );
@@ -167,12 +169,12 @@ export default function RoomPage() {
   // ---- playing ----
   const me = state.players.find((p) => p.id === myId);
   return (
-    <div className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-table-felt">
+    <div className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-table-wood">
       <EmberParticles count={8} />
 
       {/* Top bar */}
       <header className="relative z-banner flex items-center justify-between px-4 py-3">
-        <span className="font-display text-sm text-lava">🌋 {displayRoomId}</span>
+        <span className="font-display text-sm text-cream/90">🌋 {displayRoomId}</span>
         <div className="flex items-center gap-2">
           {me?.alive && (
             <Button
@@ -195,7 +197,7 @@ export default function RoomPage() {
         <PlayerHand />
       ) : (
         <div
-          className="fixed inset-x-0 bottom-0 z-hand border-t border-ember/30 bg-obsidian-2 p-5 text-center"
+          className="fixed inset-x-0 bottom-0 z-hand border-t border-ember/30 bg-panel p-5 text-center"
           style={{ paddingBottom: "max(1.25rem, env(safe-area-inset-bottom))" }}
         >
           <p className="font-display text-ember">💀 Kamu tereliminasi. Tonton sampai selesai!</p>
@@ -211,7 +213,7 @@ export default function RoomPage() {
 
 function Centered({ children }: { children: React.ReactNode }) {
   return (
-    <main className={clsx("relative grid min-h-[100dvh] place-items-center overflow-hidden bg-obsidian px-4 text-center")}>
+    <main className={clsx("relative grid min-h-[100dvh] place-items-center overflow-hidden bg-wood-deep px-4 text-center")}>
       <div className="flex flex-col items-center">{children}</div>
     </main>
   );
@@ -232,23 +234,23 @@ function NameGate({ roomId, onSubmit }: { roomId: string; onSubmit: (n: string) 
   }
 
   const inputClass =
-    "w-full rounded-xl border border-card-border bg-obsidian-2 px-4 py-3 text-cream " +
-    "placeholder:text-ash-light/60 transition-all duration-200 focus:outline-none " +
-    "focus:border-lava focus:shadow-[0_0_0_3px_rgba(255,92,26,0.18)]";
+    "w-full rounded-xl border border-panel-line bg-panel-2 px-4 py-3 text-ink " +
+    "placeholder:text-ink-soft/60 transition-all duration-200 focus:outline-none " +
+    "focus:border-lava focus:shadow-[0_0_0_3px_rgba(214,58,11,0.18)]";
 
   return (
     <div className="relative z-banner w-full max-w-sm">
       <header className="mb-6 select-none">
         <div className="mb-2 text-6xl" aria-hidden="true">🌋</div>
-        <h1 className="font-display text-2xl text-lava drop-shadow-[0_0_18px_rgba(255,92,26,0.4)]">
+        <h1 className="font-display text-2xl text-cream drop-shadow-[0_2px_8px_rgba(214,58,11,0.4)]">
           {t("invite.title")}
         </h1>
-        <p className="mt-2 text-sm text-ash-light">{t("invite.subtitle")}</p>
-        <p className="mt-1 font-display text-xl tracking-[0.25em] text-gold">{roomId}</p>
+        <p className="mt-2 text-sm text-cream/80">{t("invite.subtitle")}</p>
+        <p className="mt-1 font-display text-xl tracking-[0.25em] text-gold drop-shadow-[0_2px_6px_rgba(230,163,23,0.4)]">{roomId}</p>
       </header>
 
-      <section className="rounded-2xl border border-card-border bg-obsidian-3 p-6 shadow-[0_12px_48px_rgba(0,0,0,0.7)]">
-        <label htmlFor="join-name" className="mb-2 block text-left text-xs font-semibold uppercase tracking-widest text-ash-light">
+      <section className="rounded-2xl border border-panel-line bg-panel p-6 shadow-panel">
+        <label htmlFor="join-name" className="mb-2 block text-left text-xs font-semibold uppercase tracking-widest text-ink-soft">
           {t("lobby.enterName")}
         </label>
         <input

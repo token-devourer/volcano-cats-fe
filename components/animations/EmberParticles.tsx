@@ -23,8 +23,8 @@ export function EmberParticles({ count = 14, className }: EmberParticlesProps) {
         const r2 = ((i * 4099 + 1) % 251) / 251;
         return {
           left: `${Math.round(r * 100)}%`,
-          size: 2 + Math.round(r2 * 4),
-          duration: 6 + r * 8,
+          size: 2 + Math.round(r2 * 3),
+          duration: 7 + r * 9,
           delay: -r2 * 10,
           gold: i % 3 === 0,
         };
@@ -47,11 +47,11 @@ export function EmberParticles({ count = 14, className }: EmberParticlesProps) {
             left: e.left,
             width: e.size,
             height: e.size,
-            background: e.gold ? "#FFB547" : "#FF5C1A",
-            boxShadow: `0 0 ${e.size * 2}px ${e.gold ? "#FFB547" : "#FF5C1A"}`,
+            background: e.gold ? "#FFC23D" : "#FF7A2F",
+            boxShadow: `0 0 ${e.size * 1.6}px ${e.gold ? "#FFC23D" : "#FF7A2F"}`,
             animationDuration: `${e.duration}s`,
             animationDelay: `${e.delay}s`,
-            opacity: 0.5,
+            opacity: 0.32,
           }}
         />
       ))}

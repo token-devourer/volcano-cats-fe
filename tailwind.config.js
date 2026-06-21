@@ -7,26 +7,56 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Core palette
-        obsidian:  "#0D0D0F",
-        "obsidian-2": "#141418",
-        "obsidian-3": "#1C1C24",
-        lava:      "#FF5C1A",
-        "lava-dim": "#CC3D00",
-        gold:      "#FFB547",
-        "gold-dim": "#CC8A1A",
-        ember:     "#C0392B",
-        ash:       "#8A8A99",
-        "ash-light": "#BDBDCC",
-        cream:     "#F0EAD6",
-        "card-bg": "#1E1E2E",
-        "card-border": "#2E2E44",
-        // Gang colors
-        "gang-fire":   "#FF5C1A",
-        "gang-ice":    "#5CE0FF",
-        "gang-storm":  "#B05CFF",
-        "gang-earth":  "#5CFF8A",
-        "gang-shadow": "#8A5CFF",
+        // ============================================================
+        // WARM WOODEN-TABLE PALETTE (cheerful "ceria" direction)
+        // ============================================================
+        // Surfaces: warm wood table + cream printed cards/panels.
+        //   • wood tones  — the table surface (dark brown = readable
+        //     backdrop for cream/gold display text).
+        //   • cream tones — panels, cards, modals (carry dark INK text).
+        // All accent values are tuned so dark INK reads on cream AND
+        // light CREAM reads on the accent (WCAG AA). See DESIGN.md.
+        // ------------------------------------------------------------
+
+        // --- Warm wood surfaces (the table) ---
+        wood:         "#8A5A2E", // table base plank
+        "wood-deep":  "#5E3A1C", // vignette / grain shadow / dark plaque
+        "wood-glow":  "#A9712F", // warm light pool at table center
+
+        // --- Cream panels / cards ---
+        panel:        "#FFF6E9", // cream panel/surface (primary)
+        "panel-2":    "#FBEAD2", // raised/inset cream (inputs, hovers)
+        "panel-line": "#E3C7A0", // soft brown hairline border (1px)
+
+        // --- Ink (dark text on cream/wood-light) ---
+        ink:          "#2A1A10", // primary text on cream (~15:1 AA)
+        "ink-soft":   "#7A5A40", // muted/secondary on cream (~6:1 AA)
+
+        // --- Light text (on wood / dark accents only) ---
+        cream:        "#FFF7EC",
+
+        // --- Heat accents (AA-tuned: cream-on-accent ≥ 4.5:1) ---
+        lava:         "#D63A0B", // primary action / draw / heat
+        "lava-dim":   "#B02E08", // button gradient end + pressed
+        gold:         "#E6A317", // reward / room-code plaque text
+        "gold-dim":   "#B07A0E",
+        ember:        "#D0332A", // danger / elimination
+
+        // --- Gang / elemental (card-art + solid badges; AA as solid bg) ---
+        "gang-fire":   "#D63A0B",
+        "gang-ice":    "#2BB7C4", // decorative (teal) — borders/bars only
+        "gang-storm":  "#7A3FC4", // deep grape — cream-on-it AA
+        "gang-earth":  "#2E8B3A", // forest — cream-on-it AA
+        "gang-shadow": "#7A5BE0", // grape (decorative card art)
+
+        // --- Legacy aliases (re-pointed warm) for any unmigrated usage ---
+        obsidian:      "#8A5A2E", // → wood
+        "obsidian-2":  "#FBEAD2", // → panel-2
+        "obsidian-3":  "#FFF6E9", // → panel
+        ash:           "#7A5A40", // → ink-soft
+        "ash-light":   "#7A5A40", // → ink-soft
+        "card-bg":     "#FBEAD2",
+        "card-border": "#E3C7A0",
       },
       fontFamily: {
         display: ["Righteous", "sans-serif"],
@@ -44,16 +74,20 @@ module.exports = {
         tooltip:          "60",
       },
       boxShadow: {
-        "lava-glow":   "0 0 20px rgba(255, 92, 26, 0.6), 0 0 60px rgba(255, 92, 26, 0.2)",
-        "gold-glow":   "0 0 20px rgba(255, 181, 71, 0.5)",
-        "card-hover":  "0 8px 32px rgba(0,0,0,0.6), 0 2px 8px rgba(255,92,26,0.15)",
-        "card-normal": "0 4px 12px rgba(0,0,0,0.5)",
+        // Warm shadows (brown-tinted, not pure black) for cream cards on wood.
+        "lava-glow":   "0 0 20px rgba(214, 58, 11, 0.55), 0 0 60px rgba(214, 58, 11, 0.22)",
+        "gold-glow":   "0 0 20px rgba(230, 163, 23, 0.5)",
+        "card-hover":  "0 12px 30px rgba(60, 30, 10, 0.34), 0 2px 8px rgba(214, 58, 11, 0.15)",
+        "card-normal": "0 6px 16px rgba(60, 30, 10, 0.22)",
+        "panel":       "0 10px 32px rgba(60, 30, 10, 0.22)",
       },
       backgroundImage: {
-        "lava-gradient": "linear-gradient(135deg, #FF5C1A 0%, #C0392B 100%)",
-        "gold-gradient": "linear-gradient(135deg, #FFB547 0%, #FF8C00 100%)",
-        "card-gradient": "linear-gradient(145deg, #1E1E2E 0%, #14141C 100%)",
-        "table-felt":    "radial-gradient(ellipse at center, #1A1A2E 0%, #0D0D0F 70%)",
+        "lava-gradient": "linear-gradient(135deg, #E8470A 0%, #B02E08 100%)",
+        "gold-gradient": "linear-gradient(135deg, #F4BE2E 0%, #D4900E 100%)",
+        "card-gradient": "linear-gradient(145deg, #FFFDF7 0%, #FFF1DC 50%, #FBE8CF 100%)",
+        // The table: a warm pool of light on a wood plank surface.
+        "table-felt":    "radial-gradient(ellipse at 50% 38%, #A9712F 0%, #8A5A2E 42%, #5E3A1C 100%)",
+        "table-wood":    "radial-gradient(ellipse at 50% 38%, #A9712F 0%, #8A5A2E 42%, #5E3A1C 100%)",
       },
       animation: {
         "card-flip":    "cardFlip 0.4s ease-in-out",
@@ -79,8 +113,8 @@ module.exports = {
           "100%": { transform: "translateY(0) scale(1)",       opacity: "1" },
         },
         lavaPulse: {
-          "0%, 100%": { boxShadow: "0 0 20px rgba(255,92,26,0.4)" },
-          "50%":      { boxShadow: "0 0 40px rgba(255,92,26,0.9), 0 0 80px rgba(255,92,26,0.3)" },
+          "0%, 100%": { boxShadow: "0 0 20px rgba(214,58,11,0.4)" },
+          "50%":      { boxShadow: "0 0 40px rgba(214,58,11,0.9), 0 0 80px rgba(214,58,11,0.3)" },
         },
         shake: {
           "0%, 100%": { transform: "translateX(0)" },
@@ -115,7 +149,7 @@ module.exports = {
         },
         deathFlash: {
           "0%":   { backgroundColor: "transparent" },
-          "20%":  { backgroundColor: "rgba(192,57,43,0.6)" },
+          "20%":  { backgroundColor: "rgba(208,51,42,0.6)" },
           "100%": { backgroundColor: "transparent" },
         },
         cardPlayPop: {

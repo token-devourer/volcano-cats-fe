@@ -24,15 +24,15 @@ export interface ToastProps {
 const EASE_OUT = [0.22, 1, 0.36, 1] as const;
 
 const TONE_TINT: Record<ToastTone, string> = {
-  info:    "border-card-border bg-obsidian-3 text-cream",
-  action:  "border-lava/50 bg-obsidian-3 text-cream",
-  success: "border-gang-earth/60 bg-gang-earth/10 text-cream",
-  warning: "border-gold/60 bg-gold/10 text-cream",
-  danger:  "border-ember bg-ember/20 text-cream",
+  info:    "border-panel-line bg-panel text-ink",
+  action:  "border-lava/50 bg-panel text-ink",
+  success: "border-gang-earth/60 bg-panel text-ink",
+  warning: "border-gold/60 bg-panel text-ink",
+  danger:  "border-ember bg-ember/15 text-ink",
 };
 
 const TONE_BAR: Record<ToastTone, string> = {
-  info:    "bg-ash-light",
+  info:    "bg-ink-soft",
   action:  "bg-lava",
   success: "bg-gang-earth",
   warning: "bg-gold",
@@ -78,7 +78,7 @@ export function Toast({ toast, onDismiss, duration = 4000 }: ToastProps) {
       className={clsx(
         "pointer-events-auto relative w-[min(90vw,24rem)] cursor-pointer overflow-hidden",
         "rounded-xl border px-4 py-3 shadow-xl",
-        "focus:outline-none focus-visible:ring-2 focus-visible:ring-lava focus-visible:ring-offset-2 focus-visible:ring-offset-obsidian",
+        "focus:outline-none focus-visible:ring-2 focus-visible:ring-lava focus-visible:ring-offset-2 focus-visible:ring-offset-panel",
         TONE_TINT[toast.tone],
       )}
     >

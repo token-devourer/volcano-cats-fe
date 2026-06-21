@@ -30,7 +30,7 @@ export function Spinner({ size = "md", label = "Memuat...", className }: Spinner
       <motion.span
         aria-hidden="true"
         className={clsx(
-          "inline-block rounded-full border-card-border border-t-lava",
+          "inline-block rounded-full border-panel-line border-t-lava",
           SIZES[size],
         )}
         animate={reduce ? undefined : { rotate: 360 }}

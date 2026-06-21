@@ -18,20 +18,20 @@ export function GameOver({ onLeave }: { onLeave: () => void }) {
   const standings = [...state.players].sort((a, b) => Number(b.id === state.winnerId) - Number(a.id === state.winnerId));
 
   return (
-    <div className="fixed inset-0 z-modal grid place-items-center overflow-hidden bg-black/85 px-4 backdrop-blur-md">
+    <div className="fixed inset-0 z-modal grid place-items-center overflow-hidden bg-wood-deep/85 px-4 backdrop-blur-md">
       {iWon && <EmberParticles count={28} />}
       <div className="relative z-modal w-full max-w-md animate-slide-up text-center">
         <div className="mb-2 text-7xl" aria-hidden="true">{iWon ? "🏆" : "💀"}</div>
-        <h1 className={clsx("font-display text-3xl", iWon ? "text-gold" : "text-ember")}>
+        <h1 className={clsx("font-display text-3xl", iWon ? "text-gold drop-shadow-[0_2px_8px_rgba(230,163,23,0.5)]" : "text-ember")}>
           {iWon ? t("over.youWin") : winner ? t("over.winner", { name: winner.name }) : t("over.noWinner")}
         </h1>
-        {!iWon && <p className="mt-1 text-sm text-ash-light">{t("over.youLose")}</p>}
+        {!iWon && <p className="mt-1 text-sm text-cream/80">{t("over.youLose")}</p>}
 
-        <ul className="mt-6 space-y-2 rounded-2xl border border-card-border bg-obsidian-3 p-4 text-left">
+        <ul className="mt-6 space-y-2 rounded-2xl border border-panel-line bg-panel p-4 text-left shadow-panel">
           {standings.map((p) => (
             <li key={p.id} className="flex items-center gap-3">
               <Avatar name={p.name} size="sm" />
-              <span className="flex-1 truncate text-cream">{p.name}</span>
+              <span className="flex-1 truncate text-ink">{p.name}</span>
               <span aria-hidden="true">{p.id === state.winnerId ? "🏆" : "💀"}</span>
             </li>
           ))}

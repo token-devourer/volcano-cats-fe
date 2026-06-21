@@ -49,7 +49,7 @@ function shineDelay(id: string): number {
 interface TipPos { x: number; y: number; place: "top" | "bottom" }
 
 /**
- * The playing-card primitive. A single obsidian face tinted by the card's
+ * The playing-card primitive. A single cream face tinted by the card's
  * accent (`lib/cardTheme`), carrying bespoke SVG art (`CardArt`) — never
  * emoji. Interactive cards are real buttons (keyboard + focus ring); the
  * description tooltip renders in a fixed-position portal so it escapes the
@@ -185,10 +185,10 @@ export function Card({
                 transformOrigin: tip.place === "top" ? "bottom center" : "top center",
                 borderColor: `${theme.color}66`,
               }}
-              className="pointer-events-none fixed w-44 max-w-[60vw] rounded-xl border bg-obsidian-3/95 px-3 py-2 text-center shadow-xl backdrop-blur-sm"
+              className="pointer-events-none fixed w-44 max-w-[60vw] rounded-xl border bg-panel/95 px-3 py-2 text-center shadow-panel backdrop-blur-sm"
             >
-              <p className="font-display text-sm leading-tight" style={{ color: theme.color }}>{name}</p>
-              <p className="mt-0.5 text-xs leading-snug text-ash-light">{description}</p>
+              <p className="font-display text-sm leading-tight text-ink">{name}</p>
+              <p className="mt-0.5 text-xs leading-snug text-ink-soft">{description}</p>
             </motion.div>
           )}
         </AnimatePresence>,

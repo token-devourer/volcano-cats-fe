@@ -23,19 +23,19 @@ import { CardType, CARD_SPECS } from "@/lib/shared";
 
 /** The sanctioned palette (mirror of DESIGN.md / tailwind tokens). */
 const PALETTE = {
-  lava:       "#FF5C1A",
-  lavaDim:    "#CC3D00",
-  ember:      "#C0392B",
-  gold:       "#FFB547",
-  goldDim:    "#CC8A1A",
-  ashLight:   "#BDBDCC",
-  cardBg:     "#1E1E2E",
-  cardBg2:    "#14141C",
-  gangFire:   "#FF5C1A",
-  gangIce:    "#5CE0FF",
-  gangStorm:  "#B05CFF",
-  gangEarth:  "#5CFF8A",
-  gangShadow: "#8A5CFF",
+  lava:       "#D63A0B",
+  lavaDim:    "#B02E08",
+  ember:      "#D0332A",
+  gold:       "#E6A317",
+  goldDim:    "#B07A0E",
+  ink:        "#2A1A10",
+  inkSoft:    "#7A5A40",
+  cardBase:   "#FBE8CF", // cream card face base
+  gangFire:   "#D63A0B",
+  gangIce:    "#2BB7C4",
+  gangStorm:  "#7A3FC4",
+  gangEarth:  "#2E8B3A",
+  gangShadow: "#7A5BE0",
 } as const;
 
 export interface CardTheme {
@@ -51,9 +51,9 @@ export interface CardTheme {
   image?: string;
 }
 
-/** Build a 145deg face gradient from an accent toward the deep card base. */
+/** Build a 145deg face gradient from an accent over the cream card base. */
 function faceGradient(accent: string): string {
-  return `linear-gradient(145deg, ${accent} 0%, ${PALETTE.cardBg2} 100%)`;
+  return `linear-gradient(145deg, ${accent} 0%, ${PALETTE.cardBase} 100%)`;
 }
 
 /** rgba glow string at the given alpha for an accent hex. */
@@ -82,7 +82,7 @@ const ACCENTS: Record<CardType, string> = {
   WATER_BUCKET: PALETTE.gangIce, // its antidote is water/cold
 
   // --- CLASSIC ACTIONS ---
-  NAP_TIME:   PALETTE.ashLight, // calm / passive
+  NAP_TIME:   PALETTE.inkSoft, // calm / passive
   ERUPTION:   PALETTE.lavaDim,  // aggressive heat (but not pure lava)
   SPY_CAT:    PALETTE.gold,     // information / reward feel
   EARTHQUAKE: PALETTE.goldDim,  // disruptive but neutral
@@ -90,14 +90,14 @@ const ACCENTS: Record<CardType, string> = {
   BRIBE:      PALETTE.gold,     // a gift / favor
 
   // --- NEW MECHANICS ---
-  REVERSE:    PALETTE.ashLight,
+  REVERSE:    PALETTE.inkSoft,
   SNIPER:     PALETTE.ember,    // targeted danger
   PEEK_AND_SWAP: PALETTE.gold,  // peek = information
   BUNKER:     PALETTE.gangEarth, // defense / safety (success-green family)
   PICKPOCKET: PALETTE.goldDim,  // theft of value
   FLOOD:      PALETTE.gangIce,  // water / cold
   TIME_WARP:  PALETTE.gangStorm, // THE warp accent
-  LOCKDOWN:   PALETTE.ashLight,
+  LOCKDOWN:   PALETTE.inkSoft,
 
   // --- GANG (elemental) ---
   GANG_FIRE:   PALETTE.gangFire,
@@ -120,7 +120,7 @@ const CARD_IMAGES: Partial<Record<CardType, string>> = {
  * the shared catalog so it can never disagree with the engine.
  */
 export function getCardTheme(type: CardType): CardTheme {
-  const accent = ACCENTS[type] ?? PALETTE.ashLight;
+  const accent = ACCENTS[type] ?? PALETTE.inkSoft;
   const spec = CARD_SPECS[type];
   return {
     gradient: faceGradient(accent),

@@ -19,16 +19,18 @@ const VARIANTS: Record<ButtonVariant, string> = {
     "border border-transparent",
   // Gold — secondary / reward.
   secondary:
-    "bg-gold-gradient text-obsidian font-semibold border border-transparent " +
+    "bg-gold-gradient text-ink font-semibold border border-transparent " +
     "hover:shadow-gold-glow",
   // Outline — quiet but present.
   outline:
-    "bg-transparent text-cream border border-card-border hover:border-lava " +
+    "bg-transparent text-ink border border-panel-line hover:border-lava " +
     "hover:text-lava",
-  // Ghost — lowest emphasis, text-only until hovered.
+  // Ghost — lowest emphasis, text-only until hovered. Light text for the
+  // wood/dark surfaces it usually sits on (table, backdrops). On cream
+  // panels use `outline` instead.
   ghost:
-    "bg-transparent text-ash-light border border-transparent " +
-    "hover:bg-obsidian-3 hover:text-cream",
+    "bg-transparent text-cream/85 border border-transparent " +
+    "hover:bg-wood-deep/50 hover:text-cream",
   // Ember — destructive.
   danger:
     "bg-ember text-cream border border-transparent hover:bg-ember/90",
@@ -58,7 +60,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
         // Base
         "inline-flex items-center justify-center font-body font-medium select-none",
         "transition-[transform,box-shadow,background-color,border-color,color] duration-150",
-        "focus:outline-none focus-visible:ring-2 focus-visible:ring-lava focus-visible:ring-offset-2 focus-visible:ring-offset-obsidian",
+        "focus:outline-none focus-visible:ring-2 focus-visible:ring-lava focus-visible:ring-offset-2 focus-visible:ring-offset-panel",
         // Press feedback (no-ops under reduced motion via the global CSS rule)
         "active:scale-95",
         // Disabled — dimmed + desaturated, not just lower opacity
