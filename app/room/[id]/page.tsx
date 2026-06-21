@@ -26,6 +26,8 @@ export default function RoomPage() {
   const isCreating = urlRoomId === "_new";
 
   const [username, setUsername] = useState<string | null>(null);
+  const [needsName, setNeedsName] = useState(false);
+  const [resolved, setResolved] = useState(false); // has the localStorage check run?
   useEffect(() => {
     let name = "";
     try {
@@ -33,9 +35,26 @@ export default function RoomPage() {
     } catch {
       /* ignore */
     }
-    if (!name) router.replace("/");
-    else setUsername(name);
-  }, [router]);
+    if (name) setUsername(name);
+    // A visitor opening a shared link has no saved name. Don't bounce them to
+    // the home screen (which loses the room code) — let them name themselves
+    // and join this room right here.
+    else if (!isCreating) setNeedsName(true);
+    else router.replace("/");
+    setResolved(true);
+  }, [router, isCreating]);
+
+  function submitName(raw: string) {
+    const name = raw.trim();
+    if (!name) return;
+    try {
+      localStorage.setItem("vc_username", name);
+    } catch {
+      /* ignore */
+    }
+    setUsername(name);
+    setNeedsName(false);
+  }
 
   useRoom({ roomId: isCreating ? undefined : urlRoomId, username: username ?? "", enabled: !!username });
 
@@ -70,6 +89,28 @@ export default function RoomPage() {
       <RulesOverlay />
     </>
   );
+
+  // ---- resolving identity (localStorage read pending) — avoids a misleading
+  //      "connecting" flash before we know whether a name is needed ----
+  if (!resolved) {
+    return (
+      <Centered>
+        <Spinner size="lg" label={t("game.loading")} />
+        {globals}
+      </Centered>
+    );
+  }
+
+  // ---- name gate (shared-link visitor with no saved name) ----
+  if (needsName) {
+    return (
+      <Centered>
+        <EmberParticles count={16} />
+        <NameGate roomId={urlRoomId} onSubmit={submitName} />
+        {globals}
+      </Centered>
+    );
+  }
 
   // ---- connection gates ----
   if (!username || status === "idle" || status === "connecting") {
@@ -170,8 +211,68 @@ export default function RoomPage() {
 
 function Centered({ children }: { children: React.ReactNode }) {
   return (
-    <main className={clsx("relative grid min-h-[100dvh] place-items-center bg-obsidian px-4 text-center")}>
+    <main className={clsx("relative grid min-h-[100dvh] place-items-center overflow-hidden bg-obsidian px-4 text-center")}>
       <div className="flex flex-col items-center">{children}</div>
     </main>
+  );
+}
+
+/**
+ * Name-entry gate for people arriving via a shared room link. Keeps the room
+ * code in view and joins this exact room the moment they pick a name — no trip
+ * back to the home screen, no lost code.
+ */
+function NameGate({ roomId, onSubmit }: { roomId: string; onSubmit: (n: string) => void }) {
+  const [name, setName] = useState("");
+  const [err, setErr] = useState("");
+
+  function go() {
+    if (!name.trim()) return setErr(t("lobby.enterName"));
+    onSubmit(name);
+  }
+
+  const inputClass =
+    "w-full rounded-xl border border-card-border bg-obsidian-2 px-4 py-3 text-cream " +
+    "placeholder:text-ash-light/60 transition-all duration-200 focus:outline-none " +
+    "focus:border-lava focus:shadow-[0_0_0_3px_rgba(255,92,26,0.18)]";
+
+  return (
+    <div className="relative z-banner w-full max-w-sm">
+      <header className="mb-6 select-none">
+        <div className="mb-2 text-6xl" aria-hidden="true">🌋</div>
+        <h1 className="font-display text-2xl text-lava drop-shadow-[0_0_18px_rgba(255,92,26,0.4)]">
+          {t("invite.title")}
+        </h1>
+        <p className="mt-2 text-sm text-ash-light">{t("invite.subtitle")}</p>
+        <p className="mt-1 font-display text-xl tracking-[0.25em] text-gold">{roomId}</p>
+      </header>
+
+      <section className="rounded-2xl border border-card-border bg-obsidian-3 p-6 shadow-[0_12px_48px_rgba(0,0,0,0.7)]">
+        <label htmlFor="join-name" className="mb-2 block text-left text-xs font-semibold uppercase tracking-widest text-ash-light">
+          {t("lobby.enterName")}
+        </label>
+        <input
+          id="join-name"
+          autoFocus
+          value={name}
+          maxLength={20}
+          placeholder="Nama panggilanmu…"
+          onChange={(e) => {
+            setName(e.target.value);
+            setErr("");
+          }}
+          onKeyDown={(e) => e.key === "Enter" && go()}
+          className={`${inputClass} mb-4`}
+        />
+        {err && (
+          <p className="mb-3 text-center text-sm text-ember" role="alert">
+            ⚠️ {err}
+          </p>
+        )}
+        <Button variant="primary" size="lg" fullWidth onClick={go}>
+          {t("invite.cta")}
+        </Button>
+      </section>
+    </div>
   );
 }

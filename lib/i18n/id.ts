@@ -144,6 +144,11 @@ const UI: StringTable = {
   "lobby.create": "Buat Room",
   "lobby.join": "Gabung Room",
 
+  // Shared-link invite gate (arriving via a room URL with no saved name)
+  "invite.title": "Kamu diundang!",
+  "invite.subtitle": "Masukkan nama buat gabung ke room",
+  "invite.cta": "Gabung Sekarang",
+
   // Player status (paired with StatusBadge)
   "status.host": "Host",
   "status.you": "Kamu",
