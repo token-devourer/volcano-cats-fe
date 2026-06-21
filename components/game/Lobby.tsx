@@ -48,15 +48,15 @@ export function Lobby({ roomId }: { roomId: string }) {
         </section>
 
         {/* Players */}
-        <section className="rounded-2xl border border-panel-line bg-panel p-5 shadow-panel">
-          <p className="mb-3 text-xs uppercase tracking-widest text-ink-soft">
+        <section className="rounded-2xl border-2 border-panel-line bg-wood-deep p-5 shadow-[0_10px_30px_rgba(40,20,10,0.5),inset_0_0_0_1px_rgba(227,199,160,0.25)]">
+          <p className="mb-3 text-xs uppercase tracking-widest text-cream/70">
             {t("lobby.players")} · {state.players.length}/10
           </p>
           <ul className="space-y-2">
             {state.players.map((p) => (
               <li key={p.id} className="flex items-center gap-3">
                 <Avatar name={p.name} size="sm" />
-                <span className="flex-1 truncate text-ink">{p.name}</span>
+                <span className="flex-1 truncate text-cream">{p.name}</span>
                 {p.isHost && <StatusBadge variant="host" label={t("status.host")} />}
                 {p.id === myId && <StatusBadge variant="you" label={t("status.you")} />}
               </li>
