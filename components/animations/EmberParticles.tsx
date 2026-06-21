@@ -1,48 +1,60 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useMemo } from "react";
+import { useReducedMotion } from "framer-motion";
 
 interface EmberParticlesProps {
   count?: number;
+  className?: string;
 }
 
-export function EmberParticles({ count = 12 }: EmberParticlesProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
+/**
+ * Ambient drifting embers behind the content. Low-density and CSS-driven
+ * (the `ember-fall` keyframe), sitting at the table z-index. Fully disabled
+ * under `prefers-reduced-motion` — no motion, no distraction.
+ */
+export function EmberParticles({ count = 14, className }: EmberParticlesProps) {
+  const reduce = useReducedMotion();
 
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
+  const embers = useMemo(
+    () =>
+      Array.from({ length: count }, (_, i) => {
+        // Deterministic spread so SSR/CSR match (no hydration mismatch).
+        const r = ((i * 9301 + 49297) % 233280) / 233280;
+        const r2 = ((i * 4099 + 1) % 251) / 251;
+        return {
+          left: `${Math.round(r * 100)}%`,
+          size: 2 + Math.round(r2 * 4),
+          duration: 6 + r * 8,
+          delay: -r2 * 10,
+          gold: i % 3 === 0,
+        };
+      }),
+    [count],
+  );
 
-    const embers: HTMLDivElement[] = [];
+  if (reduce) return null;
 
-    for (let i = 0; i < count; i++) {
-      const ember = document.createElement("div");
-      const size = Math.random() * 4 + 2;
-      const startX = Math.random() * 100;
-      const duration = Math.random() * 4 + 3;
-      const delay = Math.random() * 4;
-      const hue = Math.random() > 0.5 ? "#FF5C1A" : "#FFB547";
-
-      ember.style.cssText = `
-        position: fixed;
-        width: ${size}px;
-        height: ${size}px;
-        background: ${hue};
-        border-radius: 50%;
-        left: ${startX}vw;
-        top: -10px;
-        pointer-events: none;
-        z-index: 0;
-        box-shadow: 0 0 ${size * 2}px ${hue};
-        animation: emberFall ${duration}s ${delay}s ease-in infinite;
-      `;
-      container.appendChild(ember);
-      embers.push(ember);
-    }
-
-    return () => {
-      embers.forEach(e => e.remove());
-    };
-  }, [count]);
-
-  return <div ref={containerRef} className="fixed inset-0 pointer-events-none overflow-hidden z-0" />;
+  return (
+    <div
+      aria-hidden="true"
+      className={`pointer-events-none absolute inset-0 z-table overflow-hidden ${className ?? ""}`}
+    >
+      {embers.map((e, i) => (
+        <span
+          key={i}
+          className="absolute top-0 rounded-full animate-ember-fall"
+          style={{
+            left: e.left,
+            width: e.size,
+            height: e.size,
+            background: e.gold ? "#FFB547" : "#FF5C1A",
+            boxShadow: `0 0 ${e.size * 2}px ${e.gold ? "#FFB547" : "#FF5C1A"}`,
+            animationDuration: `${e.duration}s`,
+            animationDelay: `${e.delay}s`,
+            opacity: 0.5,
+          }}
+        />
+      ))}
+    </div>
+  );
 }
