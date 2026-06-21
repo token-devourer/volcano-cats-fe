@@ -185,7 +185,7 @@ export function Card({
                 transformOrigin: tip.place === "top" ? "bottom center" : "top center",
                 borderColor: `${theme.color}66`,
               }}
-              className="pointer-events-none fixed w-44 max-w-[60vw] rounded-xl border bg-panel/95 px-3 py-2 text-center shadow-panel backdrop-blur-sm"
+              className="pointer-events-none fixed w-44 max-w-[60vw] rounded-xl border bg-panel/95 px-3 py-2 text-center backdrop-blur-sm"
             >
               <p className="font-display text-sm leading-tight text-ink">{name}</p>
               <p className="mt-0.5 text-xs leading-snug text-ink-soft">{description}</p>

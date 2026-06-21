@@ -75,7 +75,7 @@ export default function HomePage() {
           </p>
         </header>
 
-        <section className="w-full rounded-2xl border border-panel-line bg-panel p-6 shadow-panel">
+        <section className="w-full rounded-2xl border border-panel-line bg-panel p-6">
           <label htmlFor="name" className="mb-2 block text-xs font-semibold uppercase tracking-widest text-ink-soft">
             {t("lobby.enterName")}
           </label>

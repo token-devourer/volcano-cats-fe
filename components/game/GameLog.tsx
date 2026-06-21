@@ -40,7 +40,7 @@ export function GameLog() {
         role="log"
         aria-live="polite"
         className={clsx(
-          "fixed right-0 top-0 z-modal flex h-[100dvh] w-80 max-w-[85vw] flex-col border-l border-panel-line bg-panel shadow-panel transition-transform duration-300 ease-out",
+          "fixed right-0 top-0 z-modal flex h-[100dvh] w-80 max-w-[85vw] flex-col border-l border-panel-line bg-panel transition-transform duration-300 ease-out",
           open ? "translate-x-0" : "translate-x-full",
         )}
       >

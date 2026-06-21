@@ -125,7 +125,7 @@ export default function RoomPage() {
   if (status === "error" || (status === "disconnected" && !state)) {
     return (
       <Centered>
-        <div className="rounded-2xl border border-ember/40 bg-panel p-6 shadow-panel">
+        <div className="rounded-2xl border border-ember/40 bg-panel p-6">
           <div className="text-6xl" aria-hidden="true">📡</div>
           <h2 className="mt-3 font-display text-2xl text-ember">{t("conn.disconnected")}</h2>
           <p className="mt-2 max-w-xs text-sm text-ink-soft">{t("conn.lost")}</p>
@@ -249,7 +249,7 @@ function NameGate({ roomId, onSubmit }: { roomId: string; onSubmit: (n: string) 
         <p className="mt-1 font-display text-xl tracking-[0.25em] text-gold drop-shadow-[0_2px_6px_rgba(230,163,23,0.4)]">{roomId}</p>
       </header>
 
-      <section className="rounded-2xl border border-panel-line bg-panel p-6 shadow-panel">
+      <section className="rounded-2xl border border-panel-line bg-panel p-6">
         <label htmlFor="join-name" className="mb-2 block text-left text-xs font-semibold uppercase tracking-widest text-ink-soft">
           {t("lobby.enterName")}
         </label>

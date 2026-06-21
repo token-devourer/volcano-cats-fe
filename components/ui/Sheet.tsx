@@ -45,7 +45,7 @@ export function Sheet({
             className={clsx(
               "relative z-modal w-full max-w-lg rounded-t-2xl border-t border-x bg-panel",
               "flex flex-col gap-4 p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))]",
-              "shadow-panel outline-none",
+              "outline-none",
               className,
             )}
             style={{ borderColor: `${accentHex}66` }}

@@ -38,7 +38,7 @@ export function FreezeBanner() {
 
   return (
     <div className="fixed left-1/2 top-[max(0.75rem,env(safe-area-inset-top))] z-banner w-[min(92vw,28rem)] -translate-x-1/2 animate-slide-up">
-      <div className="overflow-hidden rounded-2xl border border-gang-ice/60 bg-panel/95 shadow-panel backdrop-blur">
+      <div className="overflow-hidden rounded-2xl border border-gang-ice/60 bg-panel/95 backdrop-blur">
         <div className="h-1.5 bg-gang-ice/20">
           <div className="h-full bg-gang-ice transition-[width] duration-100 ease-linear" style={{ width: `${pct}%` }} />
         </div>

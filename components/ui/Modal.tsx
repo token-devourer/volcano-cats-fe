@@ -61,7 +61,7 @@ export function Modal({
             tabIndex={-1}
             className={clsx(
               "relative z-modal w-full max-w-md rounded-2xl border bg-panel p-6",
-              "flex flex-col gap-4 shadow-panel outline-none",
+              "flex flex-col gap-4 outline-none",
               className,
             )}
             style={{ borderColor: `${accentHex}66` }}

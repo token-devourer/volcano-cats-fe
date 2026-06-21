@@ -27,7 +27,7 @@ export function GameOver({ onLeave }: { onLeave: () => void }) {
         </h1>
         {!iWon && <p className="mt-1 text-sm text-cream/80">{t("over.youLose")}</p>}
 
-        <ul className="mt-6 space-y-2 rounded-2xl border border-panel-line bg-panel p-4 text-left shadow-panel">
+        <ul className="mt-6 space-y-2 rounded-2xl border border-panel-line bg-panel p-4 text-left">
           {standings.map((p) => (
             <li key={p.id} className="flex items-center gap-3">
               <Avatar name={p.name} size="sm" />
