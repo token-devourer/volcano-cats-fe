@@ -53,10 +53,8 @@
 }
 
 html, body {
-  /* Warm wood table: a pool of light on a plank surface. */
-  background-color: var(--wood-deep);
-  background-image: radial-gradient(ellipse at 50% 30%, var(--wood-glow), var(--wood) 45%, var(--wood-deep) 100%);
-  background-attachment: fixed;
+  /* Warm wood table: a single flat plank tone — no gradient. */
+  background-color: #6B4423;
   color: var(--cream);
   font-family: 'Hanken Grotesk', sans-serif;
   min-height: 100vh;
