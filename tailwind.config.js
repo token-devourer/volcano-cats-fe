@@ -32,6 +32,17 @@ module.exports = {
         display: ["Righteous", "sans-serif"],
         body:    ["Inter", "sans-serif"],
       },
+      // Semantic z-index scale — replaces ad-hoc 30/40/50/60 across the app.
+      // table (ambient/ember layer) sits behind everything; tooltip wins.
+      zIndex: {
+        table:            "0",
+        hand:             "10",
+        toast:            "20",
+        banner:           "30",
+        "modal-backdrop": "40",
+        modal:            "50",
+        tooltip:          "60",
+      },
       boxShadow: {
         "lava-glow":   "0 0 20px rgba(255, 92, 26, 0.6), 0 0 60px rgba(255, 92, 26, 0.2)",
         "gold-glow":   "0 0 20px rgba(255, 181, 71, 0.5)",
@@ -53,7 +64,8 @@ module.exports = {
         "ember-fall":   "emberFall 2s ease-in infinite",
         "glow-pulse":   "glowPulse 2s ease-in-out infinite",
         "slide-up":     "slideUp 0.3s ease-out",
-        "bounce-in":    "bounceIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
+        // ease-out-quint — smooth deceleration, no overshoot/bounce (per DESIGN.md motion rules)
+        "bounce-in":    "bounceIn 0.4s cubic-bezier(0.22, 1, 0.36, 1)",
         "death-flash":  "deathFlash 0.8s ease-out",
       },
       keyframes: {

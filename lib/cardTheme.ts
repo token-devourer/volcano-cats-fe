@@ -1,122 +1,132 @@
-import { CardType } from "@/types/game";
+import { CardType, CARD_SPECS } from "@/lib/shared";
 
 // ============================================================
-// CARD THEME — kustomisasi tampilan kartu
+// CARD THEME — visual identity for each playing card
 // ============================================================
-// File ini adalah SATU-SATUNYA tempat yang perlu diubah untuk mengganti
-// nama, deskripsi, atau gambar kartu. Efek/mekanik kartu TIDAK terpengaruh
-// sama sekali oleh perubahan di sini — itu murni ditentukan oleh `CardType`
-// dan logic-nya hidup di backend (src/game/engine.ts), terpisah total dari file ini.
+// Pure PRESENTATION. This file decides how a card *looks* (gradient,
+// accent color, glow, emoji, optional custom image). It does NOT define
+// mechanics (that's the engine, via the shared catalog) and it does NOT
+// define text — names/descriptions/flavor live in the i18n table
+// (`lib/i18n`), keyed by each card's `i18nKey`.
 //
-// CARA GANTI GAMBAR KARTU:
-// 1. Taruh file gambar di folder /public/cards/ (contoh: /public/cards/lava-cat.png)
-// 2. Isi field `image` di bawah dengan path itu, contoh: "/cards/lava-cat.png"
-// 3. Kosongkan / hapus field `image` (atau set undefined) untuk fallback ke
-//    tampilan emoji + gradient warna seperti sekarang — tidak perlu gambar
-//    untuk semua kartu sekaligus, bisa custom sebagian dulu.
+// The theme is DERIVED from the shared catalog so it cannot drift:
+//   • emoji            ← CARD_SPECS[type].emoji  (single source of truth)
+//   • gradient / color ← assigned by role + family from the sanctioned
+//                         palette below (no off-system hues — see DESIGN.md)
 //
-// CARA GANTI NAMA / DESKRIPSI:
-// Cukup edit field `displayName` dan `displayDescription` di bawah.
-// Field ini HANYA untuk tampilan — tidak mempengaruhi cara kartu bekerja.
-//
-// Catatan ukuran gambar yang disarankan: rasio potret ~3:4 (mis. 300x400px),
-// format PNG/WebP dengan background transparan atau penuh (akan di-crop
-// otomatis dengan object-fit: cover mengikuti bentuk kartu).
+// CARA GANTI GAMBAR KARTU (custom art):
+//   1. Taruh file di /public/cards/ (mis. /public/cards/lava-cat.png)
+//   2. Tambahkan entri di CARD_IMAGES di bawah, mis. LAVA_CAT: "/cards/lava-cat.png"
+//   3. Kosongkan / hapus entri untuk fallback ke emoji + gradient.
+//   Rasio potret ~3:4 (mis. 300x400), PNG/WebP, akan di-crop object-cover.
 // ============================================================
 
-export interface CardThemeEntry {
-  displayName: string;
-  displayDescription: string;
-  image?: string; // path relatif dari /public, contoh: "/cards/lava-cat.png". Kosongkan untuk pakai emoji fallback.
+/** The sanctioned palette (mirror of DESIGN.md / tailwind tokens). */
+const PALETTE = {
+  lava:       "#FF5C1A",
+  lavaDim:    "#CC3D00",
+  ember:      "#C0392B",
+  gold:       "#FFB547",
+  goldDim:    "#CC8A1A",
+  ashLight:   "#BDBDCC",
+  cardBg:     "#1E1E2E",
+  cardBg2:    "#14141C",
+  gangFire:   "#FF5C1A",
+  gangIce:    "#5CE0FF",
+  gangStorm:  "#B05CFF",
+  gangEarth:  "#5CFF8A",
+  gangShadow: "#8A5CFF",
+} as const;
+
+export interface CardTheme {
+  /** CSS gradient for the card face background. */
+  gradient: string;
+  /** The card's accent color (border tint, name text on the face). */
+  color: string;
+  /** rgba glow used for the selected/active state. */
+  glow: string;
+  /** Emoji identifier, pulled from the shared catalog. */
+  emoji: string;
+  /** Optional custom art (path under /public). Falls back to emoji when absent. */
+  image?: string;
 }
 
-export const CARD_THEME: Record<CardType, CardThemeEntry> = {
-  LAVA_CAT: {
-    displayName: "Lava Cat",
-    displayDescription: "Jika kamu draw ini tanpa Water Bucket, kamu MATI!",
-  },
-  WATER_BUCKET: {
-    displayName: "Water Bucket",
-    displayDescription: "Selamatkan diri dari Lava Cat. Taruh balik Lava Cat di posisi manapun dalam deck.",
-  },
-  NAP_TIME: {
-    displayName: "Nap Time",
-    displayDescription: "Skip giliran tanpa draw kartu.",
-  },
-  ERUPTION: {
-    displayName: "Eruption",
-    displayDescription: "Skip giliranmu. Pemain berikutnya kena 2 turn berturut-turut.",
-  },
-  SPY_CAT: {
-    displayName: "Spy Cat",
-    displayDescription: "Lihat 3 kartu teratas deck secara rahasia.",
-  },
-  EARTHQUAKE: {
-    displayName: "Earthquake",
-    displayDescription: "Acak ulang seluruh deck.",
-  },
-  FREEZE: {
-    displayName: "Freeze",
-    displayDescription: "Batalkan aksi siapapun selama window berlangsung. Bisa di-Freeze balik!",
-  },
-  BRIBE: {
-    displayName: "Bribe",
-    displayDescription: "Paksa 1 pemain kasih 1 kartu ke kamu. Mereka pilih kartunya.",
-  },
-  REVERSE: {
-    displayName: "Reverse",
-    displayDescription: "Balik arah urutan giliran.",
-  },
-  SNIPER: {
-    displayName: "Sniper",
-    displayDescription: "Pilih 1 pemain — mereka harus draw 1 kartu sekarang, di luar giliran mereka.",
-  },
-  PEEK_AND_SWAP: {
-    displayName: "Peek & Swap",
-    displayDescription: "Lihat 1 kartu teratas deck, lalu boleh swap dengan 1 kartu dari tanganmu.",
-  },
-  BUNKER: {
-    displayName: "Bunker",
-    displayDescription: "Pasang di depanmu. Batalkan efek negatif pertama yang kamu terima, lalu Bunker hancur.",
-  },
-  PICKPOCKET: {
-    displayName: "Pickpocket",
-    displayDescription: "Ambil 1 kartu ACAK dari tangan pemain pilihanmu.",
-  },
-  FLOOD: {
-    displayName: "Flood",
-    displayDescription: "Semua pemain buang 1 kartu pilihan mereka ke discard pile.",
-  },
-  TIME_WARP: {
-    displayName: "Time Warp",
-    displayDescription: "Ambil 1 kartu apapun dari discard pile ke tanganmu.",
-  },
-  LOCKDOWN: {
-    displayName: "Lockdown",
-    displayDescription: "Pilih 1 pemain — giliran berikutnya mereka tidak bisa main kartu apapun.",
-  },
-  GANG_FIRE: {
-    displayName: "Fire Gang",
-    displayDescription: "Gang card. Kombinasikan dengan kartu sejenis untuk efek steal.",
-  },
-  GANG_ICE: {
-    displayName: "Ice Gang",
-    displayDescription: "Gang card. Kombinasikan dengan kartu sejenis untuk efek steal.",
-  },
-  GANG_STORM: {
-    displayName: "Storm Gang",
-    displayDescription: "Gang card. Kombinasikan dengan kartu sejenis untuk efek steal.",
-  },
-  GANG_EARTH: {
-    displayName: "Earth Gang",
-    displayDescription: "Gang card. Kombinasikan dengan kartu sejenis untuk efek steal.",
-  },
-  GANG_SHADOW: {
-    displayName: "Shadow Gang",
-    displayDescription: "Gang card. Kombinasikan dengan kartu sejenis untuk efek steal.",
-  },
+/** Build a 145deg face gradient from an accent toward the deep card base. */
+function faceGradient(accent: string): string {
+  return `linear-gradient(145deg, ${accent} 0%, ${PALETTE.cardBg2} 100%)`;
+}
+
+/** rgba glow string at the given alpha for an accent hex. */
+function glowFor(hex: string, alpha = 0.7): string {
+  const h = hex.replace("#", "");
+  const r = parseInt(h.slice(0, 2), 16);
+  const g = parseInt(h.slice(2, 4), 16);
+  const b = parseInt(h.slice(4, 6), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
+/**
+ * Accent color per card type, drawn ONLY from the sanctioned palette and
+ * assigned by role / family:
+ *   • danger      → lava / ember (heat = threat)
+ *   • gang        → its own elemental color
+ *   • classic/new → gold or ash-light family (calm, non-heat) so danger and
+ *                   gang moments stay the loudest things on the table.
+ *
+ * Cold effects (Freeze, Flood) use gang-ice; Time Warp uses gang-storm —
+ * per DESIGN.md's "no off-system blue/purple" rule.
+ */
+const ACCENTS: Record<CardType, string> = {
+  // --- DANGER ---
+  LAVA_CAT:     PALETTE.lava,   // the threat — hottest color
+  WATER_BUCKET: PALETTE.gangIce, // its antidote is water/cold
+
+  // --- CLASSIC ACTIONS ---
+  NAP_TIME:   PALETTE.ashLight, // calm / passive
+  ERUPTION:   PALETTE.lavaDim,  // aggressive heat (but not pure lava)
+  SPY_CAT:    PALETTE.gold,     // information / reward feel
+  EARTHQUAKE: PALETTE.goldDim,  // disruptive but neutral
+  FREEZE:     PALETTE.gangIce,  // THE cold/counter accent
+  BRIBE:      PALETTE.gold,     // a gift / favor
+
+  // --- NEW MECHANICS ---
+  REVERSE:    PALETTE.ashLight,
+  SNIPER:     PALETTE.ember,    // targeted danger
+  PEEK_AND_SWAP: PALETTE.gold,  // peek = information
+  BUNKER:     PALETTE.gangEarth, // defense / safety (success-green family)
+  PICKPOCKET: PALETTE.goldDim,  // theft of value
+  FLOOD:      PALETTE.gangIce,  // water / cold
+  TIME_WARP:  PALETTE.gangStorm, // THE warp accent
+  LOCKDOWN:   PALETTE.ashLight,
+
+  // --- GANG (elemental) ---
+  GANG_FIRE:   PALETTE.gangFire,
+  GANG_ICE:    PALETTE.gangIce,
+  GANG_STORM:  PALETTE.gangStorm,
+  GANG_EARTH:  PALETTE.gangEarth,
+  GANG_SHADOW: PALETTE.gangShadow,
 };
 
-export function getCardTheme(type: CardType): CardThemeEntry {
-  return CARD_THEME[type] ?? { displayName: type, displayDescription: "" };
+/**
+ * Optional custom art overrides. Add a path here once art exists in
+ * /public/cards. Absent / undefined ⇒ emoji + gradient fallback.
+ */
+const CARD_IMAGES: Partial<Record<CardType, string>> = {
+  // LAVA_CAT: "/cards/lava-cat.png",
+};
+
+/**
+ * Resolve the full visual theme for a card type. Emoji always comes from
+ * the shared catalog so it can never disagree with the engine.
+ */
+export function getCardTheme(type: CardType): CardTheme {
+  const accent = ACCENTS[type] ?? PALETTE.ashLight;
+  const spec = CARD_SPECS[type];
+  return {
+    gradient: faceGradient(accent),
+    color: accent,
+    glow: glowFor(accent),
+    emoji: spec?.emoji ?? "❔",
+    image: CARD_IMAGES[type],
+  };
 }

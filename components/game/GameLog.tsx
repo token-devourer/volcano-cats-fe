@@ -1,49 +1,62 @@
 "use client";
 import { useEffect, useRef } from "react";
-import { GameLogEntry } from "@/types/game";
+import { useGame } from "@/store/game";
+import { useUI } from "@/store/ui";
+import { formatEvent } from "@/lib/i18n";
+import { EVENT_TONE, type EventTone } from "@/lib/shared";
 import clsx from "clsx";
 
-type LogType = GameLogEntry["type"];
-
-const LOG_COLORS: Record<LogType, string> = {
-  action: "text-ash-light",
-  death:  "text-ember",
-  system: "text-gold/80",
-  win:    "text-gold",
+const TONE_COLOR: Record<EventTone, string> = {
+  info: "text-ash-light",
+  action: "text-cream",
+  danger: "text-ember",
+  win: "text-gold",
 };
 
-const LOG_ICONS: Record<LogType, string> = {
-  action: "▸",
-  death:  "💀",
-  system: "⚙️",
-  win:    "🏆",
-};
-
-export function GameLog({ entries, visible }: { entries: GameLogEntry[]; visible: boolean }) {
-  const bottomRef = useRef<HTMLDivElement>(null);
+/** Slide-in activity log, rendered from the structured event stream. */
+export function GameLog() {
+  const state = useGame((s) => s.state);
+  const open = useUI((s) => s.showLog);
+  const toggle = useUI((s) => s.toggleLog);
+  const endRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [entries]);
+    if (open) endRef.current?.scrollIntoView({ block: "end" });
+  }, [open, state?.log.length]);
+
+  if (!state) return null;
+  const nameOf = (id: string) => state.players.find((p) => p.id === id)?.name ?? "Pemain";
 
   return (
-    <div className={clsx(
-      "fixed right-0 top-0 h-full w-72 bg-obsidian-2 border-l border-card-border",
-      "flex flex-col transition-transform duration-300 z-40",
-      visible ? "translate-x-0" : "translate-x-full",
-    )}>
-      <div className="px-4 py-3 border-b border-card-border">
-        <h3 className="font-display text-gold text-sm tracking-wide">📜 Game Log</h3>
-      </div>
-      <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-1.5">
-        {entries.map((entry, i) => (
-          <div key={i} className={clsx("text-xs leading-relaxed animate-slide-up", LOG_COLORS[entry.type])}>
-            <span className="mr-1 opacity-60">{LOG_ICONS[entry.type]}</span>
-            {entry.message}
-          </div>
-        ))}
-        <div ref={bottomRef} />
-      </div>
-    </div>
+    <>
+      {open && (
+        <button
+          aria-label="Tutup log"
+          className="fixed inset-0 z-modal-backdrop bg-black/40 sm:hidden"
+          onClick={toggle}
+        />
+      )}
+      <aside
+        role="log"
+        aria-live="polite"
+        className={clsx(
+          "fixed right-0 top-0 z-modal flex h-[100dvh] w-80 max-w-[85vw] flex-col border-l border-card-border bg-obsidian-2 shadow-2xl transition-transform duration-300 ease-out",
+          open ? "translate-x-0" : "translate-x-full",
+        )}
+      >
+        <header className="flex items-center justify-between border-b border-card-border px-4 py-3">
+          <h2 className="font-display text-lava">📜 Log</h2>
+          <button onClick={toggle} className="text-ash-light hover:text-cream" aria-label="Tutup">✕</button>
+        </header>
+        <div className="flex-1 space-y-1.5 overflow-y-auto px-4 py-3 text-sm [scrollbar-width:thin]">
+          {state.log.map((e, i) => (
+            <p key={i} className={clsx("leading-snug", TONE_COLOR[EVENT_TONE[e.kind]])}>
+              {formatEvent(e, nameOf)}
+            </p>
+          ))}
+          <div ref={endRef} />
+        </div>
+      </aside>
+    </>
   );
 }

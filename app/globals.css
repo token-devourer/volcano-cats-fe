@@ -5,12 +5,38 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* ============================================================
+   PALETTE — CSS custom properties mirror of the Tailwind tokens.
+   Single sanctioned palette (see DESIGN.md). Use these (or the
+   Tailwind classes) — never raw blue/purple. Cold = gang-ice,
+   warp = gang-storm, success = gang-earth.
+   ============================================================ */
 :root {
-  --obsidian: #0D0D0F;
-  --lava: #FF5C1A;
-  --gold: #FFB547;
-  --cream: #F0EAD6;
-  --ash: #8A8A99;
+  /* Core surfaces (cool blue-charcoal stone) */
+  --obsidian:     #0D0D0F;
+  --obsidian-2:   #141418;
+  --obsidian-3:   #1C1C24;
+  --card-bg:      #1E1E2E;
+  --card-border:  #2E2E44;
+
+  /* Heat accents */
+  --lava:      #FF5C1A;
+  --lava-dim:  #CC3D00;
+  --gold:      #FFB547;
+  --gold-dim:  #CC8A1A;
+  --ember:     #C0392B;
+
+  /* Ink ramp */
+  --cream:      #F0EAD6;
+  --ash-light:  #BDBDCC; /* muted/secondary text on dark surfaces (AA) */
+  --ash:        #8A8A99; /* decorative / disabled only — NOT body text */
+
+  /* Gang / elemental (the only sanctioned extra hues) */
+  --gang-fire:   #FF5C1A;
+  --gang-ice:    #5CE0FF;
+  --gang-storm:  #B05CFF;
+  --gang-earth:  #5CFF8A;
+  --gang-shadow: #8A5CFF;
 }
 
 html, body {
@@ -19,15 +45,26 @@ html, body {
   font-family: 'Inter', sans-serif;
   min-height: 100vh;
   overflow-x: hidden;
+  /* Smoother text rendering on the dark field */
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #1C1C24; }
-::-webkit-scrollbar-thumb { background: #3A3A55; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #FF5C1A; }
+/* Display family is reserved for headings/card names/banners */
+.font-display { letter-spacing: -0.02em; }
 
-/* Card 3D perspective */
+/* Headings wrap nicely; prose stays readable */
+h1, h2, h3 { text-wrap: balance; }
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--obsidian-3); }
+::-webkit-scrollbar-thumb { background: #3A3A55; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--lava); }
+/* Firefox */
+* { scrollbar-width: thin; scrollbar-color: #3A3A55 var(--obsidian-3); }
+
+/* Card 3D perspective (used by the playing-card primitive) */
 .card-3d-container { perspective: 1000px; }
 .card-3d {
   transform-style: preserve-3d;
@@ -36,14 +73,14 @@ html, body {
 .card-3d:hover { transform: translateY(-8px) rotateX(5deg); }
 .card-3d-back { backface-visibility: hidden; }
 
-/* Lava border animation */
+/* Lava border animation (ambient — paused under reduced motion) */
 @keyframes lavaBorder {
   0%, 100% { border-color: rgba(255,92,26,0.4); }
   50%       { border-color: rgba(255,92,26,1); }
 }
 .lava-border { animation: lavaBorder 1.5s ease-in-out infinite; }
 
-/* Ember particles */
+/* Ember particles — sit behind content on the table layer */
 .ember {
   position: fixed;
   width: 3px;
@@ -54,39 +91,32 @@ html, body {
   z-index: 0;
 }
 
-/* Card selected state */
-.card-selected {
-  transform: translateY(-16px) !important;
-  box-shadow: 0 0 20px var(--lava), 0 0 40px rgba(255,92,26,0.3) !important;
-}
-
-/* Tooltip */
-.tooltip {
-  position: absolute;
-  bottom: calc(100% + 8px);
-  left: 50%;
-  transform: translateX(-50%);
-  background: #1C1C24;
-  border: 1px solid #3A3A55;
-  padding: 8px 12px;
-  border-radius: 8px;
-  font-size: 12px;
-  color: var(--cream);
-  white-space: nowrap;
-  pointer-events: none;
-  z-index: 100;
-  opacity: 0;
-  transition: opacity 0.15s;
-  max-width: 200px;
-  white-space: normal;
-  text-align: center;
-}
-.tooltip-trigger:hover .tooltip { opacity: 1; }
-
-/* Animations for reduced motion */
+/* ============================================================
+   REDUCED MOTION — mandatory for EVERY animation (DESIGN.md).
+   Degrade to instant/crossfade; pause ambient loops entirely so
+   ember particles, glow pulses and the lava border do not run.
+   ============================================================ */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Kill ambient infinite loops outright (they convey no state) */
+  .lava-border,
+  .ember,
+  .animate-ember-fall,
+  .animate-lava-pulse,
+  .animate-glow-pulse {
+    animation: none !important;
+  }
+
+  /* Don't lift/tilt cards on hover when motion is reduced */
+  .card-3d,
+  .card-3d:hover {
+    transition: none !important;
+    transform: none !important;
   }
 }
