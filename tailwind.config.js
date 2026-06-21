@@ -84,7 +84,6 @@ module.exports = {
       backgroundImage: {
         "lava-gradient": "linear-gradient(135deg, #E8470A 0%, #B02E08 100%)",
         "gold-gradient": "linear-gradient(135deg, #F4BE2E 0%, #D4900E 100%)",
-        "card-gradient": "linear-gradient(145deg, #FFFDF7 0%, #FFF1DC 50%, #FBE8CF 100%)",
         // The table: a warm pool of light on a wood plank surface.
         "table-felt":    "radial-gradient(ellipse at 50% 38%, #A9712F 0%, #8A5A2E 42%, #5E3A1C 100%)",
         "table-wood":    "radial-gradient(ellipse at 50% 38%, #A9712F 0%, #8A5A2E 42%, #5E3A1C 100%)",

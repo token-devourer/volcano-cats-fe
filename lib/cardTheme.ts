@@ -51,9 +51,9 @@ export interface CardTheme {
   image?: string;
 }
 
-/** Build a 145deg face gradient from an accent over the cream card base. */
-function faceGradient(accent: string): string {
-  return `linear-gradient(145deg, ${accent} 0%, ${PALETTE.cardBase} 100%)`;
+/** Flat cream card face background. */
+function faceGradient(_accent: string): string {
+  return PALETTE.cardBase;
 }
 
 /** rgba glow string at the given alpha for an accent hex. */
