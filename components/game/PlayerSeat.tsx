@@ -31,7 +31,7 @@ export function PlayerSeat({ player, isCurrent, isMe, compact }: PlayerSeatProps
         aria-label={player.name}
       />
       <div className="flex max-w-[88px] items-center gap-1">
-        <span className="truncate text-xs font-semibold text-cream">{player.name}</span>
+        <span className="truncate text-xs font-semibold text-ink">{player.name}</span>
       </div>
       <div className="flex flex-wrap items-center justify-center gap-1">
         {!player.alive ? (
@@ -49,7 +49,7 @@ export function PlayerSeat({ player, isCurrent, isMe, compact }: PlayerSeatProps
       </div>
 
       {player.alive && (
-        <span className="text-[11px] text-cream/80" aria-label={t("game.deckCount", { count: player.handCount })}>
+        <span className="text-[11px] text-ink-soft" aria-label={t("game.deckCount", { count: player.handCount })}>
           🂠 {player.handCount}
         </span>
       )}

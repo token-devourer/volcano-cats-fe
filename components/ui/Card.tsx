@@ -5,6 +5,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import clsx from "clsx";
 import type { CardType } from "@/lib/shared";
 import { getCardTheme } from "@/lib/cardTheme";
+import { useTilt } from "@/lib/motion/useTilt";
+import { play } from "@/lib/sound";
 import { CardArt, CardBackArt } from "./CardArt";
 
 export type CardSize = "sm" | "md" | "lg" | "responsive";
@@ -68,7 +70,14 @@ export function Card({
   const [tip, setTip] = useState<TipPos | null>(null);
   useEffect(() => setMounted(true), []);
 
-  const activate = () => { if (playable) (onActivate ?? onClick)?.(); };
+  // Pointer-driven 3D tilt + shine (fine-pointer, motion-on only).
+  useTilt(ref, { enabled: interactive && !faceDown, max: 9 });
+
+  const activate = () => {
+    if (!playable) return;
+    play("select");
+    (onActivate ?? onClick)?.();
+  };
   const onKeyDown = (e: KeyboardEvent) => {
     if (!playable) return;
     if (e.key === "Enter" || e.key === " ") { e.preventDefault(); activate(); }
@@ -127,8 +136,12 @@ export function Card({
     className,
   );
 
+  const onEnter = () => {
+    if (playable) play("hover");
+    showTip();
+  };
   const handlers = {
-    onMouseEnter: showTip,
+    onMouseEnter: onEnter,
     onMouseLeave: hideTip,
     onFocus: showTip,
     onBlur: hideTip,

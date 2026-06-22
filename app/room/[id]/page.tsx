@@ -2,13 +2,14 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import clsx from "clsx";
-import { Button, Spinner, ToastRegion } from "@/components/ui";
+import { Button, Spinner, ToastRegion, SoundToggle } from "@/components/ui";
 import { EmberParticles } from "@/components/animations/EmberParticles";
 import { Lobby } from "@/components/game/Lobby";
 import { GameTable } from "@/components/game/GameTable";
 import { PlayerHand } from "@/components/game/PlayerHand";
 import { PhaseController } from "@/components/game/PhaseController";
 import { CardPlayAnimation } from "@/components/game/CardPlayAnimation";
+import { EffectsController } from "@/components/game/EffectsController";
 import { GameLog } from "@/components/game/GameLog";
 import { GameOver } from "@/components/game/GameOver";
 import RulesOverlay from "@/components/game/RulesOverlay";
@@ -117,7 +118,7 @@ export default function RoomPage() {
     return (
       <Centered>
         <Spinner size="lg" label={t("conn.connecting")} />
-        <p className="mt-4 text-cream/80">{t("conn.connecting")}</p>
+        <p className="mt-4 text-ink-soft">{t("conn.connecting")}</p>
         {globals}
       </Centered>
     );
@@ -169,12 +170,12 @@ export default function RoomPage() {
   // ---- playing ----
   const me = state.players.find((p) => p.id === myId);
   return (
-    <div className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-table-wood">
+    <div data-shake-root className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-table-wood">
       <EmberParticles count={8} />
 
       {/* Top bar */}
       <header className="relative z-banner flex items-center justify-between px-4 py-3">
-        <span className="font-display text-sm text-cream/90">🌋 {displayRoomId}</span>
+        <span className="font-display text-sm text-ink">🌋 {displayRoomId}</span>
         <div className="flex items-center gap-2">
           {me?.alive && (
             <Button
@@ -185,6 +186,7 @@ export default function RoomPage() {
               {me.away ? `😴 ${t("status.away")}` : `💤 ${t("status.away")}`}
             </Button>
           )}
+          <SoundToggle />
           <Button variant="ghost" size="sm" onClick={() => setRules(true)}>📖</Button>
           <Button variant="ghost" size="sm" onClick={toggleLog}>📜</Button>
         </div>
@@ -192,6 +194,7 @@ export default function RoomPage() {
 
       <GameTable />
       <CardPlayAnimation />
+      <EffectsController />
 
       {me?.alive ? (
         <PlayerHand />
@@ -213,7 +216,7 @@ export default function RoomPage() {
 
 function Centered({ children }: { children: React.ReactNode }) {
   return (
-    <main className={clsx("relative grid min-h-[100dvh] place-items-center overflow-hidden bg-wood-deep px-4 text-center")}>
+    <main className={clsx("relative grid min-h-[100dvh] place-items-center overflow-hidden bg-table-sky px-4 text-center")}>
       <div className="flex flex-col items-center">{children}</div>
     </main>
   );
@@ -242,11 +245,11 @@ function NameGate({ roomId, onSubmit }: { roomId: string; onSubmit: (n: string) 
     <div className="relative z-banner w-full max-w-sm">
       <header className="mb-6 select-none">
         <div className="mb-2 text-6xl" aria-hidden="true">🌋</div>
-        <h1 className="font-display text-2xl text-cream drop-shadow-[0_2px_8px_rgba(214,58,11,0.4)]">
+        <h1 className="font-display text-2xl text-ink drop-shadow-[0_1px_0_rgba(255,255,255,0.5)]">
           {t("invite.title")}
         </h1>
-        <p className="mt-2 text-sm text-cream/80">{t("invite.subtitle")}</p>
-        <p className="mt-1 font-display text-xl tracking-[0.25em] text-gold drop-shadow-[0_2px_6px_rgba(230,163,23,0.4)]">{roomId}</p>
+        <p className="mt-2 text-sm text-ink-soft">{t("invite.subtitle")}</p>
+        <p className="mt-1 font-display text-xl tracking-[0.25em] text-gold-dim drop-shadow-[0_1px_0_rgba(255,255,255,0.5)]">{roomId}</p>
       </header>
 
       <section className="rounded-2xl border border-panel-line bg-panel p-6">

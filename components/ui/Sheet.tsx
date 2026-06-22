@@ -27,7 +27,7 @@ export function Sheet({
       {open && (
         <div className="fixed inset-0 z-modal-backdrop flex items-end justify-center">
           <motion.div
-            className="absolute inset-0 bg-wood-deep/80 backdrop-blur-sm"
+            className="absolute inset-0 bg-ink/40 backdrop-blur-sm"
             initial={reduce ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

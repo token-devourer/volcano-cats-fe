@@ -37,7 +37,7 @@ export function GameTable() {
         <p
           className={clsx(
             "font-display text-lg",
-            isMyTurn ? "text-cream drop-shadow-[0_0_14px_rgba(214,58,11,0.55)]" : "text-cream/85",
+            isMyTurn ? "text-lava drop-shadow-[0_1px_0_rgba(255,255,255,0.5)]" : "text-ink-soft",
           )}
         >
           {isMyTurn ? t("game.yourTurn") : `${t("status.turn")} ${currentName}`}
@@ -52,18 +52,18 @@ export function GameTable() {
       {/* Deck + discard */}
       <div className="flex items-end justify-center gap-6 sm:gap-10">
         <div className="flex flex-col items-center gap-2">
-          <span className="text-xs uppercase tracking-widest text-cream/80">{t("game.discard")}</span>
+          <span className="text-xs uppercase tracking-widest text-ink-soft">{t("game.discard")}</span>
           {topDiscard ? (
             <Card card={topDiscard} name={cardName(topDiscard.type)} size="md" />
           ) : (
-            <div className="grid h-[clamp(7rem,22vw,9rem)] w-[clamp(5rem,16vw,6.5rem)] place-items-center rounded-2xl border border-dashed border-panel-line text-cream/40">
+            <div className="grid h-[clamp(7rem,22vw,9rem)] w-[clamp(5rem,16vw,6.5rem)] place-items-center rounded-2xl border border-dashed border-panel-line text-ink-soft/50">
               —
             </div>
           )}
         </div>
 
         <div className="flex flex-col items-center gap-2">
-          <span className="text-xs uppercase tracking-widest text-cream/80">
+          <span className="text-xs uppercase tracking-widest text-ink-soft">
             {t("game.deck")} · {state.deckCount}
           </span>
           <Card

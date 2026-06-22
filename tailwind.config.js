@@ -8,55 +8,61 @@ module.exports = {
     extend: {
       colors: {
         // ============================================================
-        // WARM WOODEN-TABLE PALETTE (cheerful "ceria" direction)
+        // SUNNY DAYLIGHT PALETTE (bright "ceria++" direction)
         // ============================================================
-        // Surfaces: warm wood table + cream printed cards/panels.
-        //   • wood tones  — the table surface (dark brown = readable
-        //     backdrop for cream/gold display text).
-        //   • cream tones — panels, cards, modals (carry dark INK text).
-        // All accent values are tuned so dark INK reads on cream AND
-        // light CREAM reads on the accent (WCAG AA). See DESIGN.md.
+        // A sunlit table: peach→butter→sky background, bright cream
+        // printed cards/panels carrying dark INK text, vivid lava/gold
+        // energy and brightened elemental hues. No dark surfaces — the
+        // page should feel happy and bright to play. INK reads on cream
+        // AND on the sunny surfaces; CREAM is reserved for text sitting
+        // ON solid accents (buttons/badges). See DESIGN.md.
         // ------------------------------------------------------------
 
-        // --- Warm wood surfaces (the table) ---
-        wood:         "#8A5A2E", // table base plank
-        "wood-deep":  "#5E3A1C", // vignette / grain shadow / dark plaque
-        "wood-glow":  "#A9712F", // warm light pool at table center
+        // --- Sunny surfaces (the sky / page / table) ---
+        "sky-1": "#FFE8C5", // peach (gradient top)
+        "sky-2": "#FFD89B", // butter (gradient mid)
+        "sky-3": "#BFE3FF", // soft sky (gradient bottom)
+        sun:     "#FFF3D6", // warm light pool at table center
+
+        // --- Warm surfaces (legacy "wood" names, re-pointed BRIGHT) ---
+        wood:         "#FFD89B", // butter mid-surface
+        "wood-deep":  "#F2C879", // deeper sun (NOT brown) — scrims/plaques
+        "wood-glow":  "#FFF3D6", // warm light pool at table center
 
         // --- Cream panels / cards ---
-        panel:        "#FFF6E9", // cream panel/surface (primary)
-        "panel-2":    "#FBEAD2", // raised/inset cream (inputs, hovers)
-        "panel-line": "#E3C7A0", // soft brown hairline border (1px)
+        panel:        "#FFFDF7", // bright cream panel/surface (primary)
+        "panel-2":    "#FFF4DD", // raised/inset cream (inputs, hovers)
+        "panel-line": "#F0D9AE", // soft sandy hairline border (1px)
 
-        // --- Ink (dark text on cream/wood-light) ---
-        ink:          "#2A1A10", // primary text on cream (~15:1 AA)
-        "ink-soft":   "#7A5A40", // muted/secondary on cream (~6:1 AA)
+        // --- Ink (dark text on cream / sunny surfaces) ---
+        ink:          "#2A1A10", // primary text (~15:1 AA on cream)
+        "ink-soft":   "#5A4226", // muted/secondary (~7:1 on cream, ~6:1 on sunny)
 
-        // --- Light text (on wood / dark accents only) ---
+        // --- Light text (on solid accents only) ---
         cream:        "#FFF7EC",
 
-        // --- Heat accents (AA-tuned: cream-on-accent ≥ 4.5:1) ---
-        lava:         "#D63A0B", // primary action / draw / heat
-        "lava-dim":   "#B02E08", // button gradient end + pressed
-        gold:         "#E6A317", // reward / room-code plaque text
-        "gold-dim":   "#B07A0E",
-        ember:        "#D0332A", // danger / elimination
+        // --- Heat / reward accents (brightened) ---
+        lava:         "#F2510E", // primary action / draw / heat
+        "lava-dim":   "#D8430A", // button gradient end + pressed
+        gold:         "#FFB31E", // reward (solid bg w/ ink text)
+        "gold-dim":   "#9A6B00", // gold TEXT on cream (~4.7:1 AA)
+        ember:        "#E5392B", // danger / elimination
 
-        // --- Gang / elemental (card-art + solid badges; AA as solid bg) ---
-        "gang-fire":   "#D63A0B",
-        "gang-ice":    "#2BB7C4", // decorative (teal) — borders/bars only
-        "gang-storm":  "#7A3FC4", // deep grape — cream-on-it AA
-        "gang-earth":  "#2E8B3A", // forest — cream-on-it AA
-        "gang-shadow": "#7A5BE0", // grape (decorative card art)
+        // --- Gang / elemental (brightened; card-art + solid badges) ---
+        "gang-fire":   "#F2510E",
+        "gang-ice":    "#36C5E0", // bright sky/cyan (cold/freeze accent)
+        "gang-storm":  "#9B6BFF", // bright grape (warp accent)
+        "gang-earth":  "#36D399", // bright mint (success)
+        "gang-shadow": "#B08CFF", // light grape (decorative card art)
 
-        // --- Legacy aliases (re-pointed warm) for any unmigrated usage ---
-        obsidian:      "#8A5A2E", // → wood
-        "obsidian-2":  "#FBEAD2", // → panel-2
-        "obsidian-3":  "#FFF6E9", // → panel
-        ash:           "#7A5A40", // → ink-soft
-        "ash-light":   "#7A5A40", // → ink-soft
-        "card-bg":     "#FBEAD2",
-        "card-border": "#E3C7A0",
+        // --- Legacy aliases (re-pointed bright) for any unmigrated usage ---
+        obsidian:      "#FFD89B", // → wood
+        "obsidian-2":  "#FFF4DD", // → panel-2
+        "obsidian-3":  "#FFFDF7", // → panel
+        ash:           "#5A4226", // → ink-soft
+        "ash-light":   "#5A4226", // → ink-soft
+        "card-bg":     "#FFF4DD",
+        "card-border": "#F0D9AE",
       },
       fontFamily: {
         display: ["Righteous", "sans-serif"],
@@ -74,19 +80,22 @@ module.exports = {
         tooltip:          "60",
       },
       boxShadow: {
-        // Warm shadows (brown-tinted, not pure black) for cream cards on wood.
-        "lava-glow":   "0 0 20px rgba(214, 58, 11, 0.55), 0 0 60px rgba(214, 58, 11, 0.22)",
-        "gold-glow":   "0 0 20px rgba(230, 163, 23, 0.5)",
-        "card-hover":  "0 12px 30px rgba(60, 30, 10, 0.34), 0 2px 8px rgba(214, 58, 11, 0.15)",
-        "card-normal": "0 6px 16px rgba(60, 30, 10, 0.22)",
-        "panel":       "0 10px 32px rgba(60, 30, 10, 0.22)",
+        // Warm shadows (amber-tinted, not pure black) for cream cards on the sunny table.
+        "lava-glow":   "0 0 20px rgba(242, 81, 14, 0.50), 0 0 60px rgba(242, 81, 14, 0.20)",
+        "gold-glow":   "0 0 20px rgba(255, 179, 30, 0.55)",
+        "card-hover":  "0 12px 30px rgba(120, 70, 20, 0.28), 0 2px 8px rgba(242, 81, 14, 0.15)",
+        "card-normal": "0 6px 16px rgba(120, 70, 20, 0.18)",
+        "panel":       "0 10px 32px rgba(120, 70, 20, 0.18)",
       },
       backgroundImage: {
-        "lava-gradient": "linear-gradient(135deg, #E8470A 0%, #B02E08 100%)",
-        "gold-gradient": "linear-gradient(135deg, #F4BE2E 0%, #D4900E 100%)",
-        // The table: a warm pool of light on a wood plank surface.
-        "table-felt":    "radial-gradient(ellipse at 50% 38%, #A9712F 0%, #8A5A2E 42%, #5E3A1C 100%)",
-        "table-wood":    "radial-gradient(ellipse at 50% 38%, #A9712F 0%, #8A5A2E 42%, #5E3A1C 100%)",
+        // AA-safe ends so cream button text stays legible across the gradient.
+        "lava-gradient": "linear-gradient(135deg, #FF6A1E 0%, #D8430A 100%)",
+        "gold-gradient": "linear-gradient(135deg, #FFC23D 0%, #F0A500 100%)",
+        // The sunny sky / table: peach → butter → soft blue.
+        "table-sky":     "linear-gradient(180deg, #FFE8C5 0%, #FFD89B 45%, #BFE3FF 100%)",
+        // Legacy table names re-pointed to the sunny gradient (with a warm pool centre).
+        "table-felt":    "radial-gradient(ellipse at 50% 32%, #FFF3D6 0%, #FFE3B0 38%, #FFD89B 64%, #BFE3FF 100%)",
+        "table-wood":    "radial-gradient(ellipse at 50% 32%, #FFF3D6 0%, #FFE3B0 38%, #FFD89B 64%, #BFE3FF 100%)",
       },
       animation: {
         "card-flip":    "cardFlip 0.4s ease-in-out",
@@ -95,6 +104,7 @@ module.exports = {
         "shake":        "shake 0.5s ease-in-out",
         "float-up":     "floatUp 0.6s ease-out forwards",
         "ember-fall":   "emberFall 2s ease-in infinite",
+        "sparkle-float": "sparkleFloat 9s ease-in-out infinite",
         "glow-pulse":   "glowPulse 2s ease-in-out infinite",
         "slide-up":     "slideUp 0.3s ease-out",
         // ease-out-quint — smooth deceleration, no overshoot/bounce (per DESIGN.md motion rules)
@@ -133,6 +143,14 @@ module.exports = {
         emberFall: {
           "0%":   { transform: "translateY(-10px) translateX(0)",    opacity: "1" },
           "100%": { transform: "translateY(100vh) translateX(20px)", opacity: "0" },
+        },
+        // Sunny motes: gently rise and twinkle, then fade — happy, not falling.
+        sparkleFloat: {
+          "0%":        { transform: "translateY(12vh) scale(0.5)",  opacity: "0" },
+          "15%":       { opacity: "0.85" },
+          "55%":       { transform: "translateY(-4vh) scale(1)",    opacity: "0.7" },
+          "85%":       { opacity: "0.5" },
+          "100%":      { transform: "translateY(-20vh) scale(0.45)", opacity: "0" },
         },
         glowPulse: {
           "0%, 100%": { opacity: "0.6" },

@@ -7,55 +7,64 @@
 
 /* ============================================================
    PALETTE — CSS custom properties mirror of the Tailwind tokens.
-   Warm wooden-table system (ceria direction): cream cards on a
-   wood surface, bright heat accents. See DESIGN.md.
+   Sunny Daylight system (ceria++ direction): bright cream cards on
+   a sunlit peach→butter→sky surface, vivid heat accents, brightened
+   elementals. No dark surfaces. See DESIGN.md.
    ============================================================ */
 :root {
-  /* Warm wood surfaces (the table) */
-  --wood:        #8A5A2E;
-  --wood-deep:   #5E3A1C;
-  --wood-glow:   #A9712F;
+  /* Sunny surfaces (the sky / page / table) */
+  --sky-1:       #FFE8C5;
+  --sky-2:       #FFD89B;
+  --sky-3:       #BFE3FF;
+  --sun:         #FFF3D6;
+
+  /* Warm surfaces (legacy "wood" names, re-pointed bright) */
+  --wood:        #FFD89B;
+  --wood-deep:   #F2C879;
+  --wood-glow:   #FFF3D6;
 
   /* Cream panels / cards */
-  --panel:       #FFF6E9;
-  --panel-2:     #FBEAD2;
-  --panel-line:  #E3C7A0;
+  --panel:       #FFFDF7;
+  --panel-2:     #FFF4DD;
+  --panel-line:  #F0D9AE;
 
-  /* Ink (dark text on cream) */
+  /* Ink (dark text on cream / sunny surfaces) */
   --ink:         #2A1A10;
-  --ink-soft:    #7A5A40;
+  --ink-soft:    #5A4226;
 
-  /* Light text (on wood / dark accents) */
+  /* Light text (on solid accents only) */
   --cream:       #FFF7EC;
 
-  /* Heat accents (AA-tuned) */
-  --lava:        #D63A0B;
-  --lava-dim:    #B02E08;
-  --gold:        #E6A317;
-  --gold-dim:    #B07A0E;
-  --ember:       #D0332A;
+  /* Heat / reward accents (brightened) */
+  --lava:        #F2510E;
+  --lava-dim:    #D8430A;
+  --gold:        #FFB31E;
+  --gold-dim:    #9A6B00;
+  --ember:       #E5392B;
 
-  /* Gang / elemental */
-  --gang-fire:   #D63A0B;
-  --gang-ice:    #2BB7C4;
-  --gang-storm:  #7A3FC4;
-  --gang-earth:  #2E8B3A;
-  --gang-shadow: #7A5BE0;
+  /* Gang / elemental (brightened) */
+  --gang-fire:   #F2510E;
+  --gang-ice:    #36C5E0;
+  --gang-storm:  #9B6BFF;
+  --gang-earth:  #36D399;
+  --gang-shadow: #B08CFF;
 
-  /* Legacy aliases (warm) */
-  --obsidian:    #8A5A2E;
-  --obsidian-2:  #FBEAD2;
-  --obsidian-3:  #FFF6E9;
-  --ash-light:   #7A5A40;
-  --ash:         #7A5A40;
-  --card-bg:     #FBEAD2;
-  --card-border: #E3C7A0;
+  /* Legacy aliases (re-pointed bright) */
+  --obsidian:    #FFD89B;
+  --obsidian-2:  #FFF4DD;
+  --obsidian-3:  #FFFDF7;
+  --ash-light:   #5A4226;
+  --ash:         #5A4226;
+  --card-bg:     #FFF4DD;
+  --card-border: #F0D9AE;
 }
 
 html, body {
-  /* Warm wood table: a single flat plank tone — no gradient. */
-  background-color: #6B4423;
-  color: var(--cream);
+  /* Sunlit sky: peach → butter → soft blue, fixed so it fills tall pages. */
+  background-color: var(--sky-2);
+  background-image: linear-gradient(180deg, #FFE8C5 0%, #FFD89B 45%, #BFE3FF 100%);
+  background-attachment: fixed;
+  color: var(--ink);
   font-family: 'Hanken Grotesk', sans-serif;
   min-height: 100vh;
   overflow-x: hidden;
@@ -72,10 +81,10 @@ h1, h2, h3 { text-wrap: balance; }
 /* Custom scrollbar — warm brown */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: var(--panel-2); }
-::-webkit-scrollbar-thumb { background: #C9A06A; border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: #E6B450; border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--lava); }
 /* Firefox */
-* { scrollbar-width: thin; scrollbar-color: #C9A06A var(--panel-2); }
+* { scrollbar-width: thin; scrollbar-color: #E6B450 var(--panel-2); }
 
 /* Card 3D perspective (used by the playing-card primitive) */
 .card-3d-container { perspective: 1000px; }
@@ -117,12 +126,17 @@ h1, h2, h3 { text-wrap: balance; }
 .vc-card {
   --card-width: 6rem;
   --card-accent: var(--lava);
+  /* Pointer-driven 3D tilt + shine (set by lib/motion/useTilt). Defaults keep
+     the card flat until a fine pointer hovers it. */
+  --tilt-x: 0deg;
+  --tilt-y: 0deg;
+  --shine-x: 50%;
   position: relative;
   width: var(--card-width);
   aspect-ratio: 5 / 7;
   border-radius: clamp(8px, calc(var(--card-width) * 0.12), 18px);
   border: 1px solid color-mix(in oklab, var(--card-accent) 45%, var(--panel-line));
-  background-color: #FBE8CF;
+  background-color: #FFF6E4;
   background-image:
     radial-gradient(120% 78% at 50% -10%, color-mix(in oklab, var(--card-accent) 22%, transparent), transparent 60%),
     radial-gradient(96% 72% at 82% 118%, color-mix(in oklab, var(--card-accent) 12%, transparent), transparent 64%);
@@ -241,12 +255,21 @@ button.vc-card:focus-visible {
 .vc-card--playable { transform: translateY(-4px); }
 
 button.vc-card:not(:disabled):hover {
-  transform: translateY(-14px) scale(1.05) rotateX(7deg);
+  /* Self-perspective so the pointer tilt reads as real 3D anywhere, plus the
+     existing lift. --tilt-x/--tilt-y are driven by the pointer (useTilt). */
+  transform: perspective(720px) translateY(-14px) scale(1.05)
+    rotateX(calc(7deg + var(--tilt-x))) rotateY(var(--tilt-y));
   border-color: color-mix(in oklab, var(--card-accent) 70%, var(--panel-line));
   box-shadow:
     0 0 0 1px color-mix(in oklab, var(--card-accent) 60%, transparent),
     0 0 26px color-mix(in oklab, var(--card-accent) 45%, transparent),
-    0 26px 40px rgba(60, 30, 10, 0.34);
+    0 26px 40px rgba(120, 70, 20, 0.30);
+}
+
+/* On hover the travelling glint parks under the cursor instead of sweeping. */
+button.vc-card:not(:disabled):hover .vc-card__shine {
+  animation: none;
+  background-position: var(--shine-x) 0;
 }
 button.vc-card:not(:disabled):active {
   transform: translateY(-6px) scale(0.97);
@@ -274,9 +297,9 @@ button.vc-card:disabled {
 .vc-card--back {
   --card-accent: var(--ember);
   background:
-    radial-gradient(circle at 50% 40%, rgba(208, 51, 42, 0.28), transparent 56%),
-    repeating-linear-gradient(45deg, rgba(208, 51, 42, 0.10) 0 2px, transparent 2px 11px),
-    linear-gradient(165deg, #FBE8CF, #EFD3A6);
+    radial-gradient(circle at 50% 40%, rgba(229, 57, 43, 0.26), transparent 56%),
+    repeating-linear-gradient(45deg, rgba(229, 57, 43, 0.10) 0 2px, transparent 2px 11px),
+    linear-gradient(165deg, #FFF6E4, #FBE3B8);
 }
 .vc-card--back .vc-card__art {
   padding-bottom: 0;
@@ -305,7 +328,9 @@ button.vc-card:disabled {
   /* Kill ambient infinite loops outright (they convey no state) */
   .lava-border,
   .ember,
+  .sparkle,
   .animate-ember-fall,
+  .animate-sparkle-float,
   .animate-lava-pulse,
   .animate-glow-pulse {
     animation: none !important;
@@ -316,5 +341,11 @@ button.vc-card:disabled {
   .card-3d:hover {
     transition: none !important;
     transform: none !important;
+  }
+
+  /* Neutralize pointer 3D tilt (useTilt won't attach, but belt-and-braces) */
+  .vc-card {
+    --tilt-x: 0deg !important;
+    --tilt-y: 0deg !important;
   }
 }

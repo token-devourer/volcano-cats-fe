@@ -21,21 +21,21 @@ import { CardType, CARD_SPECS } from "@/lib/shared";
 //   Rasio potret ~3:4 (mis. 300x400), PNG/WebP, akan di-crop object-cover.
 // ============================================================
 
-/** The sanctioned palette (mirror of DESIGN.md / tailwind tokens). */
+/** The sanctioned palette (mirror of DESIGN.md / tailwind tokens — Sunny Daylight). */
 const PALETTE = {
-  lava:       "#D63A0B",
-  lavaDim:    "#B02E08",
-  ember:      "#D0332A",
-  gold:       "#E6A317",
-  goldDim:    "#B07A0E",
+  lava:       "#F2510E",
+  lavaDim:    "#D8430A",
+  ember:      "#E5392B",
+  gold:       "#FFB31E",
+  goldDim:    "#9A6B00",
   ink:        "#2A1A10",
-  inkSoft:    "#7A5A40",
-  cardBase:   "#FBE8CF", // cream card face base
-  gangFire:   "#D63A0B",
-  gangIce:    "#2BB7C4",
-  gangStorm:  "#7A3FC4",
-  gangEarth:  "#2E8B3A",
-  gangShadow: "#7A5BE0",
+  inkSoft:    "#5A4226",
+  cardBase:   "#FFF6E4", // bright cream card face base
+  gangFire:   "#F2510E",
+  gangIce:    "#36C5E0",
+  gangStorm:  "#9B6BFF",
+  gangEarth:  "#36D399",
+  gangShadow: "#B08CFF",
 } as const;
 
 export interface CardTheme {

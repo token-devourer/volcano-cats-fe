@@ -74,14 +74,14 @@ export function PlayerHand() {
 
   return (
     <div
-      className="fixed inset-x-0 bottom-0 z-hand bg-gradient-to-t from-wood-deep via-wood-deep/95 to-transparent pt-12"
+      className="fixed inset-x-0 bottom-0 z-hand bg-gradient-to-t from-panel/95 via-panel/55 to-transparent pt-12"
       style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))" }}
     >
       {/* Combo / status bar */}
       <div className="mx-auto mb-2 flex min-h-[2.5rem] w-full max-w-3xl items-center justify-center gap-3 px-4">
         {combo ? (
           <div className="flex items-center gap-3 animate-slide-up">
-            <span className="inline-flex items-center rounded-full bg-wood-deep/70 px-3 py-1 text-sm text-gold">
+            <span className="inline-flex items-center rounded-full bg-panel-2 px-3 py-1 text-sm font-semibold text-gold-dim ring-1 ring-panel-line">
               {COMBO_LABEL[combo]} ({selectedCards.length})
             </span>
             <Button variant="secondary" size="sm" onClick={playCombo}>
@@ -92,12 +92,12 @@ export function PlayerHand() {
             </Button>
           </div>
         ) : selected.length > 0 ? (
-          <span className="text-sm text-cream/80">
+          <span className="text-sm text-ink-soft">
             Pilih kartu Gang sejenis untuk kombo… ({selected.length})
             <button className="ml-2 underline" onClick={clearSelect}>{t("action.cancel")}</button>
           </span>
         ) : !canPlay && me?.alive ? (
-          <span className="text-sm text-cream/80">
+          <span className="text-sm text-ink-soft">
             {me.locked ? t("error.LOCKED") : !isMyTurn ? `${t("status.turn")} ${state.players[state.currentTurnIndex]?.name ?? ""}` : ""}
           </span>
         ) : null}
@@ -107,7 +107,7 @@ export function PlayerHand() {
           Cards overlap so a big hand still reads as one cohesive spread; the
           row scrolls horizontally only when even the overlap can't fit. */}
       {hand.length === 0 ? (
-        <p className="py-6 text-center text-sm text-cream/80">{t("game.emptyHand")}</p>
+        <p className="py-6 text-center text-sm text-ink-soft">{t("game.emptyHand")}</p>
       ) : (
         <motion.div
           className="flex justify-start overflow-x-auto overflow-y-hidden px-5 pb-1 pt-1 [perspective:900px] sm:justify-center"

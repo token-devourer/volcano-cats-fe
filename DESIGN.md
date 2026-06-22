@@ -1,68 +1,74 @@
 # Design
 
-Visual system for **Volcano Cats**. A warm, cheerful "wooden table" game UI — bright cream
-cards on a wood-plank table, vivid saturated accents, friendly and fun. This is the **ceria**
-(warm/cheerful) identity, deliberately reversing the earlier cold obsidian direction on the
-owner's instruction: the volcano/lava/cats identity is kept (lava red stays), only the cold
-funereal surfaces change to warm wood + cream. See `PRODUCT.md` for strategy.
+Visual system for **Volcano Cats**. A bright, cheerful "sunlit table" game UI — bright cream
+cards on a sunny peach→butter→sky surface, vivid saturated accents, friendly and fun. This is
+the **ceria++** (bright/cheerful) identity: brightened from the earlier warm-wood direction on
+the owner's instruction ("no dark colors that make playing uncomfortable"). The volcano/lava/
+cats identity is kept (lava orange stays as the energy color); only the surfaces go from dark
+wood to sunlit sky. See `PRODUCT.md` for strategy.
 
 ## Theme
 
-Light-mode table. The player is at a sunlit wooden table with a warm pool of light at the
-center: a wood-plank surface (mid-brown `wood` deepening to `wood-deep` at the edges), cream
-printed cards and panels on top, molten orange as the energy color, gold as reward/secondary
-(on dark plaques), ember red as danger/death. The look is a bright party game on a table —
-cream cards pop against warm wood, cats are vivid and saturated. Light INK text reads on cream;
-CREAM text reads on wood and inside solid dark accents (lava/ember/gang).
+Light-mode, daylight. The player is at a sunlit table under a bright sky: a peach→butter→soft-
+blue gradient surface (`sky-1`→`sky-2`→`sky-3`) with a warm light pool (`sun`) at the center,
+bright cream printed cards and panels on top, molten orange as the energy color, sunshine gold
+as reward/secondary, ember red as danger/death. Cream cards pop against the sunny surface; cats
+are vivid and saturated. **Dark INK text is the default everywhere** (on cream panels AND on the
+sunny surfaces); CREAM text is reserved for text sitting ON solid accents (lava/ember/gang
+buttons & badges) — never on a sunny/cream surface.
 
 ## Colors
 
 Hex is canonical. Roles, not raw values, drive usage. Accent values are AA-tuned so dark INK
-reads on cream AND light CREAM reads on the accent.
+reads on cream/sunny AND light CREAM reads on the solid accent.
 
-### Warm wood surfaces (the table)
-- `wood`        `#8A5A2E` — table base plank
-- `wood-deep`   `#5E3A1C` — vignette / grain shadow / dark plaque (room-code sign)
-- `wood-glow`   `#A9712F` — warm light pool at table center
+### Sunny surfaces (the sky / page / table)
+- `sky-1`       `#FFE8C5` — peach (gradient top)
+- `sky-2`       `#FFD89B` — butter (gradient mid)
+- `sky-3`       `#BFE3FF` — soft sky blue (gradient bottom)
+- `sun`         `#FFF3D6` — warm light pool at table center
+- Legacy `wood` `#FFD89B`, `wood-deep` `#F2C879` (deeper sun, **not** brown), `wood-glow`
+  `#FFF3D6` — re-pointed bright so any unmigrated usage still renders sunny.
 
 ### Cream panels / cards
-- `panel`       `#FFF6E9` — cream panel/surface (cards, modals, inputs container)
-- `panel-2`     `#FBEAD2` — raised/inset cream (input fills, hovers, sub-panels)
-- `panel-line`  `#E3C7A0` — soft brown hairline border (1px only)
+- `panel`       `#FFFDF7` — bright cream panel/surface (cards, modals, inputs container)
+- `panel-2`     `#FFF4DD` — raised/inset cream (input fills, hovers, sub-panels)
+- `panel-line`  `#F0D9AE` — soft sandy hairline border (1px only)
 
-### Ink (dark text on cream)
-- `ink`         `#2A1A10` — primary text on cream (~15:1 AA)
-- `ink-soft`    `#7A5A40` — muted/secondary on cream (~6:1 AA)
-- `cream`       `#FFF7EC` — light text ON wood / dark accents only (NOT on cream panels)
+### Ink (dark text on cream / sunny surfaces)
+- `ink`         `#2A1A10` — primary text (~15:1 AA on cream)
+- `ink-soft`    `#5A4226` — muted/secondary (~7:1 on cream, ~6:1 on sunny)
+- `cream`       `#FFF7EC` — light text ON solid accents only (NOT on cream/sunny surfaces)
 
-### Heat accents (AA-tuned: cream-on-accent ≥ 4.5:1)
-- `lava`       `#D63A0B` — primary action, "draw", danger highlight, focus ring
-- `lava-dim`   `#B02E08` — pressed/gradient end
-- `gold`       `#E6A317` — reward / win / room-code plaque (use on dark surfaces; for gold
-  text on cream use `gold-dim`)
-- `gold-dim`   `#B07A0E` — gold text on cream (~4.7:1 AA)
-- `ember`      `#D0332A` — error, elimination, destructive
+### Heat / reward accents (brightened)
+- `lava`       `#F2510E` — primary action, "draw", danger highlight, focus ring
+- `lava-dim`   `#D8430A` — pressed / gradient end
+- `gold`       `#FFB31E` — reward / win / plaque (solid bg with `ink` text; for gold TEXT on
+  cream use `gold-dim`)
+- `gold-dim`   `#9A6B00` — gold text on cream (~4.7:1 AA)
+- `ember`      `#E5392B` — error, elimination, destructive
 
 ### Gang (elemental) colors — also the only sanctioned "extra" hues
-- `gang-fire`   `#D63A0B` (= lava)   🔥
-- `gang-ice`    `#2BB7C4`            🧊  — also the **Freeze / cold-effect** accent (decorative:
+- `gang-fire`   `#F2510E` (= lava)   🔥
+- `gang-ice`    `#36C5E0`            🧊  — also the **Freeze / cold-effect** accent (decorative:
   bars/borders; not body text on cream)
-- `gang-storm`  `#7A3FC4`            ⚡  — also the **Time Warp** accent (cream-on-it AA as solid bg)
-- `gang-earth`  `#2E8B3A`            🌿  — also `success` (cream-on-it AA as solid bg)
-- `gang-shadow` `#7A5BE0`            🌑  — decorative card art
+- `gang-storm`  `#9B6BFF`            ⚡  — also the **Time Warp** accent
+- `gang-earth`  `#36D399`            🌿  — also `success`
+- `gang-shadow` `#B08CFF`            🌑  — decorative card art
 
 **Rule:** the palette above is the whole palette. No ad-hoc Tailwind `blue-400` / `purple-400`.
 Cold effects use `gang-ice`; warp uses `gang-storm`; success uses `gang-earth`. Legacy aliases
-(`obsidian*`, `ash-light`, `card-border`) are re-pointed to the warm tokens so any unmigrated
-usage still renders warm — but prefer the canonical names above.
+(`obsidian*`, `ash-light`, `card-border`) are re-pointed to the bright tokens so any unmigrated
+usage still renders bright — but prefer the canonical names above.
 
-### Gradients & glows (used sparingly, for heat only)
-- `lava-gradient` `linear-gradient(135deg,#E8470A,#B02E08)` — primary buttons, lava moments
-- `gold-gradient` `linear-gradient(135deg,#F4BE2E,#D4900E)` — win / join (text = `ink`, not cream)
-- `card-gradient` `linear-gradient(145deg,#FFFDF7,#FFF1DC,#FBE8CF)` — cream card faces
-- `table-wood`    `radial-gradient(ellipse at 50% 38%,#A9712F,#8A5A2E 42%,#5E3A1C 100%)` — the table
+### Gradients & glows
+- `lava-gradient` `linear-gradient(135deg,#FF6A1E,#D8430A)` — primary buttons, lava moments
+  (ends kept AA-safe so cream button text stays legible across the gradient)
+- `gold-gradient` `linear-gradient(135deg,#FFC23D,#F0A500)` — win / join (text = `ink`, not cream)
+- `card-gradient` cream card faces (base `#FFF6E4`)
+- `table-sky` / `table-wood` `linear|radial` peach→butter→sky — the sunlit table
 - Glows: `lava-glow`, `gold-glow` — reserved for the active turn, the deck on your turn, and
-  win/danger moments. Not on idle elements. Shadows are warm brown-tinted (`rgba(60,30,10,…)`).
+  win/danger moments. Not on idle elements. Shadows are warm amber-tinted (`rgba(120,70,20,…)`).
 
 ## Typography
 
@@ -103,16 +109,33 @@ Two families on a contrast axis (display vs. body) — never two similar sans.
 
 ## Motion
 
-Framer Motion (already a dep) for orchestration; Tailwind keyframes for ambient loops.
+**GSAP** drives orchestrated timelines + big-moment effects; **Framer Motion** handles component
+mount/unmount + tooltips; Tailwind keyframes drive ambient loops. `canvas-confetti` for wins.
+Helpers live in `lib/motion/` (`gsap.ts` reduced-motion-safe wrappers, `useTilt.ts` pointer 3D).
 - Ease-out curves (quart/expo); no bounce/elastic except the one playful "card pop" on play.
-- Reserve big motion for big events (Lava Cat draw, elimination flash, Rainbow swap, win); routine
-  draws/plays get small, fast feedback. Stagger lists (hand deal, log) rather than one uniform
-  reflex.
-- **`prefers-reduced-motion: reduce` is mandatory for every animation** — ember particles and the
-  card-play overlay included — degrading to crossfade/instant. Reveals must enhance an
+- **3D:** cards get a pointer-driven tilt + shine that follows the cursor (`--tilt-x/-y`,
+  `--shine-x` on `.vc-card`, set by `useTilt`; fine-pointer only). Card-play arcs to the discard
+  with a rotateY flip. No WebGL.
+- Reserve big motion for big events (Lava Cat draw → shake + flash, elimination, win → confetti);
+  routine draws/plays get small, fast feedback. Stagger lists (hand deal, log). Big-moment weight
+  is chosen from `EVENT_TONE` (`lib/shared/events.ts`) in `EffectsController`, fed by `state.log`.
+- **`prefers-reduced-motion: reduce` is mandatory for every animation** — sparkles, tilt, confetti
+  and the card-play overlay included — degrading to crossfade/instant. Reveals must enhance an
   already-visible default (never gate content on a transition that won't fire on a hidden tab).
-- Ember particles: ambient, low-density, behind content (`z-table`), perf-friendly, paused under
-  reduced motion.
+- Ambient sunny sparkles: low-density, behind content (`z-table`), perf-friendly, paused under
+  reduced motion (the `EmberParticles` component, re-skinned to sunny motes).
+
+## Sound
+
+Web Audio, built in `lib/sound/` — **synth recipes now, drop-in files later**. The engine
+(`engine.ts`) prefers a preloaded `/public/sfx/<name>.{ogg,mp3}` and falls back to a synth recipe
+(`recipes.ts`) when the file is absent, so pro SFX can be added with zero code change. State
+(`store/sound.ts`: `muted`/`volume`/`music`) persists to `localStorage`; `hooks/useSound.ts`
+exposes `play`. Sound is unlocked on the first user gesture (autoplay policy) and **music is off
+by default**. A `SoundToggle` (icon + text) lives in the home + room header.
+- SFX is independent of reduced-motion (it conveys state without motion), but the **big visual
+  effects** it co-triggers are not. Event SFX are mapped `GameEvent.kind → SfxName` in
+  `EffectsController`, mirroring `EVENT_TONE`. Direct UI SFX: button click, card hover/select.
 
 ## Iconography & content
 

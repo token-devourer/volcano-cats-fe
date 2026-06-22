@@ -26,14 +26,16 @@ interface StatusStyle {
   tint: string;
 }
 
+// Brightened accents are mid-luminance — dark INK reads better on them than
+// cream at this 11px size; away/offline use a neutral cream pill.
 const STYLES: Record<StatusVariant, StatusStyle> = {
   host:    { icon: "👑", key: "status.host",    tint: "bg-gold text-ink border-gold/60" },
-  you:     { icon: "🫵", key: "status.you",     tint: "bg-lava text-cream border-lava/60" },
-  away:    { icon: "💤", key: "status.away",    tint: "bg-wood-deep text-cream/85 border-wood-deep" },
-  locked:  { icon: "🔒", key: "status.locked",  tint: "bg-gang-storm text-cream border-gang-storm/60" },
-  bunker:  { icon: "🛡️", key: "status.bunker",  tint: "bg-gang-earth text-cream border-gang-earth/60" },
+  you:     { icon: "🫵", key: "status.you",     tint: "bg-lava text-ink border-lava/60" },
+  away:    { icon: "💤", key: "status.away",    tint: "bg-panel-2 text-ink-soft border-panel-line" },
+  locked:  { icon: "🔒", key: "status.locked",  tint: "bg-gang-storm text-ink border-gang-storm/60" },
+  bunker:  { icon: "🛡️", key: "status.bunker",  tint: "bg-gang-earth text-ink border-gang-earth/60" },
   dead:    { icon: "💀", key: "status.dead",    tint: "bg-ember text-cream border-ember/60" },
-  offline: { icon: "📵", key: "status.offline", tint: "bg-wood-deep text-cream/85 border-wood-deep" },
+  offline: { icon: "📵", key: "status.offline", tint: "bg-panel-2 text-ink-soft border-panel-line" },
 };
 
 /**

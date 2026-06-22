@@ -30,5 +30,7 @@ export type { ToastRegionProps } from "./ToastRegion";
 export { Spinner } from "./Spinner";
 export type { SpinnerProps, SpinnerSize } from "./Spinner";
 
+export { SoundToggle } from "./SoundToggle";
+
 export { Card } from "./Card";
 export type { CardProps, CardSize } from "./Card";

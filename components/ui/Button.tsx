@@ -1,6 +1,7 @@
 "use client";
-import { forwardRef, type ButtonHTMLAttributes } from "react";
+import { forwardRef, type ButtonHTMLAttributes, type MouseEvent } from "react";
 import clsx from "clsx";
+import { play } from "@/lib/sound";
 
 export type ButtonVariant = "primary" | "secondary" | "outline" | "ghost" | "danger";
 export type ButtonSize = "sm" | "md" | "lg";
@@ -13,10 +14,11 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const VARIANTS: Record<ButtonVariant, string> = {
-  // Lava-gradient — the one primary, "do this" action.
+  // Lava-gradient — the one primary, "do this" action. Cream text gets a soft
+  // dark halo so it stays legible across the bright orange gradient.
   primary:
     "bg-lava-gradient text-cream shadow-card-normal hover:shadow-lava-glow " +
-    "border border-transparent",
+    "border border-transparent [text-shadow:0_1px_2px_rgba(90,25,0,0.55)]",
   // Gold — secondary / reward.
   secondary:
     "bg-gold-gradient text-ink font-semibold border border-transparent " +
@@ -25,12 +27,11 @@ const VARIANTS: Record<ButtonVariant, string> = {
   outline:
     "bg-transparent text-ink border border-panel-line hover:border-lava " +
     "hover:text-lava",
-  // Ghost — lowest emphasis, text-only until hovered. Light text for the
-  // wood/dark surfaces it usually sits on (table, backdrops). On cream
-  // panels use `outline` instead.
+  // Ghost — lowest emphasis, text-only until hovered. Ink text for the bright
+  // sunny surfaces it sits on (table, header, backdrops).
   ghost:
-    "bg-transparent text-cream/85 border border-transparent " +
-    "hover:bg-wood-deep/50 hover:text-cream",
+    "bg-transparent text-ink-soft border border-transparent " +
+    "hover:bg-ink/5 hover:text-ink",
   // Ember — destructive.
   danger:
     "bg-ember text-cream border border-transparent hover:bg-ember/90",
@@ -48,14 +49,19 @@ const SIZES: Record<ButtonSize, string> = {
  * Visible lava focus ring, active press-down, clearly dimmed disabled state.
  */
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
-  { variant = "primary", size = "md", fullWidth = false, className, type = "button", disabled, children, ...rest },
+  { variant = "primary", size = "md", fullWidth = false, className, type = "button", disabled, onClick, children, ...rest },
   ref,
 ) {
+  const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
+    play("click");
+    onClick?.(e);
+  };
   return (
     <button
       ref={ref}
       type={type}
       disabled={disabled}
+      onClick={handleClick}
       className={clsx(
         // Base
         "inline-flex items-center justify-center font-body font-medium select-none",

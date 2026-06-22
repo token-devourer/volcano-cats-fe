@@ -1,8 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui";
+import { Button, SoundToggle } from "@/components/ui";
 import { EmberParticles } from "@/components/animations/EmberParticles";
+import { gsap, prefersReducedMotion } from "@/lib/motion/gsap";
 import { t } from "@/lib/i18n";
 
 const NAME_KEY = "vc_username";
@@ -21,6 +22,29 @@ export default function HomePage() {
     } catch {
       /* ignore */
     }
+  }, []);
+
+  // Subtle pointer parallax on the background glow blobs (motion-on only).
+  useEffect(() => {
+    if (prefersReducedMotion()) return;
+    const root = document.querySelector("[data-parallax]");
+    if (!root) return;
+    const layers = Array.from(root.querySelectorAll<HTMLElement>("[data-parallax-layer]"));
+    const setters = layers.map((el) => ({
+      x: gsap.quickTo(el, "x", { duration: 0.7, ease: "power3.out" }),
+      y: gsap.quickTo(el, "y", { duration: 0.7, ease: "power3.out" }),
+      depth: Number(el.dataset.parallaxLayer ?? 1),
+    }));
+    const onMove = (e: PointerEvent) => {
+      const cx = (e.clientX / window.innerWidth - 0.5) * 2;
+      const cy = (e.clientY / window.innerHeight - 0.5) * 2;
+      setters.forEach((s) => {
+        s.x(cx * s.depth * 8);
+        s.y(cy * s.depth * 8);
+      });
+    };
+    window.addEventListener("pointermove", onMove);
+    return () => window.removeEventListener("pointermove", onMove);
   }, []);
 
   function remember(n: string) {
@@ -55,22 +79,27 @@ export default function HomePage() {
   return (
     <main className="relative flex min-h-[100dvh] flex-col items-center justify-center overflow-hidden px-4 py-10">
       <EmberParticles count={18} />
-      <div className="pointer-events-none absolute inset-0 z-table">
-        <div className="absolute left-1/2 top-1/2 h-[560px] w-[560px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-lava/[0.10] blur-3xl" />
-        <div className="absolute bottom-0 left-1/2 h-[280px] w-[720px] -translate-x-1/2 bg-ember/[0.10] blur-3xl" />
+      <div data-parallax className="pointer-events-none absolute inset-0 z-table">
+        <div data-parallax-layer="3" className="absolute left-1/2 top-1/3 h-[560px] w-[560px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold/25 blur-3xl" />
+        <div data-parallax-layer="2" className="absolute right-[12%] top-[18%] h-[320px] w-[320px] rounded-full bg-lava/15 blur-3xl" />
+        <div data-parallax-layer="4" className="absolute bottom-0 left-1/2 h-[300px] w-[760px] -translate-x-1/2 rounded-full bg-sky-3/40 blur-3xl" />
+      </div>
+
+      <div className="absolute right-3 top-3 z-banner">
+        <SoundToggle />
       </div>
 
       <div className="relative z-banner flex w-full max-w-md flex-col items-center gap-8">
         <header className="select-none text-center">
           <div className="mb-1 text-7xl animate-slide-up" aria-hidden="true">🌋</div>
-          <h1 className="font-display text-5xl leading-[0.95] tracking-tight text-cream drop-shadow-[0_2px_10px_rgba(214,58,11,0.45)] sm:text-6xl">
+          <h1 className="bg-lava-gradient bg-clip-text font-display text-5xl leading-[0.95] tracking-tight text-transparent [filter:drop-shadow(0_3px_4px_rgba(140,45,0,0.42))] sm:text-6xl">
             VOLCANO
           </h1>
-          <h1 className="font-display text-5xl leading-[0.95] tracking-tight text-cream drop-shadow-[0_2px_12px_rgba(230,163,23,0.55)] sm:text-6xl">
+          <h1 className="bg-gold-gradient bg-clip-text font-display text-5xl leading-[0.95] tracking-tight text-transparent [filter:drop-shadow(0_3px_4px_rgba(150,95,0,0.42))] sm:text-6xl">
             CATS
           </h1>
-          <p className="mt-3 text-sm text-cream/90">{t("app.tagline")}</p>
-          <p className="mt-1 text-xs uppercase tracking-[0.2em] text-cream/70">
+          <p className="mt-3 text-sm font-medium text-ink-soft">{t("app.tagline")}</p>
+          <p className="mt-1 text-xs font-semibold uppercase tracking-[0.2em] text-ink-soft">
             2–10 Pemain · Multiplayer
           </p>
         </header>
@@ -149,7 +178,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <p className="flex flex-wrap justify-center gap-x-3 gap-y-1 text-center text-xs text-cream/70">
+        <p className="flex flex-wrap justify-center gap-x-3 gap-y-1 text-center text-xs font-medium text-ink-soft">
           <span>🌋 Jangan tarik Lava Cat</span>
           <span aria-hidden="true">·</span>
           <span>💧 Water Bucket = selamat</span>

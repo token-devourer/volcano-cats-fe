@@ -1,5 +1,5 @@
 "use client";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 
 interface EmberParticlesProps {
@@ -8,50 +8,56 @@ interface EmberParticlesProps {
 }
 
 /**
- * Ambient drifting embers behind the content. Low-density and CSS-driven
- * (the `ember-fall` keyframe), sitting at the table z-index. Fully disabled
- * under `prefers-reduced-motion` — no motion, no distraction.
+ * Ambient sunny sparkles drifting up behind the content — gold / cream / sky
+ * motes that gently rise and twinkle. Low-density and CSS-driven (the
+ * `sparkle-float` keyframe), sitting at the table z-index. Fully disabled
+ * under `prefers-reduced-motion`. (Kept the name for its existing call sites.)
  */
 export function EmberParticles({ count = 14, className }: EmberParticlesProps) {
   const reduce = useReducedMotion();
+  // Client-only: keeps SSR + first client paint identical (both render nothing)
+  // so reduced-motion users never trip a hydration mismatch.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
-  const embers = useMemo(
+  const motes = useMemo(
     () =>
       Array.from({ length: count }, (_, i) => {
         // Deterministic spread so SSR/CSR match (no hydration mismatch).
         const r = ((i * 9301 + 49297) % 233280) / 233280;
         const r2 = ((i * 4099 + 1) % 251) / 251;
+        const palette = ["#FFD24A", "#FFF3D6", "#7FD0FF"] as const;
         return {
           left: `${Math.round(r * 100)}%`,
-          size: 2 + Math.round(r2 * 3),
-          duration: 7 + r * 9,
-          delay: -r2 * 10,
-          gold: i % 3 === 0,
+          size: 3 + Math.round(r2 * 4),
+          duration: 8 + r * 7,
+          delay: -r2 * 12,
+          color: palette[i % palette.length],
         };
       }),
     [count],
   );
 
-  if (reduce) return null;
+  if (!mounted || reduce) return null;
 
   return (
     <div
       aria-hidden="true"
       className={`pointer-events-none absolute inset-0 z-table overflow-hidden ${className ?? ""}`}
     >
-      {embers.map((e, i) => (
+      {motes.map((m, i) => (
         <span
           key={i}
-          className="absolute top-0 rounded-full animate-ember-fall"
+          className="sparkle absolute bottom-0 rounded-full animate-sparkle-float"
           style={{
-            left: e.left,
-            width: e.size,
-            height: e.size,
-            background: e.gold ? "#FFC23D" : "#FF7A2F",
-            boxShadow: `0 0 ${e.size * 1.6}px ${e.gold ? "#FFC23D" : "#FF7A2F"}`,
-            animationDuration: `${e.duration}s`,
-            animationDelay: `${e.delay}s`,
-            opacity: 0.32,
+            left: m.left,
+            width: m.size,
+            height: m.size,
+            background: m.color,
+            boxShadow: `0 0 ${m.size * 2}px ${m.color}`,
+            animationDuration: `${m.duration}s`,
+            animationDelay: `${m.delay}s`,
+            opacity: 0.5,
           }}
         />
       ))}
