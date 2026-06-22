@@ -21,6 +21,7 @@ export function CardPlayAnimation() {
   });
   const reduce = useReducedMotion();
   const [shown, setShown] = useState<Card | null>(null);
+  const [pos, setPos] = useState<{ x: number; y: number } | null>(null);
   const lastId = useRef<string | null>(null);
   const cardRef = useRef<HTMLDivElement | null>(null);
   const ringRef = useRef<HTMLDivElement | null>(null);
@@ -28,6 +29,14 @@ export function CardPlayAnimation() {
   useEffect(() => {
     if (!top || top.id === lastId.current) return;
     lastId.current = top.id;
+    // Anchor the flourish on the center stage (falls back to viewport center).
+    const stage = document.querySelector("[data-stage]");
+    if (stage) {
+      const r = stage.getBoundingClientRect();
+      setPos({ x: r.left + r.width / 2, y: r.top + r.height / 2 });
+    } else {
+      setPos(null);
+    }
     setShown(top);
   }, [top]);
 
@@ -64,17 +73,21 @@ export function CardPlayAnimation() {
 
   if (!shown) return null;
   const accent = getCardTheme(shown.type).color;
+  const px = pos?.x ?? (typeof window !== "undefined" ? window.innerWidth / 2 : 0);
+  const py = pos?.y ?? (typeof window !== "undefined" ? window.innerHeight / 2 : 0);
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-banner grid place-items-center [perspective:1000px]">
-      <div
-        ref={ringRef}
-        aria-hidden="true"
-        className="absolute h-40 w-40 rounded-full"
-        style={{ border: `3px solid ${accent}`, boxShadow: `0 0 30px ${accent}`, opacity: 0 }}
-      />
-      <div ref={cardRef} style={{ transformStyle: "preserve-3d", opacity: reduce ? 1 : 0 }}>
-        <CardView card={shown} name={cardName(shown.type)} size="lg" />
+    <div className="pointer-events-none fixed inset-0 z-banner [perspective:1000px]">
+      <div className="absolute" style={{ left: px, top: py, transform: "translate(-50%, -50%)" }}>
+        <div
+          ref={ringRef}
+          aria-hidden="true"
+          className="absolute left-1/2 top-1/2 h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full"
+          style={{ border: `3px solid ${accent}`, boxShadow: `0 0 30px ${accent}`, opacity: 0 }}
+        />
+        <div ref={cardRef} style={{ transformStyle: "preserve-3d", opacity: reduce ? 1 : 0 }}>
+          <CardView card={shown} name={cardName(shown.type)} size="lg" />
+        </div>
       </div>
     </div>
   );

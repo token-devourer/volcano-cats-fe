@@ -7,7 +7,7 @@ import type { CardType } from "@/lib/shared";
 import { getCardTheme } from "@/lib/cardTheme";
 import { useTilt } from "@/lib/motion/useTilt";
 import { play } from "@/lib/sound";
-import { CardArt, CardBackArt } from "./CardArt";
+import { CardArt, CardPip, CardBackArt } from "./CardArt";
 
 export type CardSize = "sm" | "md" | "lg" | "responsive";
 
@@ -114,8 +114,8 @@ export function Card({
           <div className="vc-card__art"><CardArt type={card.type} /></div>
           {showCorners && (
             <>
-              <span className="vc-card__corner vc-card__corner--tl"><CardArt type={card.type} /></span>
-              <span className="vc-card__corner vc-card__corner--br"><CardArt type={card.type} /></span>
+              <span className="vc-card__corner vc-card__corner--tl"><CardPip type={card.type} /></span>
+              <span className="vc-card__corner vc-card__corner--br"><CardPip type={card.type} /></span>
             </>
           )}
           <span className="vc-card__name">{name}</span>

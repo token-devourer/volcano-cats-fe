@@ -26,7 +26,28 @@ export type SfxName =
   | "lose"
   | "eliminate"
   | "error"
-  | "toast";
+  | "toast"
+  // --- signature per-card effects (Tropic Pop redesign) ---
+  | "eruptBoom"
+  | "steam"
+  | "yawn"
+  | "impact"
+  | "scan"
+  | "rumble"
+  | "freezeCrack"
+  | "ribbon"
+  | "reverseWhoosh"
+  | "shot"
+  | "shutterSwap"
+  | "shieldHum"
+  | "sneakGrab"
+  | "wave"
+  | "rewind"
+  | "lockSlam"
+  | "comboBig"
+  | "rainbowPop"
+  | "crumble"
+  | "whiff";
 
 interface ToneOpts {
   freq: number;
@@ -151,4 +172,83 @@ export const RECIPES: Record<SfxName, (ctx: AudioContext, out: AudioNode) => voi
   },
   error: (c, o) => tone(c, o, { freq: 160, type: "square", dur: 0.18, gain: 0.1 }),
   toast: (c, o) => tone(c, o, { freq: 880, type: "sine", dur: 0.08, gain: 0.09 }),
+
+  // --- signature per-card effects ---
+  eruptBoom: (c, o) => {
+    tone(c, o, { freq: 140, glideTo: 38, type: "sawtooth", dur: 0.5, gain: 0.2 });
+    tone(c, o, { freq: 90, glideTo: 30, when: 0.02, type: "square", dur: 0.42, gain: 0.12 });
+    noise(c, o, { dur: 0.5, gain: 0.12, filterFreq: 800 });
+  },
+  steam: (c, o) => {
+    noise(c, o, { dur: 0.5, gain: 0.08, filterFreq: 5200, filterType: "highpass" });
+    tone(c, o, { freq: 900, glideTo: 280, type: "sine", dur: 0.32, gain: 0.05 });
+  },
+  yawn: (c, o) => {
+    tone(c, o, { freq: 300, glideTo: 520, type: "sine", dur: 0.25, gain: 0.1 });
+    tone(c, o, { freq: 520, glideTo: 240, when: 0.22, type: "sine", dur: 0.3, gain: 0.09 });
+  },
+  impact: (c, o) => {
+    tone(c, o, { freq: 200, glideTo: 60, type: "square", dur: 0.16, gain: 0.18 });
+    noise(c, o, { dur: 0.12, gain: 0.1, filterFreq: 1500 });
+  },
+  scan: (c, o) => {
+    tone(c, o, { freq: 1200, type: "sine", dur: 0.08, gain: 0.1 });
+    tone(c, o, { freq: 1500, when: 0.1, type: "sine", dur: 0.08, gain: 0.1 });
+    noise(c, o, { dur: 0.2, gain: 0.03, filterFreq: 6000, filterType: "highpass" });
+  },
+  rumble: (c, o) => {
+    noise(c, o, { dur: 0.6, gain: 0.16, filterFreq: 220 });
+    tone(c, o, { freq: 58, type: "sine", dur: 0.6, gain: 0.12 });
+  },
+  freezeCrack: (c, o) => {
+    tone(c, o, { freq: 1400, glideTo: 500, type: "sine", dur: 0.35, gain: 0.1 });
+    noise(c, o, { when: 0.18, dur: 0.12, gain: 0.1, filterFreq: 4000, filterType: "highpass" });
+  },
+  ribbon: (c, o) => [659, 880, 1175].forEach((f, i) =>
+    tone(c, o, { freq: f, when: i * 0.05, dur: 0.12, type: "triangle", gain: 0.12 })),
+  reverseWhoosh: (c, o) => {
+    tone(c, o, { freq: 800, glideTo: 300, type: "sawtooth", dur: 0.18, gain: 0.1 });
+    tone(c, o, { freq: 300, glideTo: 820, when: 0.18, type: "sawtooth", dur: 0.18, gain: 0.1 });
+  },
+  shot: (c, o) => {
+    tone(c, o, { freq: 1800, glideTo: 200, type: "square", dur: 0.08, gain: 0.16 });
+    noise(c, o, { dur: 0.1, gain: 0.12, filterFreq: 3000, filterType: "highpass" });
+  },
+  shutterSwap: (c, o) => {
+    noise(c, o, { dur: 0.05, gain: 0.12, filterFreq: 2000 });
+    tone(c, o, { freq: 600, glideTo: 900, when: 0.08, type: "triangle", dur: 0.12, gain: 0.1 });
+  },
+  shieldHum: (c, o) => {
+    tone(c, o, { freq: 220, type: "sine", dur: 0.4, gain: 0.12 });
+    tone(c, o, { freq: 440, type: "sine", dur: 0.4, gain: 0.08 });
+    tone(c, o, { freq: 880, when: 0.15, type: "sine", dur: 0.3, gain: 0.07 });
+  },
+  sneakGrab: (c, o) => {
+    tone(c, o, { freq: 500, glideTo: 900, type: "sine", dur: 0.14, gain: 0.08 });
+    noise(c, o, { when: 0.14, dur: 0.06, gain: 0.1, filterFreq: 2500, filterType: "bandpass", q: 2 });
+  },
+  wave: (c, o) => {
+    noise(c, o, { dur: 0.5, gain: 0.1, filterFreq: 900 });
+    tone(c, o, { freq: 200, glideTo: 120, type: "sine", dur: 0.5, gain: 0.08 });
+  },
+  rewind: (c, o) => {
+    for (let i = 0; i < 4; i++)
+      tone(c, o, { freq: 300 + i * 200, glideTo: 200 + i * 200, when: i * 0.06, type: "sine", dur: 0.1, gain: 0.08 });
+  },
+  lockSlam: (c, o) => {
+    tone(c, o, { freq: 160, glideTo: 58, type: "square", dur: 0.14, gain: 0.16 });
+    noise(c, o, { when: 0.04, dur: 0.1, gain: 0.12, filterFreq: 800 });
+  },
+  comboBig: (c, o) => [392, 523, 659, 784, 1047].forEach((f, i) =>
+    tone(c, o, { freq: f, when: i * 0.05, dur: 0.18, type: "triangle", gain: 0.13 })),
+  rainbowPop: (c, o) => [523, 587, 659, 784, 880, 1047, 1319].forEach((f, i) =>
+    tone(c, o, { freq: f, when: i * 0.04, dur: 0.14, type: "triangle", gain: 0.12 })),
+  crumble: (c, o) => {
+    for (let i = 0; i < 5; i++)
+      noise(c, o, { when: i * 0.05, dur: 0.08, gain: 0.08, filterFreq: 600 + i * 110 });
+  },
+  whiff: (c, o) => {
+    noise(c, o, { dur: 0.18, gain: 0.07, filterFreq: 1200, filterType: "bandpass", q: 1 });
+    tone(c, o, { freq: 400, glideTo: 200, type: "sine", dur: 0.18, gain: 0.06 });
+  },
 };

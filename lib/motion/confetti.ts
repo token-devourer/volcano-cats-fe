@@ -4,7 +4,7 @@
 import confetti from "canvas-confetti";
 import { prefersReducedMotion } from "./gsap";
 
-const SUNNY = ["#FFB31E", "#F2510E", "#36C5E0", "#36D399", "#9B6BFF", "#FFF3D6"];
+const SUNNY = ["#FFC02E", "#F5481E", "#22C7E0", "#2FCB7E", "#6D5CFF", "#FF3D8B"];
 
 /** A joyful multi-burst. No-op under reduced motion. */
 export function celebrate(): void {

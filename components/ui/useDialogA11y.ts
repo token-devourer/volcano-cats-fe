@@ -79,12 +79,24 @@ export type AccentToken =
   | "gang-earth"
   | "gang-shadow";
 
+/** AA-safe accent for title text + border on the cream panel (darkened hues). */
 export const ACCENT_HEX: Record<AccentToken, string> = {
-  lava: "#D63A0B",
-  gold: "#B07A0E",
-  ember: "#D0332A",
-  "gang-ice": "#1E8C97",
-  "gang-storm": "#7A3FC4",
-  "gang-earth": "#2E8B3A",
-  "gang-shadow": "#6A45D0",
+  lava: "#CE3D12",
+  gold: "#946400",
+  ember: "#CE2F28",
+  "gang-ice": "#117E8C",
+  "gang-storm": "#5A45C8",
+  "gang-earth": "#1E9152",
+  "gang-shadow": "#8A4FD0",
+};
+
+/** Bright accent (Tropic Pop tokens) for the themed backdrop glow behind a dialog. */
+export const ACCENT_GLOW: Record<AccentToken, string> = {
+  lava: "#F5481E",
+  gold: "#FFC02E",
+  ember: "#EE3B34",
+  "gang-ice": "#22C7E0",
+  "gang-storm": "#6D5CFF",
+  "gang-earth": "#2FCB7E",
+  "gang-shadow": "#B06BE6",
 };

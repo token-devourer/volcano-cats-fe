@@ -2,7 +2,7 @@
 import { useId, type ReactNode } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import clsx from "clsx";
-import { useDialogA11y, ACCENT_HEX } from "./useDialogA11y";
+import { useDialogA11y, ACCENT_HEX, ACCENT_GLOW } from "./useDialogA11y";
 import { Modal, type DialogProps } from "./Modal";
 import { useIsDesktop } from "@/lib/useMediaQuery";
 
@@ -21,6 +21,7 @@ export function Sheet({
   const titleId = useId();
   const containerRef = useDialogA11y(open, dismissable ? onClose : () => {});
   const accentHex = ACCENT_HEX[accent];
+  const accentGlow = ACCENT_GLOW[accent];
 
   return (
     <AnimatePresence>
@@ -28,6 +29,7 @@ export function Sheet({
         <div className="fixed inset-0 z-modal-backdrop flex items-end justify-center">
           <motion.div
             className="absolute inset-0 bg-ink/40 backdrop-blur-sm"
+            style={{ backgroundImage: `radial-gradient(70% 45% at 50% 80%, ${accentGlow}2E, transparent 72%)` }}
             initial={reduce ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

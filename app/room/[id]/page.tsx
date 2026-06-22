@@ -10,6 +10,7 @@ import { PlayerHand } from "@/components/game/PlayerHand";
 import { PhaseController } from "@/components/game/PhaseController";
 import { CardPlayAnimation } from "@/components/game/CardPlayAnimation";
 import { EffectsController } from "@/components/game/EffectsController";
+import { EffectStage } from "@/components/game/EffectStage";
 import { GameLog } from "@/components/game/GameLog";
 import { GameOver } from "@/components/game/GameOver";
 import RulesOverlay from "@/components/game/RulesOverlay";
@@ -193,6 +194,7 @@ export default function RoomPage() {
       </header>
 
       <GameTable />
+      <EffectStage />
       <CardPlayAnimation />
       <EffectsController />
 

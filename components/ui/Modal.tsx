@@ -2,7 +2,7 @@
 import { useId, type ReactNode } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import clsx from "clsx";
-import { useDialogA11y, ACCENT_HEX, type AccentToken } from "./useDialogA11y";
+import { useDialogA11y, ACCENT_HEX, ACCENT_GLOW, type AccentToken } from "./useDialogA11y";
 
 export interface DialogProps {
   open: boolean;
@@ -36,14 +36,16 @@ export function Modal({
   const titleId = useId();
   const containerRef = useDialogA11y(open, dismissable ? onClose : () => {});
   const accentHex = ACCENT_HEX[accent];
+  const accentGlow = ACCENT_GLOW[accent];
 
   return (
     <AnimatePresence>
       {open && (
         <div className="fixed inset-0 z-modal-backdrop flex items-center justify-center p-4">
-          {/* Backdrop */}
+          {/* Backdrop — tinted with the dialog's accent so each prompt feels themed. */}
           <motion.div
             className="absolute inset-0 bg-ink/40 backdrop-blur-sm"
+            style={{ backgroundImage: `radial-gradient(60% 50% at 50% 42%, ${accentGlow}2E, transparent 70%)` }}
             initial={reduce ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={reduce ? { opacity: 0 } : { opacity: 0 }}

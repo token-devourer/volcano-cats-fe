@@ -72,8 +72,15 @@ export function PlayerHand() {
     }
   }
 
+  // A gentle fan: middle card flat, edges rotate out + sit slightly lower.
+  const fan = (i: number) => {
+    const c = i - (hand.length - 1) / 2;
+    return { rot: Math.max(-11, Math.min(11, c * 3)), lift: Math.min(Math.abs(c) * 4, 22) };
+  };
+
   return (
     <div
+      data-seat-id={myId ?? undefined}
       className="fixed inset-x-0 bottom-0 z-hand bg-gradient-to-t from-panel/95 via-panel/55 to-transparent pt-12"
       style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))" }}
     >
@@ -124,15 +131,18 @@ export function PlayerHand() {
                 key={card.id}
                 className="relative shrink-0 transition-[z-index] hover:z-20 focus-within:z-20"
                 style={{ marginLeft: i === 0 ? 0 : "-0.6rem", zIndex: 1 }}
+                custom={i}
                 variants={
                   reduce
                     ? { hidden: { opacity: 0 }, show: { opacity: 1 } }
                     : {
                         hidden: { opacity: 0, y: 26, rotateZ: -5 },
-                        show: {
-                          opacity: 1, y: 0, rotateZ: 0,
+                        show: (idx: number) => ({
+                          opacity: 1,
+                          y: fan(idx).lift,
+                          rotateZ: fan(idx).rot,
                           transition: { duration: 0.36, ease: [0.22, 1, 0.36, 1] },
-                        },
+                        }),
                       }
                 }
               >

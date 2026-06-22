@@ -1,46 +1,26 @@
 // ============================================================
 // EFFECTS CONTROLLER — turns the structured game-event stream into
-// sound + big-moment visual effects.
+// sound + signature visual effects via the effect registry.
 // ============================================================
 // Watches `state.log` (the server's structured GameEvent stream) and, for each
-// NEW event, plays a mapped SFX and fires GSAP one-shots for the loud moments
-// (Lava Cat alarm → shake + flash, freezes → frost flash, elimination → flash).
-// Weight follows the same intent as EVENT_TONE in lib/shared/events. Win/lose
-// (confetti + fanfare) is owned by GameOver, which mounts as this unmounts.
+// NEW event, builds an EffectContext (seat / stage / anchor DOM rect lookups +
+// flash / shake primitives) and hands it to `runEffect` — which plays the SFX
+// and choreographs the per-card cinematic on the <EffectStage> canvas/overlay.
+// Win/lose (confetti + fanfare) is owned by GameOver, which mounts as this
+// unmounts.
 // ============================================================
 "use client";
 import { useEffect, useRef } from "react";
 import { useGame } from "@/store/game";
-import { play, type SfxName } from "@/lib/sound";
 import { gsap, prefersReducedMotion } from "@/lib/motion/gsap";
-import type { GameEvent, GameEventKind } from "@/lib/shared";
+import { runEffect, type Pt } from "@/lib/effects/registry";
 
-/** Default SFX per event kind (kinds handled specially below are omitted). */
-const EVENT_SFX: Partial<Record<GameEventKind, SfxName>> = {
-  GAME_STARTED: "shuffle",
-  CARD_PLAYED: "play",
-  GANG_PLAYED: "gang",
-  CARD_DREW: "draw",
-  NOPE_PLAYED: "error",
-  BUNKER_SAVED: "defuse",
-  BUNKER_SET: "select",
-  BUCKET_PLACED: "select",
-  STEAL_RANDOM: "steal",
-  STEAL_NAMED: "steal",
-  STEAL_NONE: "error",
-  GIFT_GIVEN: "steal",
-  HANDS_SWAPPED: "shuffle",
-  RAID: "steal",
-  SHUFFLED: "shuffle",
-  REVERSED: "select",
-  ATTACK: "play",
-  SKIPPED: "play",
-  SPIED: "select",
-  PEEK_SWAPPED: "select",
-  FLOOD_DISCARDED: "deal",
-  TIME_WARPED: "select",
-  FORCED_DRAW: "draw",
-};
+function rectCenter(el: Element | null): Pt | null {
+  if (!el) return null;
+  const r = el.getBoundingClientRect();
+  if (!r.width && !r.height) return null;
+  return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+}
 
 export function EffectsController() {
   const log = useGame((s) => s.state?.log);
@@ -58,6 +38,7 @@ export function EffectsController() {
     if (events.length < lastLen.current) lastLen.current = 0; // new game / rematch
     const fresh = events.slice(lastLen.current);
     lastLen.current = events.length;
+    if (fresh.length === 0) return;
 
     const flash = (color: string, strength: number) => {
       const el = flashRef.current;
@@ -66,58 +47,34 @@ export function EffectsController() {
       gsap.fromTo(el, { opacity: strength }, { opacity: 0, duration: 0.6, ease: "power2.out" });
     };
 
-    const shake = () => {
+    const shake = (intensity: "small" | "medium" | "large") => {
       if (prefersReducedMotion()) return;
       const el = document.querySelector<HTMLElement>("[data-shake-root]");
       if (!el) return;
+      const amp = intensity === "large" ? 14 : intensity === "medium" ? 9 : 5;
       gsap.to(el, {
         keyframes: [
-          { x: -10, duration: 0.05 },
-          { x: 10, duration: 0.05 },
-          { x: -7, duration: 0.05 },
-          { x: 7, duration: 0.05 },
-          { x: -4, duration: 0.05 },
+          { x: -amp, duration: 0.05 },
+          { x: amp, duration: 0.05 },
+          { x: -amp * 0.7, duration: 0.05 },
+          { x: amp * 0.7, duration: 0.05 },
+          { x: -amp * 0.4, duration: 0.05 },
           { x: 0, duration: 0.05 },
         ],
         ease: "power1.inOut",
       });
     };
 
-    const handle = (ev: GameEvent) => {
-      switch (ev.kind) {
-        case "TURN_STARTED":
-          if (ev.playerId === myId) play("yourTurn");
-          return;
-        case "LAVA_DRAWN":
-          if (ev.defused) {
-            play("defuse");
-            flash("#36D399", 0.25);
-          } else {
-            play("lavaAlarm");
-            shake();
-            flash("#F2510E", 0.5);
-          }
-          return;
-        case "ELIMINATED":
-          play("eliminate");
-          flash("#E5392B", 0.4);
-          return;
-        case "ACTION_NEGATED":
-        case "LOCKED":
-        case "FLOOD_STARTED":
-          play("freeze");
-          flash("#36C5E0", 0.22);
-          return;
-        case "WIN":
-          return; // GameOver owns win/lose + confetti
-        default: {
-          const sfx = EVENT_SFX[ev.kind];
-          if (sfx) play(sfx);
-        }
-      }
-    };
+    const seat = (playerId?: string): Pt | null =>
+      playerId ? rectCenter(document.querySelector(`[data-seat-id="${playerId}"]`)) : null;
+    const stage = (): Pt | null => rectCenter(document.querySelector("[data-stage]"));
+    const anchor = (name: "deck" | "discard"): Pt | null =>
+      rectCenter(document.querySelector(`[data-anchor="${name}"]`));
 
-    for (const ev of fresh) handle(ev);
+    const reduced = prefersReducedMotion();
+    for (const ev of fresh) {
+      runEffect({ event: ev, myId, reduced, flash, shake, seat, stage, anchor });
+    }
   }, [log, myId]);
 
   return (

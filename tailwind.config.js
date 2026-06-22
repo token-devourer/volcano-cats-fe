@@ -8,64 +8,68 @@ module.exports = {
     extend: {
       colors: {
         // ============================================================
-        // SUNNY DAYLIGHT PALETTE (bright "ceria++" direction)
+        // TROPIC POP PALETTE (bright "candy/sticker" direction)
         // ============================================================
-        // A sunlit table: peach→butter→sky background, bright cream
-        // printed cards/panels carrying dark INK text, vivid lava/gold
-        // energy and brightened elemental hues. No dark surfaces — the
-        // page should feel happy and bright to play. INK reads on cream
-        // AND on the sunny surfaces; CREAM is reserved for text sitting
-        // ON solid accents (buttons/badges). See DESIGN.md.
+        // A tropical-island volcano table: a fresh aqua → seafoam → warm
+        // sand surface, bright sticker cards/panels carrying dark INK text,
+        // hot coral-lava energy with a magenta MAGMA reserved for the
+        // loudest moments, sunshine gold reward, and candy elemental hues.
+        // No dark surfaces — the page should feel happy and alive. INK
+        // reads on cream AND on the bright surfaces; CREAM is reserved for
+        // text sitting ON solid accents (buttons/badges). See DESIGN.md.
+        // (This supersedes the earlier Sunny Daylight peach direction.)
         // ------------------------------------------------------------
 
-        // --- Sunny surfaces (the sky / page / table) ---
-        "sky-1": "#FFE8C5", // peach (gradient top)
-        "sky-2": "#FFD89B", // butter (gradient mid)
-        "sky-3": "#BFE3FF", // soft sky (gradient bottom)
-        sun:     "#FFF3D6", // warm light pool at table center
+        // --- Bright surfaces (the sky / page / table) ---
+        "sky-1": "#86E5E0", // tropic aqua (gradient top)
+        "sky-2": "#C7F0D8", // seafoam (gradient mid)
+        "sky-3": "#FFE6B0", // warm sand (gradient bottom / table)
+        sun:     "#FFF7E2", // warm light pool at table center
 
-        // --- Warm surfaces (legacy "wood" names, re-pointed BRIGHT) ---
-        wood:         "#FFD89B", // butter mid-surface
-        "wood-deep":  "#F2C879", // deeper sun (NOT brown) — scrims/plaques
-        "wood-glow":  "#FFF3D6", // warm light pool at table center
+        // --- Warm surfaces (legacy "wood" names, re-pointed to SAND) ---
+        wood:         "#FFE6B0", // sand mid-surface
+        "wood-deep":  "#F7D38C", // deeper sand (NOT brown) — scrims/plaques
+        "wood-glow":  "#FFF7E2", // warm light pool at table center
 
-        // --- Cream panels / cards ---
-        panel:        "#FFFDF7", // bright cream panel/surface (primary)
-        "panel-2":    "#FFF4DD", // raised/inset cream (inputs, hovers)
-        "panel-line": "#F0D9AE", // soft sandy hairline border (1px)
+        // --- Sticker panels / cards ---
+        panel:        "#FFFCF6", // warm near-white panel/surface (primary)
+        "panel-2":    "#FFF3DF", // raised/inset cream (inputs, hovers)
+        "panel-line": "#EFD9B2", // soft sandy hairline border (1px)
 
-        // --- Ink (dark text on cream / sunny surfaces) ---
-        ink:          "#2A1A10", // primary text (~15:1 AA on cream)
-        "ink-soft":   "#5A4226", // muted/secondary (~7:1 on cream, ~6:1 on sunny)
+        // --- Ink (dark text on cream / bright surfaces) ---
+        ink:          "#2A1C14", // primary text (~14:1 AA on cream)
+        "ink-soft":   "#5C4632", // muted/secondary (~8:1 on cream, ~6:1 on sky)
 
         // --- Light text (on solid accents only) ---
         cream:        "#FFF7EC",
 
-        // --- Heat / reward accents (brightened) ---
-        lava:         "#F2510E", // primary action / draw / heat
-        "lava-dim":   "#D8430A", // button gradient end + pressed
-        gold:         "#FFB31E", // reward (solid bg w/ ink text)
-        "gold-dim":   "#9A6B00", // gold TEXT on cream (~4.7:1 AA)
-        ember:        "#E5392B", // danger / elimination
+        // --- Heat / reward accents ---
+        lava:         "#F5481E", // primary action / draw / heat
+        "lava-dim":   "#D8390F", // button gradient end + pressed
+        magma:        "#FF3D8B", // magenta-hot — loudest moments (decorative/effect; ink text if chipped)
+        gold:         "#FFC02E", // reward (solid bg w/ ink text)
+        "gold-dim":   "#946400", // gold TEXT on cream (~4.8:1 AA)
+        ember:        "#EE3B34", // danger / elimination
 
-        // --- Gang / elemental (brightened; card-art + solid badges) ---
-        "gang-fire":   "#F2510E",
-        "gang-ice":    "#36C5E0", // bright sky/cyan (cold/freeze accent)
-        "gang-storm":  "#9B6BFF", // bright grape (warp accent)
-        "gang-earth":  "#36D399", // bright mint (success)
-        "gang-shadow": "#B08CFF", // light grape (decorative card art)
+        // --- Gang / elemental (candy; card-art + solid badges) ---
+        "gang-fire":   "#FF6A2B", // bright coral-orange
+        "gang-ice":    "#22C7E0", // bright cyan (cold/freeze accent)
+        "gang-storm":  "#6D5CFF", // electric indigo (warp accent)
+        "gang-earth":  "#2FCB7E", // tropical green (success)
+        "gang-shadow": "#B06BE6", // plum (decorative card art)
 
-        // --- Legacy aliases (re-pointed bright) for any unmigrated usage ---
-        obsidian:      "#FFD89B", // → wood
-        "obsidian-2":  "#FFF4DD", // → panel-2
-        "obsidian-3":  "#FFFDF7", // → panel
-        ash:           "#5A4226", // → ink-soft
-        "ash-light":   "#5A4226", // → ink-soft
-        "card-bg":     "#FFF4DD",
-        "card-border": "#F0D9AE",
+        // --- Legacy aliases (re-pointed) for any unmigrated usage ---
+        obsidian:      "#FFE6B0", // → sand
+        "obsidian-2":  "#FFF3DF", // → panel-2
+        "obsidian-3":  "#FFFCF6", // → panel
+        ash:           "#5C4632", // → ink-soft
+        "ash-light":   "#5C4632", // → ink-soft
+        "card-bg":     "#FFF3DF",
+        "card-border": "#EFD9B2",
       },
       fontFamily: {
-        display: ["Righteous", "sans-serif"],
+        // Display = Fredoka (rounded, friendly, sticker-y) for logo/headings/card names.
+        display: ["Fredoka", "Righteous", "sans-serif"],
         body:    ["Hanken Grotesk", "sans-serif"],
       },
       // Semantic z-index scale — replaces ad-hoc 30/40/50/60 across the app.
@@ -80,22 +84,24 @@ module.exports = {
         tooltip:          "60",
       },
       boxShadow: {
-        // Warm shadows (amber-tinted, not pure black) for cream cards on the sunny table.
-        "lava-glow":   "0 0 20px rgba(242, 81, 14, 0.50), 0 0 60px rgba(242, 81, 14, 0.20)",
-        "gold-glow":   "0 0 20px rgba(255, 179, 30, 0.55)",
-        "card-hover":  "0 12px 30px rgba(120, 70, 20, 0.28), 0 2px 8px rgba(242, 81, 14, 0.15)",
-        "card-normal": "0 6px 16px rgba(120, 70, 20, 0.18)",
-        "panel":       "0 10px 32px rgba(120, 70, 20, 0.18)",
+        // Warm shadows (amber-tinted, not pure black) for sticker cards on the sand table.
+        "lava-glow":   "0 0 20px rgba(245, 72, 30, 0.50), 0 0 60px rgba(245, 72, 30, 0.20)",
+        "gold-glow":   "0 0 20px rgba(255, 192, 46, 0.55)",
+        "magma-glow":  "0 0 22px rgba(255, 61, 139, 0.55), 0 0 64px rgba(255, 61, 139, 0.22)",
+        "card-hover":  "0 14px 34px rgba(90, 60, 25, 0.30), 0 2px 8px rgba(245, 72, 30, 0.15)",
+        "card-normal": "0 8px 18px rgba(90, 60, 25, 0.20)",
+        "panel":       "0 12px 34px rgba(90, 60, 25, 0.20)",
       },
       backgroundImage: {
         // AA-safe ends so cream button text stays legible across the gradient.
-        "lava-gradient": "linear-gradient(135deg, #FF6A1E 0%, #D8430A 100%)",
-        "gold-gradient": "linear-gradient(135deg, #FFC23D 0%, #F0A500 100%)",
-        // The sunny sky / table: peach → butter → soft blue.
-        "table-sky":     "linear-gradient(180deg, #FFE8C5 0%, #FFD89B 45%, #BFE3FF 100%)",
-        // Legacy table names re-pointed to the sunny gradient (with a warm pool centre).
-        "table-felt":    "radial-gradient(ellipse at 50% 32%, #FFF3D6 0%, #FFE3B0 38%, #FFD89B 64%, #BFE3FF 100%)",
-        "table-wood":    "radial-gradient(ellipse at 50% 32%, #FFF3D6 0%, #FFE3B0 38%, #FFD89B 64%, #BFE3FF 100%)",
+        "lava-gradient":  "linear-gradient(135deg, #FF6A2B 0%, #E23A12 100%)",
+        "magma-gradient": "linear-gradient(135deg, #FF5BA8 0%, #F5481E 100%)",
+        "gold-gradient":  "linear-gradient(135deg, #FFD24D 0%, #F2A100 100%)",
+        // The tropic sky / table: aqua → seafoam → warm sand.
+        "table-sky":     "linear-gradient(180deg, #86E5E0 0%, #C7F0D8 46%, #FFE6B0 100%)",
+        // Table = a warm sand stage pooled at center, surrounded by seafoam + aqua.
+        "table-felt":    "radial-gradient(ellipse at 50% 36%, #FFF7E2 0%, #FFE6B0 34%, #C7F0D8 66%, #86E5E0 100%)",
+        "table-wood":    "radial-gradient(ellipse at 50% 36%, #FFF7E2 0%, #FFE6B0 34%, #C7F0D8 66%, #86E5E0 100%)",
       },
       animation: {
         "card-flip":    "cardFlip 0.4s ease-in-out",
@@ -107,6 +113,7 @@ module.exports = {
         "sparkle-float": "sparkleFloat 9s ease-in-out infinite",
         "glow-pulse":   "glowPulse 2s ease-in-out infinite",
         "slide-up":     "slideUp 0.3s ease-out",
+        "float":        "floaty 4s ease-in-out infinite",
         // ease-out-quint — smooth deceleration, no overshoot/bounce (per DESIGN.md motion rules)
         "bounce-in":    "bounceIn 0.4s cubic-bezier(0.22, 1, 0.36, 1)",
         "death-flash":  "deathFlash 0.8s ease-out",
@@ -159,6 +166,10 @@ module.exports = {
         slideUp: {
           "0%":   { transform: "translateY(20px)", opacity: "0" },
           "100%": { transform: "translateY(0)",    opacity: "1" },
+        },
+        floaty: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%":      { transform: "translateY(-8px)" },
         },
         bounceIn: {
           "0%":   { transform: "scale(0.5)", opacity: "0" },

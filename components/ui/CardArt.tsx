@@ -282,14 +282,173 @@ export interface CardArtProps {
 }
 
 /**
- * The card's glyph. Inherits its colour from `currentColor`, so the parent
- * sets `style={{ color: accent }}` (the Card primitive does this). Decorative
- * by default — the accessible name lives on the Card's button.
+ * The card's accent GLYPH (line-art), inheriting colour from `currentColor`.
+ * Used for the corner pips — a small, bold mechanic icon that reads even at
+ * ~16px. The big card face uses the full-colour illustration (`CardArt`).
  */
-export function CardArt({ type, className }: CardArtProps) {
+export function CardPip({ type, className }: CardArtProps) {
   return (
     <svg viewBox="0 0 64 64" className={className} aria-hidden="true" role="presentation">
       {GLYPHS[type]}
+    </svg>
+  );
+}
+
+// ============================================================
+// CARD ART — full-colour illustrated CAT character per card.
+// ============================================================
+// A cohesive "sticker" cat: bold ink outline, flat fills + light shading,
+// element-tinted fur and a per-card expression. Accent parts (inner ears,
+// cheeks, nose) use `currentColor` so each illustration stays colour-matched
+// to its card accent / border / name. Crisp at any size, no assets. The
+// specific mechanic is conveyed by the corner pip (CardPip) + the name plate.
+// A raster override (lib/cardTheme CARD_IMAGES) can still replace this later.
+// ============================================================
+
+const OUT = "#2A1C14"; // sticker outline (ink)
+
+type Eyes = "normal" | "angry" | "sleepy" | "wide" | "wink" | "focused" | "x" | "spiral" | "star" | "cool";
+type Mouth = "smile" | "open" | "flat" | "fang" | "omega";
+
+interface Fur { fur: string; fur2: string; ear: string; }
+const TABBY: Fur = { fur: "#FFB46B", fur2: "#EE9A45", ear: "#FFDDB4" };
+const FIRE: Fur = { fur: "#FF8348", fur2: "#EA4A1C", ear: "#FFC09A" };
+const ICE: Fur = { fur: "#86E6F2", fur2: "#27B7D2", ear: "#CFF6FB" };
+const STORM: Fur = { fur: "#9F92FF", fur2: "#6D5CFF", ear: "#DAD3FF" };
+const EARTH: Fur = { fur: "#74E0A8", fur2: "#2FCB7E", ear: "#C8F4DD" };
+const SHADO: Fur = { fur: "#C79BEE", fur2: "#A968E0", ear: "#E7D4F7" };
+const GOLD: Fur = { fur: "#FFD27A", fur2: "#F0A800", ear: "#FFE9BE" };
+
+interface CatCfg extends Fur { eyes: Eyes; mouth: Mouth; }
+const CATS: Record<CardType, CatCfg> = {
+  LAVA_CAT:      { ...FIRE,  eyes: "angry",   mouth: "fang" },
+  WATER_BUCKET:  { ...ICE,   eyes: "normal",  mouth: "smile" },
+  NAP_TIME:      { ...TABBY, eyes: "sleepy",  mouth: "smile" },
+  ERUPTION:      { ...FIRE,  eyes: "angry",   mouth: "open" },
+  SPY_CAT:       { ...GOLD,  eyes: "wide",    mouth: "smile" },
+  EARTHQUAKE:    { ...TABBY, eyes: "spiral",  mouth: "open" },
+  FREEZE:        { ...ICE,   eyes: "wide",    mouth: "flat" },
+  BRIBE:         { ...GOLD,  eyes: "wink",    mouth: "smile" },
+  REVERSE:       { ...TABBY, eyes: "cool",    mouth: "smile" },
+  SNIPER:        { ...TABBY, eyes: "focused", mouth: "flat" },
+  PEEK_AND_SWAP: { ...GOLD,  eyes: "wide",    mouth: "omega" },
+  BUNKER:        { ...EARTH, eyes: "normal",  mouth: "smile" },
+  PICKPOCKET:    { ...TABBY, eyes: "cool",    mouth: "omega" },
+  FLOOD:         { ...ICE,   eyes: "wide",    mouth: "open" },
+  TIME_WARP:     { ...STORM, eyes: "spiral",  mouth: "omega" },
+  LOCKDOWN:      { ...TABBY, eyes: "focused", mouth: "flat" },
+  GANG_FIRE:     { ...FIRE,  eyes: "normal",  mouth: "omega" },
+  GANG_ICE:      { ...ICE,   eyes: "normal",  mouth: "omega" },
+  GANG_STORM:    { ...STORM, eyes: "normal",  mouth: "omega" },
+  GANG_EARTH:    { ...EARTH, eyes: "normal",  mouth: "omega" },
+  GANG_SHADOW:   { ...SHADO, eyes: "cool",    mouth: "omega" },
+};
+
+function star(cx: number, cy: number) {
+  const pts: string[] = [];
+  for (let i = 0; i < 10; i++) {
+    const r = i % 2 === 0 ? 4.6 : 1.9;
+    const a = -Math.PI / 2 + (i * Math.PI) / 5;
+    pts.push(`${(cx + Math.cos(a) * r).toFixed(1)},${(cy + Math.sin(a) * r).toFixed(1)}`);
+  }
+  return <polygon points={pts.join(" ")} fill="currentColor" stroke={OUT} strokeWidth={0.8} />;
+}
+
+function renderEyes(style: Eyes) {
+  const dot = (cx: number, cy: number, r = 4.8) => (
+    <>
+      <circle cx={cx} cy={cy} r={r} fill={OUT} />
+      <circle cx={cx + 1.7} cy={cy - 1.7} r={r * 0.34} fill="#fff" />
+    </>
+  );
+  switch (style) {
+    case "angry":
+      return (<>{dot(24, 33)}{dot(40, 33)}<path d="M18 27 29 30M46 27 35 30" stroke={OUT} strokeWidth={2.6} strokeLinecap="round" /></>);
+    case "sleepy":
+      return (<g stroke={OUT} strokeWidth={2.6} fill="none" strokeLinecap="round"><path d="M19 33q5 4 10 0M35 33q5 4 10 0" /></g>);
+    case "wide":
+      return (<>
+        <circle cx={24} cy={33} r={6} fill="#fff" stroke={OUT} strokeWidth={2} />
+        <circle cx={40} cy={33} r={6} fill="#fff" stroke={OUT} strokeWidth={2} />
+        <circle cx={24.6} cy={33.6} r={2.8} fill={OUT} /><circle cx={40.6} cy={33.6} r={2.8} fill={OUT} />
+      </>);
+    case "wink":
+      return (<>{dot(24, 33)}<path d="M35 34q5 4 10 0" stroke={OUT} strokeWidth={2.6} fill="none" strokeLinecap="round" /></>);
+    case "focused":
+      return (<>{dot(24, 33, 3.4)}{dot(40, 33, 3.4)}<path d="M19 29 29 30M45 29 35 30" stroke={OUT} strokeWidth={2} strokeLinecap="round" /></>);
+    case "x":
+      return (<g stroke={OUT} strokeWidth={2.6} strokeLinecap="round"><path d="M20 29l8 8M28 29l-8 8M36 29l8 8M44 29l-8 8" /></g>);
+    case "spiral":
+      return (<>
+        <circle cx={24} cy={33} r={5} fill="#fff" stroke={OUT} strokeWidth={2} />
+        <circle cx={40} cy={33} r={5} fill="#fff" stroke={OUT} strokeWidth={2} />
+        <path d="M24 33m-3 0a3 3 0 1 0 3-3M40 33m-3 0a3 3 0 1 0 3-3" fill="none" stroke={OUT} strokeWidth={1.5} />
+      </>);
+    case "star":
+      return (<>{star(24, 33)}{star(40, 33)}</>);
+    case "cool":
+      return (<>
+        <rect x={16} y={29} width={32} height={8.5} rx={4.2} fill={OUT} />
+        <rect x={18.5} y={30.5} width={9} height={2} rx={1} fill="#fff" opacity={0.45} />
+      </>);
+    default:
+      return (<>{dot(24, 33)}{dot(40, 33)}</>);
+  }
+}
+
+function renderMouth(style: Mouth) {
+  switch (style) {
+    case "open":
+      return (<>
+        <path d="M27 43q5 8 10 0q-5 2-10 0Z" fill="#8A3A3A" stroke={OUT} strokeWidth={1.8} strokeLinejoin="round" />
+        <path d="M30 47q2 2 4 0" fill="#FF8AA0" />
+      </>);
+    case "flat":
+      return <path d="M28 45h8" stroke={OUT} strokeWidth={2.4} strokeLinecap="round" />;
+    case "fang":
+      return (<>
+        <path d="M26 43q6 5 12 0" stroke={OUT} strokeWidth={2.4} fill="none" strokeLinecap="round" />
+        <path d="M29 44l1.4 3.4 1.4-3.4ZM33 44l1.4 3.4 1.4-3.4Z" fill="#fff" stroke={OUT} strokeWidth={0.8} strokeLinejoin="round" />
+      </>);
+    case "omega":
+      return <path d="M27 43q3 4 5.5 0q2.5 4 5.5 0" stroke={OUT} strokeWidth={2.4} fill="none" strokeLinecap="round" />;
+    default:
+      return <path d="M26 43q6 6 12 0" stroke={OUT} strokeWidth={2.4} fill="none" strokeLinecap="round" />;
+  }
+}
+
+/**
+ * The card's full-colour illustrated cat. The Card primitive sets
+ * `color: accent` on the wrapper, which currentColor (ears/cheeks/nose) picks
+ * up so every cat is colour-matched to its card.
+ */
+export function CardArt({ type, className }: CardArtProps) {
+  const c = CATS[type];
+  return (
+    <svg viewBox="0 0 64 64" className={className} aria-hidden="true" role="presentation">
+      {/* ears */}
+      <path d="M14 26 18 8 31 21Z" fill={c.fur} stroke={OUT} strokeWidth={2} strokeLinejoin="round" />
+      <path d="M50 26 46 8 33 21Z" fill={c.fur} stroke={OUT} strokeWidth={2} strokeLinejoin="round" />
+      <path d="M18.5 22 20 12 26.5 19Z" fill="currentColor" opacity={0.85} />
+      <path d="M45.5 22 44 12 37.5 19Z" fill="currentColor" opacity={0.85} />
+      {/* head */}
+      <ellipse cx={32} cy={36} rx={21} ry={19} fill={c.fur} stroke={OUT} strokeWidth={2} />
+      <ellipse cx={26} cy={27} rx={9} ry={6} fill="#fff" opacity={0.16} />
+      {/* forehead tabby stripes */}
+      <path d="M27 22q1 4 0 7M32 21v8M37 22q-1 4 0 7" stroke={c.fur2} strokeWidth={2} fill="none" strokeLinecap="round" opacity={0.65} />
+      {/* muzzle */}
+      <ellipse cx={32} cy={43} rx={13} ry={9.5} fill={c.ear} opacity={0.55} />
+      {/* cheeks (accent) */}
+      <ellipse cx={18.5} cy={41} rx={4} ry={2.6} fill="currentColor" opacity={0.45} />
+      <ellipse cx={45.5} cy={41} rx={4} ry={2.6} fill="currentColor" opacity={0.45} />
+      {/* whiskers */}
+      <g stroke={OUT} strokeWidth={1.3} strokeLinecap="round" opacity={0.65}>
+        <path d="M11 38h10M11 42h10M53 38H43M53 42H43" />
+      </g>
+      {renderEyes(c.eyes)}
+      {/* nose (accent) */}
+      <path d="M30 38h4l-2 3Z" fill="currentColor" stroke={OUT} strokeWidth={0.7} strokeLinejoin="round" />
+      {renderMouth(c.mouth)}
     </svg>
   );
 }

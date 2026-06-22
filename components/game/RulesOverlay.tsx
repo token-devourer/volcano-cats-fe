@@ -19,7 +19,7 @@
 
 import { useMemo, type CSSProperties, type ReactNode } from "react";
 import { ResponsiveDialog } from "@/components/ui";
-import { CardArt } from "@/components/ui/CardArt";
+import { CardPip } from "@/components/ui/CardArt";
 import { ALL_CARD_TYPES, CARD_SPECS, type CardType, type CardRole } from "@/lib/shared";
 import { getCardTheme } from "@/lib/cardTheme";
 import { cardName, cardDesc, t } from "@/lib/i18n";
@@ -161,7 +161,7 @@ function CardRef({ type }: { type: CardType }) {
         style={{ background: `${theme.color}1A`, boxShadow: `inset 0 0 0 1px ${theme.color}40`, color: theme.color }}
         aria-hidden="true"
       >
-        <CardArt type={type} className="h-full w-full" />
+        <CardPip type={type} className="h-full w-full" />
       </span>
       <div className="min-w-0">
         <p className="font-display text-sm leading-tight text-ink">

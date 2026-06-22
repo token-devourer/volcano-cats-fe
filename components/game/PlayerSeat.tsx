@@ -19,6 +19,7 @@ interface PlayerSeatProps {
 export function PlayerSeat({ player, isCurrent, isMe, compact }: PlayerSeatProps) {
   return (
     <div
+      data-seat-id={player.id}
       className={clsx(
         "flex flex-col items-center gap-1 transition-opacity duration-300",
         !player.alive && "opacity-40",

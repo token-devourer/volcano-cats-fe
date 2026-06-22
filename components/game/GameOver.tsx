@@ -1,5 +1,6 @@
 "use client";
 import { useEffect } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { Button, Avatar } from "@/components/ui";
 import { useGame } from "@/store/game";
 import { send } from "@/lib/net/client";
@@ -29,11 +30,31 @@ export function GameOver({ onLeave }: { onLeave: () => void }) {
   const me = state.players.find((p) => p.id === myId);
   const isHost = me?.isHost ?? false;
   const standings = [...state.players].sort((a, b) => Number(b.id === state.winnerId) - Number(a.id === state.winnerId));
+  const reduce = useReducedMotion();
+
+  const pop = reduce
+    ? { initial: { opacity: 0 }, animate: { opacity: 1 } }
+    : { initial: { opacity: 0, scale: 0.85, y: 18 }, animate: { opacity: 1, scale: 1, y: 0 } };
 
   return (
     <div className="fixed inset-0 z-modal grid place-items-center overflow-hidden bg-ink/45 px-4 backdrop-blur-md">
-      <div className="relative z-modal w-full max-w-md animate-slide-up rounded-3xl border border-panel-line bg-panel/95 p-6 text-center shadow-panel">
-        <div className="mb-2 text-7xl" aria-hidden="true">{iWon ? "🏆" : "💀"}</div>
+      <motion.div
+        {...pop}
+        transition={{ type: reduce ? "tween" : "spring", stiffness: 320, damping: 22, duration: reduce ? 0.2 : undefined }}
+        className={clsx(
+          "relative z-modal w-full max-w-md rounded-3xl border bg-panel/95 p-6 text-center shadow-panel",
+          iWon ? "border-gold/50 shadow-gold-glow" : "border-panel-line",
+        )}
+      >
+        <motion.div
+          className="mb-2 text-7xl"
+          aria-hidden="true"
+          initial={reduce ? undefined : { scale: 0, rotate: -20 }}
+          animate={reduce ? undefined : { scale: 1, rotate: 0 }}
+          transition={{ type: "spring", stiffness: 260, damping: 12, delay: 0.12 }}
+        >
+          {iWon ? "🏆" : "💀"}
+        </motion.div>
         <h1 className={clsx(
           "font-display text-3xl",
           iWon
@@ -45,13 +66,22 @@ export function GameOver({ onLeave }: { onLeave: () => void }) {
         {!iWon && <p className="mt-1 text-sm text-ink-soft">{t("over.youLose")}</p>}
 
         <ul className="mt-6 space-y-2 rounded-2xl border border-panel-line bg-panel-2 p-4 text-left">
-          {standings.map((p) => (
-            <li key={p.id} className="flex items-center gap-3">
-              <Avatar name={p.name} size="sm" />
-              <span className="flex-1 truncate text-ink">{p.name}</span>
-              <span aria-hidden="true">{p.id === state.winnerId ? "🏆" : "💀"}</span>
-            </li>
-          ))}
+          {standings.map((p) => {
+            const won = p.id === state.winnerId;
+            return (
+              <li
+                key={p.id}
+                className={clsx(
+                  "flex items-center gap-3 rounded-xl px-2 py-1.5",
+                  won && "bg-gold/20 ring-1 ring-gold/50",
+                )}
+              >
+                <Avatar name={p.name} size="sm" ring={won} />
+                <span className={clsx("flex-1 truncate", won ? "font-semibold text-ink" : "text-ink-soft")}>{p.name}</span>
+                <span aria-hidden="true">{won ? "👑" : "💀"}</span>
+              </li>
+            );
+          })}
         </ul>
 
         <div className="mt-6 flex flex-col gap-3">
@@ -64,7 +94,7 @@ export function GameOver({ onLeave }: { onLeave: () => void }) {
             {t("action.leave")}
           </Button>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

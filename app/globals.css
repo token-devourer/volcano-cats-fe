@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Righteous&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,62 +7,66 @@
 
 /* ============================================================
    PALETTE — CSS custom properties mirror of the Tailwind tokens.
-   Sunny Daylight system (ceria++ direction): bright cream cards on
-   a sunlit peach→butter→sky surface, vivid heat accents, brightened
-   elementals. No dark surfaces. See DESIGN.md.
+   Tropic Pop system (candy/sticker direction): bright sticker cards
+   on a fresh aqua→seafoam→sand surface, hot coral-lava + magenta
+   magma energy, candy elementals. No dark surfaces. See DESIGN.md.
    ============================================================ */
 :root {
-  /* Sunny surfaces (the sky / page / table) */
-  --sky-1:       #FFE8C5;
-  --sky-2:       #FFD89B;
-  --sky-3:       #BFE3FF;
-  --sun:         #FFF3D6;
+  /* Bright surfaces (the sky / page / table) */
+  --sky-1:       #86E5E0;
+  --sky-2:       #C7F0D8;
+  --sky-3:       #FFE6B0;
+  --sun:         #FFF7E2;
 
-  /* Warm surfaces (legacy "wood" names, re-pointed bright) */
-  --wood:        #FFD89B;
-  --wood-deep:   #F2C879;
-  --wood-glow:   #FFF3D6;
+  /* Warm surfaces (legacy "wood" names, re-pointed to sand) */
+  --wood:        #FFE6B0;
+  --wood-deep:   #F7D38C;
+  --wood-glow:   #FFF7E2;
 
-  /* Cream panels / cards */
-  --panel:       #FFFDF7;
-  --panel-2:     #FFF4DD;
-  --panel-line:  #F0D9AE;
+  /* Sticker panels / cards */
+  --panel:       #FFFCF6;
+  --panel-2:     #FFF3DF;
+  --panel-line:  #EFD9B2;
 
-  /* Ink (dark text on cream / sunny surfaces) */
-  --ink:         #2A1A10;
-  --ink-soft:    #5A4226;
+  /* Ink (dark text on cream / bright surfaces) */
+  --ink:         #2A1C14;
+  --ink-soft:    #5C4632;
 
   /* Light text (on solid accents only) */
   --cream:       #FFF7EC;
 
-  /* Heat / reward accents (brightened) */
-  --lava:        #F2510E;
-  --lava-dim:    #D8430A;
-  --gold:        #FFB31E;
-  --gold-dim:    #9A6B00;
-  --ember:       #E5392B;
+  /* Heat / reward accents */
+  --lava:        #F5481E;
+  --lava-dim:    #D8390F;
+  --magma:       #FF3D8B;
+  --gold:        #FFC02E;
+  --gold-dim:    #946400;
+  --ember:       #EE3B34;
 
-  /* Gang / elemental (brightened) */
-  --gang-fire:   #F2510E;
-  --gang-ice:    #36C5E0;
-  --gang-storm:  #9B6BFF;
-  --gang-earth:  #36D399;
-  --gang-shadow: #B08CFF;
+  /* Gang / elemental (candy) */
+  --gang-fire:   #FF6A2B;
+  --gang-ice:    #22C7E0;
+  --gang-storm:  #6D5CFF;
+  --gang-earth:  #2FCB7E;
+  --gang-shadow: #B06BE6;
 
-  /* Legacy aliases (re-pointed bright) */
-  --obsidian:    #FFD89B;
-  --obsidian-2:  #FFF4DD;
-  --obsidian-3:  #FFFDF7;
-  --ash-light:   #5A4226;
-  --ash:         #5A4226;
-  --card-bg:     #FFF4DD;
-  --card-border: #F0D9AE;
+  /* Card face base */
+  --card-face:   #FFF8EC;
+
+  /* Legacy aliases (re-pointed) */
+  --obsidian:    #FFE6B0;
+  --obsidian-2:  #FFF3DF;
+  --obsidian-3:  #FFFCF6;
+  --ash-light:   #5C4632;
+  --ash:         #5C4632;
+  --card-bg:     #FFF3DF;
+  --card-border: #EFD9B2;
 }
 
 html, body {
-  /* Sunlit sky: peach → butter → soft blue, fixed so it fills tall pages. */
+  /* Tropic sky: aqua → seafoam → warm sand, fixed so it fills tall pages. */
   background-color: var(--sky-2);
-  background-image: linear-gradient(180deg, #FFE8C5 0%, #FFD89B 45%, #BFE3FF 100%);
+  background-image: linear-gradient(180deg, #86E5E0 0%, #C7F0D8 46%, #FFE6B0 100%);
   background-attachment: fixed;
   color: var(--ink);
   font-family: 'Hanken Grotesk', sans-serif;
@@ -72,8 +76,8 @@ html, body {
   text-rendering: optimizeLegibility;
 }
 
-/* Display family is reserved for headings/card names/banners */
-.font-display { letter-spacing: -0.02em; }
+/* Display family (Fredoka, rounded) is reserved for headings/card names/banners */
+.font-display { letter-spacing: -0.01em; }
 
 /* Headings wrap nicely; prose stays readable */
 h1, h2, h3 { text-wrap: balance; }
@@ -81,10 +85,10 @@ h1, h2, h3 { text-wrap: balance; }
 /* Custom scrollbar — warm brown */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: var(--panel-2); }
-::-webkit-scrollbar-thumb { background: #E6B450; border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: #F0C45A; border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--lava); }
 /* Firefox */
-* { scrollbar-width: thin; scrollbar-color: #E6B450 var(--panel-2); }
+* { scrollbar-width: thin; scrollbar-color: #F0C45A var(--panel-2); }
 
 /* Card 3D perspective (used by the playing-card primitive) */
 .card-3d-container { perspective: 1000px; }
@@ -136,7 +140,7 @@ h1, h2, h3 { text-wrap: balance; }
   aspect-ratio: 5 / 7;
   border-radius: clamp(8px, calc(var(--card-width) * 0.12), 18px);
   border: 1px solid color-mix(in oklab, var(--card-accent) 45%, var(--panel-line));
-  background-color: #FFF6E4;
+  background-color: var(--card-face);
   background-image:
     radial-gradient(120% 78% at 50% -10%, color-mix(in oklab, var(--card-accent) 22%, transparent), transparent 60%),
     radial-gradient(96% 72% at 82% 118%, color-mix(in oklab, var(--card-accent) 12%, transparent), transparent 64%);
@@ -297,9 +301,9 @@ button.vc-card:disabled {
 .vc-card--back {
   --card-accent: var(--ember);
   background:
-    radial-gradient(circle at 50% 40%, rgba(229, 57, 43, 0.26), transparent 56%),
-    repeating-linear-gradient(45deg, rgba(229, 57, 43, 0.10) 0 2px, transparent 2px 11px),
-    linear-gradient(165deg, #FFF6E4, #FBE3B8);
+    radial-gradient(circle at 50% 40%, rgba(238, 59, 52, 0.26), transparent 56%),
+    repeating-linear-gradient(45deg, rgba(238, 59, 52, 0.10) 0 2px, transparent 2px 11px),
+    linear-gradient(165deg, #FFF8EC, #FBE0B0);
 }
 .vc-card--back .vc-card__art {
   padding-bottom: 0;

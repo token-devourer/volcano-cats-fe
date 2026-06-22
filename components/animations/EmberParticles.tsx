@@ -26,7 +26,7 @@ export function EmberParticles({ count = 14, className }: EmberParticlesProps) {
         // Deterministic spread so SSR/CSR match (no hydration mismatch).
         const r = ((i * 9301 + 49297) % 233280) / 233280;
         const r2 = ((i * 4099 + 1) % 251) / 251;
-        const palette = ["#FFD24A", "#FFF3D6", "#7FD0FF"] as const;
+        const palette = ["#FFC02E", "#FFF7E2", "#86E5E0"] as const;
         return {
           left: `${Math.round(r * 100)}%`,
           size: 3 + Math.round(r2 * 4),

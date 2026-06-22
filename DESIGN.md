@@ -1,80 +1,89 @@
 # Design
 
-Visual system for **Volcano Cats**. A bright, cheerful "sunlit table" game UI — bright cream
-cards on a sunny peach→butter→sky surface, vivid saturated accents, friendly and fun. This is
-the **ceria++** (bright/cheerful) identity: brightened from the earlier warm-wood direction on
-the owner's instruction ("no dark colors that make playing uncomfortable"). The volcano/lava/
-cats identity is kept (lava orange stays as the energy color); only the surfaces go from dark
-wood to sunlit sky. See `PRODUCT.md` for strategy.
+Visual system for **Volcano Cats**. A bright, alive "tropical-island volcano" game UI — bold
+sticker cards on a fresh aqua→seafoam→warm-sand surface, candy-saturated accents, friendly and
+fun. This is the **Tropic Pop** identity: a brand-new bright direction (supersedes the earlier
+"Sunny Daylight" peach and the older warm-wood/obsidian directions) on the owner's standing
+instruction ("no dark colors that make playing uncomfortable"). The volcano/lava/cats identity
+is kept (hot coral-lava stays as the energy color, with a magenta **magma** reserved for the
+loudest moments); the surface moves from peach to a tropical lagoon-meets-beach table. See
+`PRODUCT.md` for strategy.
 
 ## Theme
 
-Light-mode, daylight. The player is at a sunlit table under a bright sky: a peach→butter→soft-
-blue gradient surface (`sky-1`→`sky-2`→`sky-3`) with a warm light pool (`sun`) at the center,
-bright cream printed cards and panels on top, molten orange as the energy color, sunshine gold
-as reward/secondary, ember red as danger/death. Cream cards pop against the sunny surface; cats
-are vivid and saturated. **Dark INK text is the default everywhere** (on cream panels AND on the
-sunny surfaces); CREAM text is reserved for text sitting ON solid accents (lava/ember/gang
-buttons & badges) — never on a sunny/cream surface.
+Light-mode, daylight. The player is at a sunny beach table on a tropic island: an aqua→seafoam→
+warm-sand gradient surface (`sky-1`→`sky-2`→`sky-3`) with a warm sand light-pool (`sun`) at the
+center stage, bold sticker cards and panels on top, hot coral-lava as the energy color, magenta
+magma for the biggest beats, sunshine gold as reward/secondary, ember red as danger/death. Cards
+read as printed "stickers" (bold outline + soft drop shadow) and pop against the bright surface;
+cats are vivid and saturated. **Dark INK text is the default everywhere** (on cream panels AND on
+the bright surfaces); CREAM text is reserved for text sitting ON solid accents (lava/ember/gang
+buttons & badges) — never on a bright/cream surface.
 
 ## Colors
 
 Hex is canonical. Roles, not raw values, drive usage. Accent values are AA-tuned so dark INK
-reads on cream/sunny AND light CREAM reads on the solid accent.
+reads on cream/bright AND light CREAM reads on the solid accent.
 
-### Sunny surfaces (the sky / page / table)
-- `sky-1`       `#FFE8C5` — peach (gradient top)
-- `sky-2`       `#FFD89B` — butter (gradient mid)
-- `sky-3`       `#BFE3FF` — soft sky blue (gradient bottom)
-- `sun`         `#FFF3D6` — warm light pool at table center
-- Legacy `wood` `#FFD89B`, `wood-deep` `#F2C879` (deeper sun, **not** brown), `wood-glow`
-  `#FFF3D6` — re-pointed bright so any unmigrated usage still renders sunny.
+### Bright surfaces (the sky / page / table)
+- `sky-1`       `#86E5E0` — tropic aqua (gradient top)
+- `sky-2`       `#C7F0D8` — seafoam (gradient mid)
+- `sky-3`       `#FFE6B0` — warm sand (gradient bottom / table)
+- `sun`         `#FFF7E2` — warm sand light-pool at table center
+- Legacy `wood` `#FFE6B0`, `wood-deep` `#F7D38C` (deeper sand, **not** brown), `wood-glow`
+  `#FFF7E2` — re-pointed so any unmigrated usage still renders bright.
 
-### Cream panels / cards
-- `panel`       `#FFFDF7` — bright cream panel/surface (cards, modals, inputs container)
-- `panel-2`     `#FFF4DD` — raised/inset cream (input fills, hovers, sub-panels)
-- `panel-line`  `#F0D9AE` — soft sandy hairline border (1px only)
+### Sticker panels / cards
+- `panel`       `#FFFCF6` — warm near-white panel/surface (cards, modals, inputs container)
+- `panel-2`     `#FFF3DF` — raised/inset cream (input fills, hovers, sub-panels)
+- `panel-line`  `#EFD9B2` — soft sandy hairline border (1px only)
+- card face base `#FFF8EC` (CSS `--card-face`)
 
-### Ink (dark text on cream / sunny surfaces)
-- `ink`         `#2A1A10` — primary text (~15:1 AA on cream)
-- `ink-soft`    `#5A4226` — muted/secondary (~7:1 on cream, ~6:1 on sunny)
-- `cream`       `#FFF7EC` — light text ON solid accents only (NOT on cream/sunny surfaces)
+### Ink (dark text on cream / bright surfaces)
+- `ink`         `#2A1C14` — primary text (~14:1 AA on cream)
+- `ink-soft`    `#5C4632` — muted/secondary (~8:1 on cream, ~6:1 on bright surfaces)
+- `cream`       `#FFF7EC` — light text ON solid accents only (NOT on cream/bright surfaces)
 
-### Heat / reward accents (brightened)
-- `lava`       `#F2510E` — primary action, "draw", danger highlight, focus ring
-- `lava-dim`   `#D8430A` — pressed / gradient end
-- `gold`       `#FFB31E` — reward / win / plaque (solid bg with `ink` text; for gold TEXT on
+### Heat / reward accents
+- `lava`       `#F5481E` — primary action, "draw", danger highlight, focus ring
+- `lava-dim`   `#D8390F` — pressed / gradient end
+- `magma`      `#FF3D8B` — magenta-hot; the LOUDEST moments (Lava Cat eruption, win spectacle).
+  Decorative / effect colour; if ever chipped, use `ink` text on it (not cream).
+- `gold`       `#FFC02E` — reward / win / plaque (solid bg with `ink` text; for gold TEXT on
   cream use `gold-dim`)
-- `gold-dim`   `#9A6B00` — gold text on cream (~4.7:1 AA)
-- `ember`      `#E5392B` — error, elimination, destructive
+- `gold-dim`   `#946400` — gold text on cream (~4.8:1 AA)
+- `ember`      `#EE3B34` — error, elimination, destructive
 
 ### Gang (elemental) colors — also the only sanctioned "extra" hues
-- `gang-fire`   `#F2510E` (= lava)   🔥
-- `gang-ice`    `#36C5E0`            🧊  — also the **Freeze / cold-effect** accent (decorative:
+- `gang-fire`   `#FF6A2B`            🔥
+- `gang-ice`    `#22C7E0`            🧊  — also the **Freeze / cold-effect** accent (decorative:
   bars/borders; not body text on cream)
-- `gang-storm`  `#9B6BFF`            ⚡  — also the **Time Warp** accent
-- `gang-earth`  `#36D399`            🌿  — also `success`
-- `gang-shadow` `#B08CFF`            🌑  — decorative card art
+- `gang-storm`  `#6D5CFF`            ⚡  — also the **Time Warp** accent
+- `gang-earth`  `#2FCB7E`            🌿  — also `success`
+- `gang-shadow` `#B06BE6`            🌑  — decorative card art
 
 **Rule:** the palette above is the whole palette. No ad-hoc Tailwind `blue-400` / `purple-400`.
-Cold effects use `gang-ice`; warp uses `gang-storm`; success uses `gang-earth`. Legacy aliases
-(`obsidian*`, `ash-light`, `card-border`) are re-pointed to the bright tokens so any unmigrated
-usage still renders bright — but prefer the canonical names above.
+Cold effects use `gang-ice`; warp uses `gang-storm`; success uses `gang-earth`; the biggest
+beats use `magma`. Legacy aliases (`obsidian*`, `ash-light`, `card-border`) are re-pointed to the
+bright tokens so any unmigrated usage still renders bright — but prefer the canonical names above.
 
 ### Gradients & glows
-- `lava-gradient` `linear-gradient(135deg,#FF6A1E,#D8430A)` — primary buttons, lava moments
+- `lava-gradient` `linear-gradient(135deg,#FF6A2B,#E23A12)` — primary buttons, lava moments
   (ends kept AA-safe so cream button text stays legible across the gradient)
-- `gold-gradient` `linear-gradient(135deg,#FFC23D,#F0A500)` — win / join (text = `ink`, not cream)
-- `card-gradient` cream card faces (base `#FFF6E4`)
-- `table-sky` / `table-wood` `linear|radial` peach→butter→sky — the sunlit table
-- Glows: `lava-glow`, `gold-glow` — reserved for the active turn, the deck on your turn, and
-  win/danger moments. Not on idle elements. Shadows are warm amber-tinted (`rgba(120,70,20,…)`).
+- `magma-gradient` `linear-gradient(135deg,#FF5BA8,#F5481E)` — the loudest spectacle moments
+- `gold-gradient` `linear-gradient(135deg,#FFD24D,#F2A100)` — win / join (text = `ink`, not cream)
+- `card-gradient` sticker card faces (base `#FFF8EC`)
+- `table-sky` / `table-wood` `linear|radial` aqua→seafoam→sand — the tropic beach table
+- Glows: `lava-glow`, `gold-glow`, `magma-glow` — reserved for the active turn, the deck on your
+  turn, and win/danger moments. Not on idle elements. Shadows are warm amber-tinted
+  (`rgba(90,60,25,…)`).
 
 ## Typography
 
 Two families on a contrast axis (display vs. body) — never two similar sans.
-- **Display:** `Righteous` (single weight) — logo, headings, card names, room code, turn banner.
-  Used at large sizes only; letter-spacing ≥ -0.02em; `text-wrap: balance` on headings.
+- **Display:** `Fredoka` (400–700; rounded, friendly, sticker-y) — logo, headings, card names,
+  room code, turn banner. Used at large sizes/heavier weights; letter-spacing ≈ -0.01em;
+  `text-wrap: balance` on headings. (Replaces the earlier `Righteous`, kept as fallback.)
 - **Body / UI:** `Hanken Grotesk` (400/500/600/700/800) — all running text, labels, buttons, log, tooltips.
 - Scale (clamp, mobile→desktop): display hero ≤ `clamp(2.5rem,8vw,4.5rem)` (never above ~6rem);
   h2 `clamp(1.5rem,4vw,2rem)`; body `0.95–1rem`; small/meta `0.8rem` (never below 12px for

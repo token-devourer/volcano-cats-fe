@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button, SoundToggle } from "@/components/ui";
+import { CardArt } from "@/components/ui/CardArt";
 import { EmberParticles } from "@/components/animations/EmberParticles";
 import { gsap, prefersReducedMotion } from "@/lib/motion/gsap";
 import { t } from "@/lib/i18n";
@@ -91,7 +92,15 @@ export default function HomePage() {
 
       <div className="relative z-banner flex w-full max-w-md flex-col items-center gap-8">
         <header className="select-none text-center">
-          <div className="mb-1 text-7xl animate-slide-up" aria-hidden="true">🌋</div>
+          <div className="mb-2 flex animate-slide-up justify-center" aria-hidden="true">
+            <div
+              className="relative grid h-24 w-24 animate-float place-items-center rounded-full border border-panel-line bg-panel shadow-panel"
+              style={{ color: "#F5481E" }}
+            >
+              <CardArt type="GANG_FIRE" className="h-16 w-16" />
+              <span className="absolute -bottom-1 -right-1 text-2xl drop-shadow-[0_1px_2px_rgba(90,60,25,0.4)]">🌋</span>
+            </div>
+          </div>
           <h1 className="bg-lava-gradient bg-clip-text font-display text-5xl leading-[0.95] tracking-tight text-transparent [filter:drop-shadow(0_3px_4px_rgba(140,45,0,0.42))] sm:text-6xl">
             VOLCANO
           </h1>
