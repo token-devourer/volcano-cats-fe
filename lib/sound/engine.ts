@@ -130,7 +130,6 @@ export function armUnlock(): void {
   const events: (keyof WindowEventMap)[] = ["pointerdown", "keydown", "touchstart"];
   const arm = () => {
     unlock();
-    if (useSoundStore.getState().music) void startMusic();
     events.forEach((e) => window.removeEventListener(e, arm));
   };
   events.forEach((e) => window.addEventListener(e, arm, { once: true, passive: true }));
