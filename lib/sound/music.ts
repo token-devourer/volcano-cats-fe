@@ -96,7 +96,7 @@ function startAmbient(): VoiceBus | null {
 
   const bus = ctx.createGain();
   bus.gain.setValueAtTime(0.0001, ctx.currentTime);
-  bus.gain.linearRampToValueAtTime(0.22, ctx.currentTime + 1.5);
+  bus.gain.linearRampToValueAtTime(0.45, ctx.currentTime + 1.5);
   bus.connect(master);
 
   // Sub rumble: two detuned low sines.
@@ -193,7 +193,7 @@ function createMusicBus(level: number): VoiceBus | null {
   const { ctx, master } = audio;
   const bus = ctx.createGain();
   bus.gain.setValueAtTime(0.0001, ctx.currentTime);
-  bus.gain.linearRampToValueAtTime(level, ctx.currentTime + 1.2);
+  bus.gain.linearRampToValueAtTime(level * 1.8, ctx.currentTime + 1.2);
   bus.connect(master);
   return {
     gain: bus,
@@ -216,9 +216,9 @@ function scheduleLobbyBar(ctx: AudioContext, out: AudioNode, t0: number, step: n
   // 4 beats * 0.75s = 3s per bar at ~80bpm-ish, cozy + slow.
   const beat = 0.75;
   // Soft pad chord (Am): A2, E3, A3 — sustained sines.
-  note(ctx, out, t0, 110.0, 2.6, "sine", 0.12, 0.4, 0.4);
-  note(ctx, out, t0, 164.81, 2.6, "sine", 0.09, 0.5, 0.4);
-  note(ctx, out, t0 + 1.5, 220.0, 1.6, "sine", 0.08, 0.3, 0.3);
+  note(ctx, out, t0, 110.0, 2.6, "sine", 0.28, 0.4, 0.4);
+  note(ctx, out, t0, 164.81, 2.6, "sine", 0.22, 0.5, 0.4);
+  note(ctx, out, t0 + 1.5, 220.0, 1.6, "sine", 0.20, 0.3, 0.3);
 
   // Pizzicato "kitty paw" melody — triangle plucks with quick decay.
   const phrases: number[][] = [
@@ -231,7 +231,7 @@ function scheduleLobbyBar(ctx: AudioContext, out: AudioNode, t0: number, step: n
   for (let i = 0; i < phrase.length; i++) {
     const t = t0 + i * (beat / 1.5);
     const f = A_MINOR_PENT[phrase[i]];
-    note(ctx, out, t, f, 0.28, "triangle", 0.16, 0.005, 0.15);
+    note(ctx, out, t, f, 0.28, "triangle", 0.35, 0.005, 0.15);
     // Tiny upward bend on the first note of the phrase = soft "meow".
     if (i === 0) {
       const osc = ctx.createOscillator();
@@ -241,7 +241,7 @@ function scheduleLobbyBar(ctx: AudioContext, out: AudioNode, t0: number, step: n
       osc.frequency.exponentialRampToValueAtTime(f * 0.92, t + 0.42);
       const g = ctx.createGain();
       g.gain.setValueAtTime(0.0001, t);
-      g.gain.linearRampToValueAtTime(0.07, t + 0.05);
+      g.gain.linearRampToValueAtTime(0.18, t + 0.05);
       g.gain.exponentialRampToValueAtTime(0.0001, t + 0.5);
       osc.connect(g);
       g.connect(out);
@@ -261,7 +261,7 @@ function scheduleGameBar(ctx: AudioContext, out: AudioNode, t0: number, step: nu
   const bassPattern = [0, 0, 2, 0, 1, 0, 2, 3];
   for (let i = 0; i < beats; i++) {
     const t = t0 + i * sixteenth;
-    note(ctx, out, t, BASS[bassPattern[i % bassPattern.length]], sixteenth * 0.9, "sawtooth", 0.09, 0.003, 0.02);
+    note(ctx, out, t, BASS[bassPattern[i % bassPattern.length]], sixteenth * 0.9, "sawtooth", 0.22, 0.003, 0.02);
   }
 
   // Ember marimba lead (triangle with quick body).
@@ -277,7 +277,7 @@ function scheduleGameBar(ctx: AudioContext, out: AudioNode, t0: number, step: nu
     if (idx < 0) continue;
     const t = t0 + i * sixteenth;
     const f = A_MINOR_PENT[idx] * 2;
-    note(ctx, out, t, f, 0.18, "triangle", 0.13, 0.004, 0.06);
+    note(ctx, out, t, f, 0.18, "triangle", 0.30, 0.004, 0.06);
   }
 
   // Rumble swell on the downbeat every 4 bars for tension.
@@ -289,7 +289,7 @@ function scheduleGameBar(ctx: AudioContext, out: AudioNode, t0: number, step: nu
 }
 
 function startTrack(track: MusicTrack): ActiveTrack | null {
-  const bus = createMusicBus(track === "lobby" ? 0.28 : 0.24);
+  const bus = createMusicBus(track === "lobby" ? 0.35 : 0.30);
   if (!bus) return null;
   const audio = getAudio();
   if (!audio) {

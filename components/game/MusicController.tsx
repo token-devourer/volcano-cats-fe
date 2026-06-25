@@ -38,10 +38,11 @@ export function MusicController({ track }: Props) {
     };
     tryStart();
     const events: (keyof WindowEventMap)[] = ["pointerdown", "keydown", "touchstart"];
-    events.forEach((e) => window.addEventListener(e, tryStart, { once: true, passive: true }));
+    const onGesture = () => { if (!cancelled) tryStart(); };
+    events.forEach((e) => window.addEventListener(e, onGesture, { passive: true }));
     return () => {
       cancelled = true;
-      events.forEach((e) => window.removeEventListener(e, tryStart));
+      events.forEach((e) => window.removeEventListener(e, onGesture));
     };
   }, [muted, music, track, phase]);
 

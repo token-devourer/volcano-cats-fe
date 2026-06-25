@@ -112,7 +112,6 @@ export function play(name: SfxName): void {
 export function getAudio(): { ctx: AudioContext; master: GainNode } | null {
   const c = ensureCtx();
   if (!c || !master) return null;
-  if (c.state === "suspended") void c.resume().catch(() => {});
   return { ctx: c, master };
 }
 
@@ -130,9 +129,13 @@ export function armUnlock(): void {
   const events: (keyof WindowEventMap)[] = ["pointerdown", "keydown", "touchstart"];
   const arm = () => {
     unlock();
-    events.forEach((e) => window.removeEventListener(e, arm));
+    // Keep trying until context is actually running (Chrome may reject early resume).
+    const c = ctx;
+    if (c && c.state === "running") {
+      events.forEach((e) => window.removeEventListener(e, arm));
+    }
   };
-  events.forEach((e) => window.addEventListener(e, arm, { once: true, passive: true }));
+  events.forEach((e) => window.addEventListener(e, arm, { passive: true }));
 }
 
 // Arm immediately on the client so the very first interaction unlocks audio,
