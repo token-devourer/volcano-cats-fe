@@ -10,6 +10,7 @@ import { PlayerHand } from "@/components/game/PlayerHand";
 import { PhaseController } from "@/components/game/PhaseController";
 import { CardPlayAnimation } from "@/components/game/CardPlayAnimation";
 import { EffectsController } from "@/components/game/EffectsController";
+import { MusicController } from "@/components/game/MusicController";
 import { EffectStage } from "@/components/game/EffectStage";
 import { GameLog } from "@/components/game/GameLog";
 import { GameOver } from "@/components/game/GameOver";
