@@ -8,7 +8,7 @@
 // ============================================================
 "use client";
 import { useEffect } from "react";
-import { setMusicTrack, stopAllMusic, type MusicTrack } from "@/lib/sound";
+import { setMusicTrack, stopAllMusic, onFirstUnlock, type MusicTrack } from "@/lib/sound";
 import { useSoundStore } from "@/store/sound";
 import { useGame } from "@/store/game";
 
@@ -30,19 +30,24 @@ export function MusicController({ track }: Props) {
     const desired: MusicTrack | null =
       track ?? (phase === null || phase === "lobby" || phase === "finished" ? "lobby" : "game");
 
-    // Wait for the audio context to unlock (first user gesture).
     let cancelled = false;
+
+    // Only start music once the AudioContext is actually running.
+    // getAudio() returns null when suspended, so synth nodes won't be
+    // scheduled on a frozen timeline (which would die before Chrome resumes).
     const tryStart = () => {
       if (cancelled) return;
       setMusicTrack(desired);
     };
+
+    // If already unlocked, start immediately.
     tryStart();
-    const events: (keyof WindowEventMap)[] = ["pointerdown", "keydown", "touchstart"];
-    const onGesture = () => { if (!cancelled) tryStart(); };
-    events.forEach((e) => window.addEventListener(e, onGesture, { passive: true }));
+
+    // Otherwise wait for the first unlock event.
+    const unsub = onFirstUnlock(tryStart);
     return () => {
       cancelled = true;
-      events.forEach((e) => window.removeEventListener(e, onGesture));
+      unsub();
     };
   }, [muted, music, track, phase]);
 

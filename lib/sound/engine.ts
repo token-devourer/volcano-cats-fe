@@ -43,8 +43,6 @@ function ensureCtx(): AudioContext | null {
 
   if (!subscribed) {
     subscribed = true;
-    // Keep the master level in sync with the persisted preferences.
-    // Music track-switching is owned by the MusicController component.
     useSoundStore.subscribe((s) => {
       if (master) master.gain.value = s.muted ? 0 : s.volume;
     });
@@ -52,10 +50,33 @@ function ensureCtx(): AudioContext | null {
   return ctx;
 }
 
-/** Resume a suspended context + mark unlocked. Safe to call repeatedly. */
+/** Resume a suspended context. Safe to call repeatedly. */
 export function unlock(): void {
   const c = ensureCtx();
   if (c && c.state === "suspended") void c.resume().catch(() => {});
+}
+
+/** True when the AudioContext is created AND in the "running" state. */
+export function isUnlocked(): boolean {
+  return ctx !== null && ctx.state === "running";
+}
+
+/** Callbacks fired once when context transitions to "running". */
+const onUnlockCallbacks = new Set<() => void>();
+let unlockFired = false;
+
+export function onFirstUnlock(cb: () => void): () => void {
+  if (unlockFired) { cb(); return () => {}; }
+  onUnlockCallbacks.add(cb);
+  return () => { onUnlockCallbacks.delete(cb); };
+}
+
+function checkUnlock() {
+  if (!unlockFired && ctx && ctx.state === "running") {
+    unlockFired = true;
+    for (const cb of onUnlockCallbacks) cb();
+    onUnlockCallbacks.clear();
+  }
 }
 
 /** Try to load a file buffer for `name`. Resolves null when no file exists. */
@@ -97,8 +118,6 @@ export function play(name: SfxName): void {
     playBuffer(c, master, cached);
     return;
   }
-  // Synth immediately; if we haven't probed for a file yet, do it in the
-  // background and prefer the file on subsequent plays.
   RECIPES[name]?.(c, master);
   if (!buffers.has(name)) {
     buffers.set(name, null);
@@ -108,10 +127,16 @@ export function play(name: SfxName): void {
   }
 }
 
-/** Shared accessor for music/ambient modules. Returns null until unlocked. */
+/**
+ * Shared accessor for music/ambient modules.
+ * Returns the audio nodes ONLY when the context is running.
+ * Returns null when suspended — prevents scheduling notes that will die
+ * before Chrome allows playback.
+ */
 export function getAudio(): { ctx: AudioContext; master: GainNode } | null {
   const c = ensureCtx();
   if (!c || !master) return null;
+  if (c.state !== "running") return null;
   return { ctx: c, master };
 }
 
@@ -129,9 +154,8 @@ export function armUnlock(): void {
   const events: (keyof WindowEventMap)[] = ["pointerdown", "keydown", "touchstart"];
   const arm = () => {
     unlock();
-    // Keep trying until context is actually running (Chrome may reject early resume).
-    const c = ctx;
-    if (c && c.state === "running") {
+    checkUnlock();
+    if (unlockFired) {
       events.forEach((e) => window.removeEventListener(e, arm));
     }
   };
