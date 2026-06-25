@@ -90,6 +90,7 @@ export default function RoomPage() {
     <>
       <ToastRegion toasts={toasts} onDismiss={dismissToast} />
       <RulesOverlay />
+      <MusicController />
     </>
   );
 
