@@ -90,14 +90,15 @@ module.exports = {
       },
       backgroundImage: {
         // AA-safe ends so cream button text stays legible across the gradient.
-        "lava-gradient":  "linear-gradient(135deg, #FF6A2B 0%, #E23A12 100%)",
-        "magma-gradient": "linear-gradient(135deg, #FF5BA8 0%, #F5481E 100%)",
-        "gold-gradient":  "linear-gradient(135deg, #FFD24D 0%, #F2A100 100%)",
-        // The tropic sky / table: aqua → seafoam → warm sand.
-        "table-sky":     "linear-gradient(180deg, #86E5E0 0%, #C7F0D8 46%, #FFE6B0 100%)",
-        // Table = a warm sand stage pooled at center, surrounded by seafoam + aqua.
-        "table-felt":    "radial-gradient(ellipse at 50% 36%, #FFF7E2 0%, #FFE6B0 34%, #C7F0D8 66%, #86E5E0 100%)",
-        "table-wood":    "radial-gradient(ellipse at 50% 36%, #FFF7E2 0%, #FFE6B0 34%, #C7F0D8 66%, #86E5E0 100%)",
+        "lava-gradient":  "linear-gradient(135deg, #ff8a3d 0%, #c03108 100%)",
+        "magma-gradient": "linear-gradient(135deg, #ff2e6e 0%, #ff5722 100%)",
+        "gold-gradient":  "linear-gradient(135deg, #ffd24d 0%, #c08400 100%)",
+        // Caldera sky: ember-glow top fading to obsidian void.
+        "table-sky":     "linear-gradient(180deg, #2b0c0a 0%, #1a0608 46%, #0a0304 100%)",
+        // Caldera table: a hot lava pool at center bleeding into dark basalt.
+        "table-felt":    "radial-gradient(ellipse at 50% 36%, #ff8a3d 0%, #c03108 18%, #4a1207 42%, #1a0608 70%, #0a0304 100%)",
+        "table-wood":    "radial-gradient(ellipse at 50% 36%, #ff8a3d 0%, #c03108 18%, #4a1207 42%, #1a0608 70%, #0a0304 100%)",
+
       },
       animation: {
         "card-flip":    "cardFlip 0.4s ease-in-out",
