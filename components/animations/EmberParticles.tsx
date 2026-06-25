@@ -8,15 +8,13 @@ interface EmberParticlesProps {
 }
 
 /**
- * Ambient sunny sparkles drifting up behind the content — gold / cream / sky
- * motes that gently rise and twinkle. Low-density and CSS-driven (the
- * `sparkle-float` keyframe), sitting at the table z-index. Fully disabled
- * under `prefers-reduced-motion`. (Kept the name for its existing call sites.)
+ * Ambient molten embers drifting up from the caldera — hot lava-orange,
+ * sulfur-gold and magma-pink motes that gently rise and twinkle behind
+ * the content. CSS-driven (the `sparkle-float` keyframe) and gated by
+ * `prefers-reduced-motion`. Density bumped for the volcanic theme.
  */
-export function EmberParticles({ count = 14, className }: EmberParticlesProps) {
+export function EmberParticles({ count = 32, className }: EmberParticlesProps) {
   const reduce = useReducedMotion();
-  // Client-only: keeps SSR + first client paint identical (both render nothing)
-  // so reduced-motion users never trip a hydration mismatch.
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
@@ -26,13 +24,15 @@ export function EmberParticles({ count = 14, className }: EmberParticlesProps) {
         // Deterministic spread so SSR/CSR match (no hydration mismatch).
         const r = ((i * 9301 + 49297) % 233280) / 233280;
         const r2 = ((i * 4099 + 1) % 251) / 251;
-        const palette = ["#FFC02E", "#FFF7E2", "#86E5E0"] as const;
+        // Molten palette: hot lava, ember, sulfur gold, occasional magma.
+        const palette = ["#ff5722", "#ff8a3d", "#ffc02e", "#ff2e6e"] as const;
         return {
           left: `${Math.round(r * 100)}%`,
-          size: 3 + Math.round(r2 * 4),
-          duration: 8 + r * 7,
-          delay: -r2 * 12,
+          size: 2 + Math.round(r2 * 5),
+          duration: 6 + r * 8,
+          delay: -r2 * 14,
           color: palette[i % palette.length],
+          opacity: 0.55 + r2 * 0.4,
         };
       }),
     [count],
@@ -54,10 +54,10 @@ export function EmberParticles({ count = 14, className }: EmberParticlesProps) {
             width: m.size,
             height: m.size,
             background: m.color,
-            boxShadow: `0 0 ${m.size * 2}px ${m.color}`,
+            boxShadow: `0 0 ${m.size * 3}px ${m.color}, 0 0 ${m.size * 6}px ${m.color}`,
             animationDuration: `${m.duration}s`,
             animationDelay: `${m.delay}s`,
-            opacity: 0.5,
+            opacity: m.opacity,
           }}
         />
       ))}

@@ -12,67 +12,74 @@
    magma energy, candy elementals. No dark surfaces. See DESIGN.md.
    ============================================================ */
 :root {
-  /* Bright surfaces (the sky / page / table) */
-  --sky-1:       #86E5E0;
-  --sky-2:       #C7F0D8;
-  --sky-3:       #FFE6B0;
-  --sun:         #FFF7E2;
+  /* Dark caldera surfaces (page / table backdrop) */
+  --sky-1:       #2b0c0a;
+  --sky-2:       #1a0608;
+  --sky-3:       #0a0304;
+  --sun:         #ff8a3d;
 
-  /* Warm surfaces (legacy "wood" names, re-pointed to sand) */
-  --wood:        #FFE6B0;
-  --wood-deep:   #F7D38C;
-  --wood-glow:   #FFF7E2;
+  /* Warm dark surfaces (legacy "wood" names, re-pointed to basalt) */
+  --wood:        #1a0608;
+  --wood-deep:   #0a0304;
+  --wood-glow:   #4a1207;
 
-  /* Sticker panels / cards */
-  --panel:       #FFFCF6;
-  --panel-2:     #FFF3DF;
-  --panel-line:  #EFD9B2;
+  /* Stone panels / cards (dark surfaces beneath cream cards) */
+  --panel:       #1f0e10;
+  --panel-2:     #2b1417;
+  --panel-line:  #4a1d18;
 
-  /* Ink (dark text on cream / bright surfaces) */
-  --ink:         #2A1C14;
-  --ink-soft:    #5C4632;
+  /* Ink — LIGHT on dark stone (Tailwind text-ink / text-ink-soft) */
+  --ink:         #f5e5d4;
+  --ink-soft:    #b89a87;
 
-  /* Light text (on solid accents only) */
+  /* Light text on solid accents */
   --cream:       #FFF7EC;
 
   /* Heat / reward accents */
-  --lava:        #F5481E;
-  --lava-dim:    #D8390F;
-  --magma:       #FF3D8B;
-  --gold:        #FFC02E;
-  --gold-dim:    #946400;
-  --ember:       #EE3B34;
+  --lava:        #ff5722;
+  --lava-dim:    #c03108;
+  --magma:       #ff2e6e;
+  --gold:        #ffc02e;
+  --gold-dim:    #a07300;
+  --ember:       #ff8a3d;
 
-  /* Gang / elemental (candy) */
-  --gang-fire:   #FF6A2B;
-  --gang-ice:    #22C7E0;
-  --gang-storm:  #6D5CFF;
-  --gang-earth:  #2FCB7E;
-  --gang-shadow: #B06BE6;
+  /* Gang / elemental */
+  --gang-fire:   #ff6a2b;
+  --gang-ice:    #5fd6ec;
+  --gang-storm:  #8a78ff;
+  --gang-earth:  #43d68a;
+  --gang-shadow: #c084fc;
 
-  /* Card face base */
+  /* Cream printed-card face (stays light — cards are physical objects on the dark table) */
   --card-face:   #FFF8EC;
+  /* DARK ink used ONLY for printed card text (name, corners) so it stays legible on cream */
+  --print-ink:   #2A1C14;
 
-  /* Legacy aliases (re-pointed) */
-  --obsidian:    #FFE6B0;
-  --obsidian-2:  #FFF3DF;
-  --obsidian-3:  #FFFCF6;
-  --ash-light:   #5C4632;
-  --ash:         #5C4632;
-  --card-bg:     #FFF3DF;
-  --card-border: #EFD9B2;
+  /* Legacy aliases */
+  --obsidian:    #0a0304;
+  --obsidian-2:  #1a0608;
+  --obsidian-3:  #1f0e10;
+  --ash-light:   #d8c4b3;
+  --ash:         #b89a87;
+  --card-bg:     #FFF8EC;
+  --card-border: #3a1a14;
 }
 
 html, body {
-  /* Tropic sky: aqua → seafoam → warm sand, fixed so it fills tall pages. */
-  background-color: var(--sky-2);
-  background-image: linear-gradient(180deg, #86E5E0 0%, #C7F0D8 46%, #FFE6B0 100%);
+  /* Molten caldera backdrop: ember-glow at top fading to obsidian void.
+     Fixed so it fills tall pages without scrolling artifacts. */
+  background-color: var(--sky-3);
+  background-image:
+    radial-gradient(ellipse 110% 80% at 50% -10%, rgba(255, 87, 34, 0.35) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 60% at 50% 115%, rgba(255, 46, 110, 0.18) 0%, transparent 60%),
+    linear-gradient(180deg, #2b0c0a 0%, #1a0608 46%, #0a0304 100%);
   background-attachment: fixed;
   color: var(--ink);
   font-family: 'Hanken Grotesk', sans-serif;
   min-height: 100vh;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+
   text-rendering: optimizeLegibility;
 }
 
@@ -213,9 +220,12 @@ h1, h2, h3 { text-wrap: balance; }
   line-height: 1.02;
   font-size: calc(var(--card-width) * 0.118);
   /* Accent pulled toward ink so the name stays AA-dark on cream. */
-  color: color-mix(in oklab, var(--card-accent) 55%, var(--ink));
+  /* Card name uses DARK print-ink so it stays AA-legible on the cream face,
+     regardless of the dark page palette. */
+  color: color-mix(in oklab, var(--card-accent) 55%, var(--print-ink));
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
-  background: linear-gradient(to top, color-mix(in oklab, var(--card-accent) 14%, var(--panel)) 4%, color-mix(in oklab, var(--card-accent) 6%, transparent) 60%, transparent);
+  background: linear-gradient(to top, color-mix(in oklab, var(--card-accent) 14%, var(--card-face)) 4%, color-mix(in oklab, var(--card-accent) 6%, transparent) 60%, transparent);
+
 }
 
 /* Corner pips — a small echo of the art, top-left & bottom-right (rotated),
@@ -225,7 +235,7 @@ h1, h2, h3 { text-wrap: balance; }
   z-index: 4;
   width: calc(var(--card-width) * 0.2);
   height: calc(var(--card-width) * 0.2);
-  color: color-mix(in oklab, var(--card-accent) 68%, var(--ink));
+  color: color-mix(in oklab, var(--card-accent) 68%, var(--print-ink));
   opacity: 0.92;
   pointer-events: none;
 }

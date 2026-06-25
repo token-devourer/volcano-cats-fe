@@ -8,70 +8,66 @@ module.exports = {
     extend: {
       colors: {
         // ============================================================
-        // TROPIC POP PALETTE (bright "candy/sticker" direction)
-        // ============================================================
-        // A tropical-island volcano table: a fresh aqua → seafoam → warm
-        // sand surface, bright sticker cards/panels carrying dark INK text,
-        // hot coral-lava energy with a magenta MAGMA reserved for the
-        // loudest moments, sunshine gold reward, and candy elemental hues.
-        // No dark surfaces — the page should feel happy and alive. INK
-        // reads on cream AND on the bright surfaces; CREAM is reserved for
-        // text sitting ON solid accents (buttons/badges). See DESIGN.md.
-        // (This supersedes the earlier Sunny Daylight peach direction.)
+        // MOLTEN CALDERA PALETTE — dark obsidian table, lava accents.
+        // Page/table surfaces are deep volcanic black with an ember
+        // underglow at the center. Panels are warm dark stone so cream
+        // ink reads clearly. Cards stay as cream printed sticker objects
+        // on top — their bodies use --card-face and --print-ink so the
+        // global ink flip does not affect printed card text.
         // ------------------------------------------------------------
 
-        // --- Bright surfaces (the sky / page / table) ---
-        "sky-1": "#86E5E0", // tropic aqua (gradient top)
-        "sky-2": "#C7F0D8", // seafoam (gradient mid)
-        "sky-3": "#FFE6B0", // warm sand (gradient bottom / table)
-        sun:     "#FFF7E2", // warm light pool at table center
+        // --- Dark surfaces (page / table backdrop) ---
+        "sky-1": "#2b0c0a", // smoldering rock (gradient top)
+        "sky-2": "#1a0608", // night basalt (gradient mid / page base)
+        "sky-3": "#0a0304", // deep void (gradient bottom)
+        sun:     "#ff8a3d", // hot lava pool (used in radial center)
 
-        // --- Warm surfaces (legacy "wood" names, re-pointed to SAND) ---
-        wood:         "#FFE6B0", // sand mid-surface
-        "wood-deep":  "#F7D38C", // deeper sand (NOT brown) — scrims/plaques
-        "wood-glow":  "#FFF7E2", // warm light pool at table center
+        // --- Warm dark surfaces (legacy "wood" names, re-pointed) ---
+        wood:         "#1a0608", // dark basalt table
+        "wood-deep":  "#0a0304", // void shadow
+        "wood-glow":  "#4a1207", // deep ember pool light
 
-        // --- Sticker panels / cards ---
-        panel:        "#FFFCF6", // warm near-white panel/surface (primary)
-        "panel-2":    "#FFF3DF", // raised/inset cream (inputs, hovers)
-        "panel-line": "#EFD9B2", // soft sandy hairline border (1px)
+        // --- Stone panels / cards (dark) ---
+        panel:        "#1f0e10", // warm dark stone (primary surface)
+        "panel-2":    "#2b1417", // raised/inset stone (inputs/hovers)
+        "panel-line": "#4a1d18", // ember-tinted hairline border
 
-        // --- Ink (dark text on cream / bright surfaces) ---
-        ink:          "#2A1C14", // primary text (~14:1 AA on cream)
-        "ink-soft":   "#5C4632", // muted/secondary (~8:1 on cream, ~6:1 on sky)
+        // --- Ink (light text on dark stone) ---
+        ink:          "#f5e5d4", // primary text (warm cream on stone)
+        "ink-soft":   "#b89a87", // muted/secondary
 
-        // --- Light text (on solid accents only) ---
+        // --- Light text (on solid accents) ---
         cream:        "#FFF7EC",
 
-        // --- Heat / reward accents ---
-        lava:         "#F5481E", // primary action / draw / heat
-        "lava-dim":   "#D8390F", // button gradient end + pressed
-        magma:        "#FF3D8B", // magenta-hot — loudest moments (decorative/effect; ink text if chipped)
-        gold:         "#FFC02E", // reward (solid bg w/ ink text)
-        "gold-dim":   "#946400", // gold TEXT on cream (~4.8:1 AA)
-        ember:        "#EE3B34", // danger / elimination
+        // --- Heat / reward accents (molten) ---
+        lava:         "#ff5722", // primary action / draw / heat
+        "lava-dim":   "#c03108", // pressed/gradient end
+        magma:        "#ff2e6e", // hot magenta — loudest moments
+        gold:         "#ffc02e", // sulfur reward
+        "gold-dim":   "#a07300", // gold ink on dark
+        ember:        "#ff8a3d", // bright ember for glows / danger
 
-        // --- Gang / elemental (candy; card-art + solid badges) ---
-        "gang-fire":   "#FF6A2B", // bright coral-orange
-        "gang-ice":    "#22C7E0", // bright cyan (cold/freeze accent)
-        "gang-storm":  "#6D5CFF", // electric indigo (warp accent)
-        "gang-earth":  "#2FCB7E", // tropical green (success)
-        "gang-shadow": "#B06BE6", // plum (decorative card art)
+        // --- Gang / elemental ---
+        "gang-fire":   "#ff6a2b",
+        "gang-ice":    "#5fd6ec",
+        "gang-storm":  "#8a78ff",
+        "gang-earth":  "#43d68a",
+        "gang-shadow": "#c084fc",
 
-        // --- Legacy aliases (re-pointed) for any unmigrated usage ---
-        obsidian:      "#FFE6B0", // → sand
-        "obsidian-2":  "#FFF3DF", // → panel-2
-        "obsidian-3":  "#FFFCF6", // → panel
-        ash:           "#5C4632", // → ink-soft
-        "ash-light":   "#5C4632", // → ink-soft
-        "card-bg":     "#FFF3DF",
-        "card-border": "#EFD9B2",
+        // --- Legacy aliases (re-pointed) ---
+        obsidian:      "#0a0304",
+        "obsidian-2":  "#1a0608",
+        "obsidian-3":  "#1f0e10",
+        ash:           "#b89a87",
+        "ash-light":   "#d8c4b3",
+        "card-bg":     "#FFF8EC",
+        "card-border": "#3a1a14",
       },
       fontFamily: {
-        // Display = Fredoka (rounded, friendly, sticker-y) for logo/headings/card names.
         display: ["Fredoka", "Righteous", "sans-serif"],
         body:    ["Hanken Grotesk", "sans-serif"],
       },
+
       // Semantic z-index scale — replaces ad-hoc 30/40/50/60 across the app.
       // table (ambient/ember layer) sits behind everything; tooltip wins.
       zIndex: {
@@ -94,14 +90,15 @@ module.exports = {
       },
       backgroundImage: {
         // AA-safe ends so cream button text stays legible across the gradient.
-        "lava-gradient":  "linear-gradient(135deg, #FF6A2B 0%, #E23A12 100%)",
-        "magma-gradient": "linear-gradient(135deg, #FF5BA8 0%, #F5481E 100%)",
-        "gold-gradient":  "linear-gradient(135deg, #FFD24D 0%, #F2A100 100%)",
-        // The tropic sky / table: aqua → seafoam → warm sand.
-        "table-sky":     "linear-gradient(180deg, #86E5E0 0%, #C7F0D8 46%, #FFE6B0 100%)",
-        // Table = a warm sand stage pooled at center, surrounded by seafoam + aqua.
-        "table-felt":    "radial-gradient(ellipse at 50% 36%, #FFF7E2 0%, #FFE6B0 34%, #C7F0D8 66%, #86E5E0 100%)",
-        "table-wood":    "radial-gradient(ellipse at 50% 36%, #FFF7E2 0%, #FFE6B0 34%, #C7F0D8 66%, #86E5E0 100%)",
+        "lava-gradient":  "linear-gradient(135deg, #ff8a3d 0%, #c03108 100%)",
+        "magma-gradient": "linear-gradient(135deg, #ff2e6e 0%, #ff5722 100%)",
+        "gold-gradient":  "linear-gradient(135deg, #ffd24d 0%, #c08400 100%)",
+        // Caldera sky: ember-glow top fading to obsidian void.
+        "table-sky":     "linear-gradient(180deg, #2b0c0a 0%, #1a0608 46%, #0a0304 100%)",
+        // Caldera table: a hot lava pool at center bleeding into dark basalt.
+        "table-felt":    "radial-gradient(ellipse at 50% 36%, #ff8a3d 0%, #c03108 18%, #4a1207 42%, #1a0608 70%, #0a0304 100%)",
+        "table-wood":    "radial-gradient(ellipse at 50% 36%, #ff8a3d 0%, #c03108 18%, #4a1207 42%, #1a0608 70%, #0a0304 100%)",
+
       },
       animation: {
         "card-flip":    "cardFlip 0.4s ease-in-out",

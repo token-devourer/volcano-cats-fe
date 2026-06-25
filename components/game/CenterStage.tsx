@@ -21,16 +21,28 @@ interface CenterStageProps {
 export function CenterStage({ deckCount, topDiscard, canDraw, onDraw }: CenterStageProps) {
   return (
     <div className="relative flex flex-col items-center">
-      {/* Resolve halo — sits behind the piles (DOM order keeps it underneath). */}
+      {/* Molten caldera pool — hot lava center fading to ember underglow,
+          behind the deck and discard. The deck sits in a pool of fire. */}
       <div
         data-stage
         aria-hidden="true"
-        className="pointer-events-none absolute left-1/2 top-1/2 h-[clamp(11rem,34vw,17rem)] w-[clamp(11rem,34vw,17rem)] -translate-x-1/2 -translate-y-1/2 rounded-full"
+        className="pointer-events-none absolute left-1/2 top-1/2 h-[clamp(13rem,38vw,20rem)] w-[clamp(13rem,38vw,20rem)] -translate-x-1/2 -translate-y-1/2 rounded-full animate-lava-pulse"
         style={{
           background:
-            "radial-gradient(circle, rgba(255,247,226,0.85) 0%, rgba(255,230,176,0.35) 42%, rgba(255,230,176,0) 72%)",
+            "radial-gradient(circle, rgba(255,138,61,0.55) 0%, rgba(255,87,34,0.35) 28%, rgba(255,46,110,0.18) 56%, rgba(74,18,7,0) 78%)",
+          filter: "blur(2px)",
         }}
       />
+      {/* Heat shimmer ring */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute left-1/2 top-1/2 h-[clamp(8rem,24vw,13rem)] w-[clamp(8rem,24vw,13rem)] -translate-x-1/2 -translate-y-1/2 rounded-full animate-glow-pulse"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(255,192,46,0.25) 0%, rgba(255,87,34,0.10) 50%, transparent 75%)",
+        }}
+      />
+
 
       <div className="relative flex items-end justify-center gap-6 sm:gap-10">
         {/* Discard */}
