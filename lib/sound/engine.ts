@@ -43,11 +43,10 @@ function ensureCtx(): AudioContext | null {
 
   if (!subscribed) {
     subscribed = true;
-    // Keep the master level + music in sync with the persisted preferences.
+    // Keep the master level in sync with the persisted preferences.
+    // Music track-switching is owned by the MusicController component.
     useSoundStore.subscribe((s) => {
       if (master) master.gain.value = s.muted ? 0 : s.volume;
-      if (s.muted || !s.music) stopMusic();
-      else void startMusic();
     });
   }
   return ctx;
@@ -109,37 +108,20 @@ export function play(name: SfxName): void {
   }
 }
 
-// ---- optional background music (file only; silent if /public/sfx/music.* absent) ----
-let musicSrc: AudioBufferSourceNode | null = null;
-let musicGain: GainNode | null = null;
-let musicBuf: AudioBuffer | null | undefined = undefined; // undefined = not probed
-
-export async function startMusic(): Promise<void> {
+/** Shared accessor for music/ambient modules. Returns null until unlocked. */
+export function getAudio(): { ctx: AudioContext; master: GainNode } | null {
   const c = ensureCtx();
-  if (!c || !master || musicSrc) return;
-  if (musicBuf === undefined) musicBuf = await loadBuffer("music");
-  if (!musicBuf) return; // no file → silence (synth fallback is intentionally none)
-
-  musicGain = c.createGain();
-  musicGain.gain.value = 0.25;
-  musicGain.connect(master);
-  musicSrc = c.createBufferSource();
-  musicSrc.buffer = musicBuf;
-  musicSrc.loop = true;
-  musicSrc.connect(musicGain);
-  musicSrc.start();
+  if (!c || !master) return null;
+  if (c.state === "suspended") void c.resume().catch(() => {});
+  return { ctx: c, master };
 }
 
+// Legacy single-track music API — kept as no-ops; use setMusicTrack from ./music.
+export async function startMusic(): Promise<void> {
+  /* deprecated — see ./music */
+}
 export function stopMusic(): void {
-  if (musicSrc) {
-    try {
-      musicSrc.stop();
-    } catch {
-      /* already stopped */
-    }
-    musicSrc.disconnect();
-    musicSrc = null;
-  }
+  /* deprecated — see ./music */
 }
 
 /** Arm the one-time autoplay unlock on the first user gesture. */
@@ -148,7 +130,6 @@ export function armUnlock(): void {
   const events: (keyof WindowEventMap)[] = ["pointerdown", "keydown", "touchstart"];
   const arm = () => {
     unlock();
-    if (useSoundStore.getState().music) void startMusic();
     events.forEach((e) => window.removeEventListener(e, arm));
   };
   events.forEach((e) => window.addEventListener(e, arm, { once: true, passive: true }));
