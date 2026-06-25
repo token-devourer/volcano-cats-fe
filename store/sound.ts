@@ -24,7 +24,7 @@ export const useSoundStore = create<SoundState>()(
     (set) => ({
       muted: false,
       volume: 0.7,
-      music: false,
+      music: true,
       toggleMute: () => set((s) => ({ muted: !s.muted })),
       setVolume: (v) => set({ volume: Math.min(1, Math.max(0, v)) }),
       toggleMusic: () => set((s) => ({ music: !s.music })),
