@@ -168,10 +168,17 @@ export const RECIPES: Record<SfxName, (ctx: AudioContext, out: AudioNode) => voi
       noise(c, o, { when: i * 0.05, dur: 0.05, gain: 0.07, filterFreq: 2500, filterType: "bandpass", q: 2 });
   },
   win: (c, o) => {
-    [523, 659, 784, 1047].forEach((f, i) =>
-      tone(c, o, { freq: f, when: i * 0.12, dur: 0.4, type: "triangle", gain: 0.18 }));
-    tone(c, o, { freq: 1568, when: 0.5, dur: 0.5, type: "sine", gain: 0.13 });
+    // Volcanic victory: deep magma rumble erupts into a triumphant brass-bright
+    // arpeggio, capped with a crystalline obsidian shimmer.
+    tone(c, o, { freq: 110, glideTo: 55, type: "sawtooth", dur: 0.6, gain: 0.16 });
+    noise(c, o, { dur: 0.55, gain: 0.1, filterFreq: 420 });
+    [392, 523, 659, 784, 1047].forEach((f, i) =>
+      tone(c, o, { freq: f, when: 0.25 + i * 0.1, dur: 0.42, type: "triangle", gain: 0.18 }));
+    [784, 1047, 1568].forEach((f, i) =>
+      tone(c, o, { freq: f, when: 0.7 + i * 0.05, dur: 0.55, type: "sine", gain: 0.12 }));
+    tone(c, o, { freq: 2093, when: 0.95, dur: 0.6, type: "sine", gain: 0.09 });
   },
+
   lose: (c, o) => [440, 349, 262].forEach((f, i) =>
     tone(c, o, { freq: f, when: i * 0.14, dur: 0.3, type: "sine", gain: 0.13 })),
   eliminate: (c, o) => {
