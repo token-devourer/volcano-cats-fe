@@ -73,9 +73,20 @@ export function EffectsController() {
 
     const reduced = prefersReducedMotion();
     for (const ev of fresh) {
+      // Surge the caldera halo + ambient embers on the big "things changed"
+      // beats so the table visibly responds to play, not just the effect canvas.
+      if (
+        ev.kind === "TURN_STARTED" ||
+        ev.kind === "CARD_PLAYED" ||
+        ev.kind === "GANG_PLAYED" ||
+        ev.kind === "CARD_DREW"
+      ) {
+        window.dispatchEvent(new CustomEvent("vc:stage-pulse"));
+      }
       runEffect({ event: ev, myId, reduced, flash, shake, seat, stage, anchor });
     }
   }, [log, myId]);
+
 
   return (
     <div
