@@ -43,11 +43,10 @@ function ensureCtx(): AudioContext | null {
 
   if (!subscribed) {
     subscribed = true;
-    // Keep the master level + music in sync with the persisted preferences.
+    // Keep the master level in sync with the persisted preferences.
+    // Music track-switching is owned by the MusicController component.
     useSoundStore.subscribe((s) => {
       if (master) master.gain.value = s.muted ? 0 : s.volume;
-      if (s.muted || !s.music) stopMusic();
-      else void startMusic();
     });
   }
   return ctx;
