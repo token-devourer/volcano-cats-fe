@@ -235,7 +235,7 @@ h1, h2, h3 { text-wrap: balance; }
   z-index: 4;
   width: calc(var(--card-width) * 0.2);
   height: calc(var(--card-width) * 0.2);
-  color: color-mix(in oklab, var(--card-accent) 68%, var(--ink));
+  color: color-mix(in oklab, var(--card-accent) 68%, var(--print-ink));
   opacity: 0.92;
   pointer-events: none;
 }
