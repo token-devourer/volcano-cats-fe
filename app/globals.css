@@ -220,9 +220,12 @@ h1, h2, h3 { text-wrap: balance; }
   line-height: 1.02;
   font-size: calc(var(--card-width) * 0.118);
   /* Accent pulled toward ink so the name stays AA-dark on cream. */
-  color: color-mix(in oklab, var(--card-accent) 55%, var(--ink));
+  /* Card name uses DARK print-ink so it stays AA-legible on the cream face,
+     regardless of the dark page palette. */
+  color: color-mix(in oklab, var(--card-accent) 55%, var(--print-ink));
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
-  background: linear-gradient(to top, color-mix(in oklab, var(--card-accent) 14%, var(--panel)) 4%, color-mix(in oklab, var(--card-accent) 6%, transparent) 60%, transparent);
+  background: linear-gradient(to top, color-mix(in oklab, var(--card-accent) 14%, var(--card-face)) 4%, color-mix(in oklab, var(--card-accent) 6%, transparent) 60%, transparent);
+
 }
 
 /* Corner pips — a small echo of the art, top-left & bottom-right (rotated),
