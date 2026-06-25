@@ -5,12 +5,10 @@ import { useGame } from "@/store/game";
 import { send } from "@/lib/net/client";
 import { cardName, t } from "@/lib/i18n";
 
-const WINDOW_MS = 4000;
-
 /**
  * Top banner shown while an action sits in the freeze window. Anyone holding
  * a Freeze can cancel the pending action before the countdown ends. The bar
- * drains using the server-provided `endsAt` timestamp.
+ * drains using the server-provided `endsAt` timestamp and `freezeDuration`.
  */
 export function FreezeBanner() {
   const state = useGame((s) => s.state);
@@ -28,9 +26,9 @@ export function FreezeBanner() {
 
   if (!state || state.phase.kind !== "nope_window") return null;
 
-  const { pending, endsAt } = state.phase;
+  const { pending, endsAt, freezeDuration } = state.phase;
   const remaining = Math.max(0, endsAt - now);
-  const pct = Math.min(100, Math.max(0, (remaining / WINDOW_MS) * 100));
+  const pct = Math.min(100, Math.max(0, (remaining / freezeDuration) * 100));
   const actorName = state.players.find((p) => p.id === pending.actorId)?.name ?? "Pemain";
   const hasFreeze = hand.some((c) => c.type === "FREEZE");
   const canFreeze = hasFreeze && pending.actorId !== myId;
