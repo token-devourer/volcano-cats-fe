@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { Button, SoundToggle } from "@/components/ui";
 import { CardArt } from "@/components/ui/CardArt";
 import { EmberParticles } from "@/components/animations/EmberParticles";
+import { MusicController } from "@/components/game/MusicController";
 import { gsap, prefersReducedMotion } from "@/lib/motion/gsap";
 import { t } from "@/lib/i18n";
 
