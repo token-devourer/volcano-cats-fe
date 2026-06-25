@@ -124,10 +124,18 @@ export const RECIPES: Record<SfxName, (ctx: AudioContext, out: AudioNode) => voi
   click: (c, o) => tone(c, o, { freq: 520, type: "triangle", dur: 0.06, gain: 0.16 }),
   hover: (c, o) => tone(c, o, { freq: 680, type: "sine", dur: 0.04, gain: 0.06 }),
   select: (c, o) => {
-    tone(c, o, { freq: 440, type: "triangle", dur: 0.07, gain: 0.15 });
-    tone(c, o, { freq: 660, when: 0.05, dur: 0.09, type: "triangle", gain: 0.13 });
+    // Volcanic flint-strike: bright sulfur ping that drops onto a warm ember pad.
+    tone(c, o, { freq: 920, glideTo: 1240, type: "triangle", dur: 0.06, gain: 0.14 });
+    tone(c, o, { freq: 540, when: 0.04, dur: 0.12, type: "sine", gain: 0.12 });
+    noise(c, o, { when: 0.02, dur: 0.05, gain: 0.05, filterFreq: 5200, filterType: "highpass" });
   },
-  deal: (c, o) => noise(c, o, { dur: 0.12, gain: 0.1, filterFreq: 2200, filterType: "bandpass", q: 1 }),
+  deal: (c, o) => {
+    // Stone-on-stone shuffle: short brushed-rock noise + soft basalt thud.
+    noise(c, o, { dur: 0.1, gain: 0.09, filterFreq: 2400, filterType: "bandpass", q: 1.2 });
+    noise(c, o, { when: 0.06, dur: 0.08, gain: 0.07, filterFreq: 1500, filterType: "bandpass", q: 1.4 });
+    tone(c, o, { freq: 150, glideTo: 90, type: "sine", dur: 0.12, gain: 0.09 });
+  },
+
   draw: (c, o) => {
     noise(c, o, { dur: 0.14, gain: 0.1, filterFreq: 1800 });
     tone(c, o, { freq: 300, glideTo: 540, type: "sine", dur: 0.16, gain: 0.12 });
