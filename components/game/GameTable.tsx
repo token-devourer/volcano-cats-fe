@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@/components/ui";
 import { PlayerSeat } from "./PlayerSeat";
+import { PlayerRoster } from "./PlayerRoster";
 import { CenterStage } from "./CenterStage";
 import { useTableLayout } from "@/lib/useTableLayout";
 import { useGame } from "@/store/game";
@@ -12,7 +13,8 @@ import clsx from "clsx";
  * The shared table. On phones (or before measurement) it's a safe stacked
  * layout: opponents wrap across the top, the center stage below. On wider
  * screens `useTableLayout` seats opponents on an arc around the CenterStage —
- * deck, discard and the effect "stage" at the heart of the table.
+ * deck, discard and the effect "stage" at the heart of the table. A
+ * PlayerRoster panel docks to the side as a clear scoreboard.
  */
 export function GameTable() {
   const state = useGame((s) => s.state);
@@ -20,6 +22,7 @@ export function GameTable() {
   const opponents = state ? state.players.filter((p) => p.id !== myId) : [];
   const layout = useTableLayout(opponents.length);
   if (!state) return null;
+
 
   const currentId = state.turnOrder[state.currentTurnIndex];
   const isMyTurn = currentId === myId;
