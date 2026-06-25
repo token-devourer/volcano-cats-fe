@@ -81,6 +81,7 @@ export default function HomePage() {
   return (
     <main className="relative flex min-h-[100dvh] flex-col items-center justify-center overflow-hidden px-4 py-10">
       <EmberParticles count={18} />
+      <MusicController track="lobby" />
       <div data-parallax className="pointer-events-none absolute inset-0 z-table">
         <div data-parallax-layer="3" className="absolute left-1/2 top-1/3 h-[560px] w-[560px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold/25 blur-3xl" />
         <div data-parallax-layer="2" className="absolute right-[12%] top-[18%] h-[320px] w-[320px] rounded-full bg-lava/15 blur-3xl" />
