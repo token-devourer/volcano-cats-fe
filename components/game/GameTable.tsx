@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@/components/ui";
 import { PlayerSeat } from "./PlayerSeat";
+import { PlayerRoster } from "./PlayerRoster";
 import { CenterStage } from "./CenterStage";
 import { useTableLayout } from "@/lib/useTableLayout";
 import { useGame } from "@/store/game";
@@ -12,7 +13,8 @@ import clsx from "clsx";
  * The shared table. On phones (or before measurement) it's a safe stacked
  * layout: opponents wrap across the top, the center stage below. On wider
  * screens `useTableLayout` seats opponents on an arc around the CenterStage —
- * deck, discard and the effect "stage" at the heart of the table.
+ * deck, discard and the effect "stage" at the heart of the table. A
+ * PlayerRoster panel docks to the side as a clear scoreboard.
  */
 export function GameTable() {
   const state = useGame((s) => s.state);
@@ -20,6 +22,7 @@ export function GameTable() {
   const opponents = state ? state.players.filter((p) => p.id !== myId) : [];
   const layout = useTableLayout(opponents.length);
   if (!state) return null;
+
 
   const currentId = state.turnOrder[state.currentTurnIndex];
   const isMyTurn = currentId === myId;
@@ -61,11 +64,21 @@ export function GameTable() {
     <CenterStage deckCount={state.deckCount} topDiscard={topDiscard} canDraw={canDraw} onDraw={draw} />
   );
 
+  const roster = (
+    <PlayerRoster
+      players={state.players}
+      currentId={currentId}
+      myId={myId}
+      turnsRemaining={state.turnsRemaining}
+    />
+  );
+
   return (
     <section ref={layout.ref} data-table className="relative flex-1">
       {layout.compact ? (
         // --- Stacked / wrap (phones, or pre-measurement) ---
         <div className="flex h-full flex-col items-center justify-between gap-4 px-4 pb-4 pt-3">
+          <div className="w-full max-w-md">{roster}</div>
           <div className="flex w-full max-w-3xl flex-wrap items-start justify-center gap-x-5 gap-y-3">
             {opponents.map((p) => (
               <PlayerSeat key={p.id} player={p} isCurrent={p.id === currentId} isMe={false} compact />
@@ -93,6 +106,8 @@ export function GameTable() {
 
           <div className="absolute inset-x-0 top-2 flex justify-center">{turnBanner}</div>
 
+          <div className="absolute left-3 top-3 w-64 max-w-[18rem]">{roster}</div>
+
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">{stage}</div>
 
           <div className="absolute inset-x-0 bottom-3 flex h-12 justify-center">{drawButton}</div>
@@ -101,3 +116,4 @@ export function GameTable() {
     </section>
   );
 }
+
